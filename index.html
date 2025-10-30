@@ -6,266 +6,70 @@
   <title>EduTrip India – Learning Beyond Classrooms</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background: #f5f8ff;
-      color: #222;
-      overflow-x: hidden;
-    }
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;scroll-behavior:smooth;}
+    body{background:#f5f8ff;color:#222;overflow-x:hidden;}
 
     /* HEADER */
-    header {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 999;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 2rem;
-      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
-    }
+    header{background:rgba(255,255,255,0.85);backdrop-filter:blur(10px);position:sticky;top:0;z-index:999;
+      display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;
+      box-shadow:0 3px 15px rgba(0,0,0,0.08);}
+    .logo{display:flex;align-items:center;gap:10px;}
+    .logo img{height:45px;width:45px;border-radius:50%;}
+    .logo span{font-size:1.5rem;font-weight:700;color:#0078d7;}
+    nav a{color:#333;margin-left:1.5rem;text-decoration:none;font-weight:500;transition:0.3s;}
+    nav a:hover{color:#0078d7;}
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    /* HERO */
+    .hero{text-align:center;padding:6rem 2rem;
+      background:linear-gradient(120deg,#0078d7,#00b4db,#89f7fe);
+      background-size:300% 300%;animation:gradientShift 12s ease infinite;color:#fff;}
+    @keyframes gradientShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+    .hero h1{font-size:3rem;text-shadow:0 3px 10px rgba(0,0,0,0.2);}
+    .hero p{font-size:1.1rem;max-width:700px;margin:1rem auto;color:#f0f0f0;}
+    .btn{display:inline-block;margin-top:2rem;padding:0.9rem 2.5rem;background:#fff;color:#0078d7;
+      border-radius:50px;text-decoration:none;font-weight:600;transition:0.3s;}
+    .btn:hover{background:#005fa3;color:#fff;transform:scale(1.05);}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
 
-    .logo img {
-      height: 45px;
-      width: 45px;
-      border-radius: 50%;
-    }
-
-    .logo span {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #0078d7;
-    }
-
-    nav a {
-      color: #333;
-      margin-left: 1.5rem;
-      text-decoration: none;
-      font-weight: 500;
-      transition: 0.3s;
-    }
-
-    nav a:hover {
-      color: #0078d7;
-    }
-
-    /* HERO SECTION */
-    .hero {
-      text-align: center;
-      padding: 6rem 2rem;
-      background: linear-gradient(120deg, #0078d7, #00b4db, #89f7fe);
-      background-size: 300% 300%;
-      animation: gradientShift 12s ease infinite;
-      color: #fff;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .hero h1 {
-      font-size: 3rem;
-      color: #fff;
-      text-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-      animation: fadeUp 1s ease-out;
-    }
-
-    .hero p {
-      font-size: 1.1rem;
-      color: #f0f0f0;
-      max-width: 700px;
-      margin: 1rem auto;
-      animation: fadeUp 1.3s ease-out;
-    }
-
-    .btn {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 0.9rem 2.5rem;
-      background-color: #fff;
-      color: #0078d7;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: 0.3s;
-      animation: fadeUp 1.6s ease-out;
-    }
-
-    .btn:hover {
-      background-color: #005fa3;
-      color: white;
-      transform: scale(1.05);
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to { opacity: 1; transform: translateY(0px); }
-    }
-
-    /* SECTION BASE */
-    section {
-      padding: 4rem 1.5rem;
-      text-align: center;
-      max-width: 1100px;
-      margin: auto;
-    }
-
-    h2 {
-      color: #0078d7;
-      margin-bottom: 1rem;
-      font-size: 2rem;
-    }
-
-    .line {
-      width: 80px;
-      height: 3px;
-      background: #00b4db;
-      margin: 0.8rem auto 2rem;
-      border-radius: 3px;
-    }
-
-    /* ABOUT */
-    .about p {
-      color: #444;
-      font-size: 1.1rem;
-      line-height: 1.8rem;
-    }
+    section{padding:4rem 1.5rem;text-align:center;max-width:1100px;margin:auto;}
+    h2{color:#0078d7;margin-bottom:1rem;font-size:2rem;}
+    .line{width:80px;height:3px;background:#00b4db;margin:0.8rem auto 2rem;border-radius:3px;}
+    .about p{color:#444;font-size:1.1rem;line-height:1.8rem;}
 
     /* SERVICES */
-    .services {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-
-    .service-card {
-      background-color: #fff;
-      border-radius: 15px;
-      padding: 2rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      cursor: pointer;
-    }
-
-    .service-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-
-    .service-card h3 {
-      color: #0078d7;
-      margin-bottom: 1rem;
-      font-size: 1.3rem;
-    }
+    .services{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;margin-top:3rem;}
+    .service-card{background:#fff;border-radius:15px;padding:2rem;box-shadow:0 4px 15px rgba(0,0,0,0.08);
+      transition:transform .4s,box-shadow .4s;cursor:pointer;}
+    .service-card:hover{transform:translateY(-10px);box-shadow:0 10px 25px rgba(0,0,0,0.15);}
+    .service-card h3{color:#0078d7;margin-bottom:1rem;font-size:1.3rem;}
 
     /* FOUNDERS */
-    .founders {
-      background: linear-gradient(135deg, #e3f2fd, #ffffff);
-      padding: 4rem 1rem;
-      border-top: 1px solid #eee;
-    }
+    .founders{background:linear-gradient(135deg,#e3f2fd,#ffffff);padding:4rem 1rem;border-top:1px solid #eee;}
+    .founders-list{display:flex;flex-wrap:wrap;justify-content:center;gap:2rem;margin-top:2rem;}
+    .founder-card{background:#fff;padding:2rem;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.1);
+      width:250px;transition:.3s;cursor:pointer;}
+    .founder-card:hover{transform:scale(1.05);box-shadow:0 10px 25px rgba(0,0,0,0.15);}
+    .founder-card img{transition:transform .3s;}
+    .founder-card:hover img{transform:scale(1.1);}
+    .founder-card h4{color:#0078d7;margin-top:1rem;transition:color .3s;}
+    .founder-card:hover h4{color:#005fa3;}
 
-    .founders-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
+    /* FORM BOX */
+    .form-box{margin-top:3rem;background:#f8fbff;padding:2rem;border-radius:15px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.08);}
+    form label{font-weight:500;color:#333;}
+    form input{width:100%;padding:10px;margin:6px 0 14px;border:1px solid #ccc;border-radius:8px;}
+    form button{background:#0078d7;color:white;padding:12px 20px;border:none;border-radius:30px;
+      font-weight:600;cursor:pointer;width:100%;transition:0.3s;}
+    form button:hover{background:#005fa3;}
+    .thankyou{display:none;text-align:center;font-size:1.2rem;color:#0078d7;font-weight:600;
+      animation:fadeUp 0.7s ease forwards;}
 
-    .founder-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      width: 250px;
-      transition: 0.3s;
-      cursor: pointer;
-    }
-
-    .founder-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-
-    .founder-card img {
-      transition: transform 0.3s ease;
-    }
-
-    .founder-card:hover img {
-      transform: scale(1.1);
-    }
-
-    .founder-card h4 {
-      color: #0078d7;
-      margin-top: 1rem;
-      transition: color 0.3s ease;
-    }
-
-    .founder-card:hover h4 {
-      color: #005fa3;
-    }
-
-    /* CONTACT */
-    .contact p {
-      font-size: 1.1rem;
-      color: #333;
-      margin-bottom: 1rem;
-    }
-
-    footer {
-      background-color: #0078d7;
-      color: white;
-      text-align: center;
-      padding: 2rem 1rem;
-      margin-top: 3rem;
-    }
-
-    footer p {
-      margin: 0;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      nav {
-        margin-top: 0.5rem;
-      }
-
-      .hero h1 {
-        font-size: 2.2rem;
-      }
-
-      .service-card {
-        margin: 0 auto;
-      }
-
-      .founder-card {
-        width: 80%;
-      }
-    }
+    /* CONTACT & FOOTER */
+    .contact p{font-size:1.1rem;color:#333;margin-bottom:1rem;}
+    footer{background:#0078d7;color:#fff;text-align:center;padding:2rem 1rem;margin-top:3rem;}
+    @media(max-width:768px){header{flex-direction:column;text-align:center;}nav{margin-top:.5rem;}
+      .hero h1{font-size:2.2rem;}.founder-card{width:80%;}}
   </style>
 </head>
 <body>
@@ -278,47 +82,70 @@
     </div>
     <nav>
       <a href="#about" title="Learn about EduTrip">About</a>
-      <a href="#services" title="Explore our programs">Programs</a>
+      <a href="#learning-model" title="Explore our model">Learning Model</a>
       <a href="#founders" title="Meet our founders">Founders</a>
-      <a href="#contact" title="Get in touch with us">Contact</a>
+      <a href="#contact" title="Get in touch">Contact</a>
     </nav>
   </header>
 
   <!-- HERO -->
   <section class="hero">
     <h1>Learning Beyond Classrooms</h1>
-    <p>Empowering students through real-world learning. Explore educational trips, skill camps, and practical learning experiences with EduTrip India.</p>
-    <a href="#services" class="btn">Explore Programs</a>
+    <p>Empowering students through real-world learning. Explore educational trips, skill camps, and SimpLearn Sessions with EduTrip India.</p>
+    <a href="#learning-model" class="btn">Explore Model</a>
   </section>
 
   <!-- ABOUT -->
   <section id="about" class="about">
     <h2>About EduTrip</h2>
     <div class="line"></div>
-    <p>EduTrip India bridges education with experience. Our goal is to make learning immersive by connecting classrooms with the real world — from science labs to cultural landmarks, from innovation hubs to public institutions. We are shaping a responsible and knowledgeable generation through experiential learning.</p>
+    <p>EduTrip India bridges education with experience. We make learning immersive by connecting classrooms with the real world — from science labs to cultural landmarks and public institutions — shaping a responsible, knowledgeable generation through experiential learning.</p>
   </section>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <h2>Our Programs</h2>
+  <!-- LEARNING MODEL -->
+  <section id="learning-model">
+    <h2>EduTrip Learning Model</h2>
     <div class="line"></div>
+    <p>Our integrated approach connects academic learning with real-world experiences through structured and engaging programs for schools and institutions.</p>
+
     <div class="services">
-      <div class="service-card" title="Explore STEM programs">
-        <h3>STEM Discovery Trips</h3>
-        <p>Hands-on science & technology experiences through field visits to innovation centers, tech labs, and research hubs.</p>
+      <div class="service-card" title="Curriculum Integrated Learning">
+        <h3>Curriculum Integrated Trips</h3>
+        <p>Interactive field trips aligned with the school curriculum, enabling students to apply classroom concepts in real-life scenarios.</p>
       </div>
-      <div class="service-card" title="Government & Civic Visits">
-        <h3>Civic Awareness Visits</h3>
-        <p>Learn how the country functions with guided tours of government institutions, law, and public services.</p>
+      <div class="service-card" title="Experiential Learning">
+        <h3>Experiential Learning</h3>
+        <p>Students learn by doing — from science explorations to cultural immersions, each trip is a hands-on journey of discovery.</p>
       </div>
-      <div class="service-card" title="Cultural Education">
-        <h3>Culture & Heritage Tours</h3>
-        <p>Explore India's diverse history and art forms through guided cultural immersions and educational travel.</p>
+      <div class="service-card" title="SimpLearn Sessions">
+        <h3>SimpLearn Sessions</h3>
+        <p>Expert-led sessions held at schools to simplify academics and civic understanding, blending classroom learning with expert insights.</p>
       </div>
-      <div class="service-card" title="Skill Development Programs">
-        <h3>Skill-Building Workshops</h3>
-        <p>Develop essential skills like leadership, problem-solving, and communication through structured field programs.</p>
+      <div class="service-card" title="Skill Development">
+        <h3>Skill Development Workshops</h3>
+        <p>Focused on 21st-century skills — communication, leadership, and teamwork — through interactive field experiences.</p>
       </div>
+    </div>
+
+    <!-- INSTITUTION ENQUIRY FORM -->
+    <div class="form-box">
+      <h3 style="color:#0078d7;margin-bottom:1rem;">Institution Enquiry Form</h3>
+      <form id="enquiryForm" action="https://formsubmit.co/founders@edutripindia.com" method="POST">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="New Institution Enquiry from EduTrip Website">
+        <label>Name</label><br>
+        <input type="text" name="Name" required>
+        <label>Institution Name</label><br>
+        <input type="text" name="Institution Name" required>
+        <label>Contact Number</label><br>
+        <input type="tel" name="Contact Number" required>
+        <label>Email ID</label><br>
+        <input type="email" name="Email ID" required>
+        <label>City</label><br>
+        <input type="text" name="City" required>
+        <button type="submit">Submit Details</button>
+      </form>
+      <div id="thankyou" class="thankyou">✅ Thank you! We’ve received your details and will contact you soon.</div>
     </div>
   </section>
 
@@ -345,15 +172,36 @@
     <h2>Contact Us</h2>
     <div class="line"></div>
     <p>📧 Email: <strong>founders@edutripindia.com</strong></p>
-    <p>📞 Phone: +91 81782 88678</p>
+    <p>📞 Phone: +91 90000 00000</p>
     <p>🏢 Hyderabad, Telangana, India</p>
-    <a href="mailto:info@edutripindia.com" class="btn">Send a Message</a>
+    <a href="mailto:founders@edutripindia.com" class="btn">Send a Message</a>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <p>© 2025 EduTrip India. All Rights Reserved.</p>
   </footer>
+
+  <!-- SMALL SCRIPT FOR SMOOTH "THANK YOU" -->
+  <script>
+    const form = document.getElementById('enquiryForm');
+    const thanks = document.getElementById('thankyou');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); // stop default reload
+      const data = new FormData(form);
+      fetch(form.action, {
+        method: 'POST',
+        body: data
+      }).then(() => {
+        form.style.display = 'none';
+        thanks.style.display = 'block';
+      }).catch(() => {
+        thanks.innerHTML = '⚠️ Something went wrong. Please try again.';
+        thanks.style.display = 'block';
+      });
+    });
+  </script>
 
 </body>
 </html>
