@@ -9,35 +9,45 @@
     :root {
       --accent1: #0078d7;
       --accent2: #00b4db;
-      --bg-soft: #f7fbff;
-      --text: #1a2c40;
-      --card: #ffffff;
+      --light1: #d7efff;
+      --light2: #bde7f7;
+      --light3: #ffffff;
+      --text: #16324f;
+      --card: #fff;
       --shadow: 0 10px 25px rgba(0,0,0,0.08);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
+    /* BODY with animated gradient background */
     body {
-      background: linear-gradient(180deg, #f7fbff, #ffffff);
       color: var(--text);
+      background: linear-gradient(-45deg, var(--light1), var(--light2), var(--light3), var(--light2));
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
       scroll-behavior: smooth;
-      transition: background 0.6s ease;
     }
 
-    /* FLOATING CAPSULE HEADER */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating Capsule Header */
     .capsule {
       position: fixed;
-      top: 20px;
+      top: 18px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(10px);
       border-radius: 50px;
       box-shadow: var(--shadow);
       display: flex;
       gap: 1.5rem;
       align-items: center;
-      padding: 10px 24px;
+      padding: 10px 28px;
       z-index: 999;
       transition: transform 0.3s ease, opacity 0.3s ease;
     }
@@ -61,7 +71,7 @@
       color: var(--accent2);
     }
 
-    /* Tooltip (below instead of above) */
+    /* Tooltip below */
     .capsule a[data-tip]:hover::after {
       content: attr(data-tip);
       position: absolute;
@@ -74,23 +84,17 @@
       border-radius: 6px;
       font-size: 12px;
       white-space: nowrap;
-      opacity: 1;
     }
 
     /* HERO */
     .hero {
       text-align: center;
-      padding: 6rem 2rem;
-      background: linear-gradient(135deg, #0078d7, #00b4db, #89f7fe);
-      background-size: 300% 300%;
-      animation: gradientShift 12s ease infinite;
-      color: white;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      padding: 7rem 2rem 5rem;
+      color: #fff;
+      position: relative;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      border-radius: 0 0 50px 50px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .hero h1 {
@@ -102,7 +106,7 @@
       max-width: 700px;
       margin: 0 auto 1.5rem;
       font-size: 1.1rem;
-      color: #f8f8f8;
+      color: #f3f9ff;
     }
 
     .btn {
@@ -122,6 +126,7 @@
       transform: scale(1.05);
     }
 
+    /* Sections */
     section {
       max-width: 1000px;
       margin: 0 auto;
@@ -143,6 +148,7 @@
       border-radius: 2px;
     }
 
+    /* Services */
     .services {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -167,14 +173,15 @@
       margin-bottom: 0.5rem;
     }
 
-    /* FORM */
+    /* Form */
     .form-container {
-      background: linear-gradient(180deg, #ffffff, #f4faff);
+      background: rgba(255,255,255,0.9);
       border-radius: 15px;
       padding: 2rem;
       max-width: 550px;
       margin: 2rem auto 0;
       box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      backdrop-filter: blur(6px);
     }
 
     form label {
@@ -225,7 +232,7 @@
       margin-top: 1rem;
     }
 
-    /* FOUNDERS */
+    /* Founders */
     .founders-list {
       display: flex;
       justify-content: center;
@@ -284,7 +291,7 @@
   <!-- HERO -->
   <section class="hero">
     <h1>Learning Beyond Classrooms</h1>
-    <p>EduTrip India creates experiential, curriculum-integrated trips and SimpLearn sessions for practical learning that lasts a lifetime.</p>
+    <p>EduTrip India brings experiential learning and curriculum-integrated programs that inspire students to explore, understand, and evolve.</p>
     <a href="#learning-model" class="btn">Explore Model</a>
   </section>
 
@@ -292,7 +299,7 @@
   <section id="about">
     <h2>About EduTrip</h2>
     <div class="line"></div>
-    <p>EduTrip India bridges education with experience. We bring classrooms to life by connecting academic concepts with real-world exposure through trips, workshops, and civic learning programs.</p>
+    <p>We make education immersive and engaging by connecting students with real-world experiences. EduTrip India bridges classroom learning with practical exposure to shape a responsible generation.</p>
   </section>
 
   <!-- LEARNING MODEL -->
@@ -300,10 +307,10 @@
     <h2>EduTrip Learning Model</h2>
     <div class="line"></div>
     <div class="services">
-      <div class="service-card"><h3>Curriculum Integrated Trips</h3><p>Trips aligned with school syllabus where students connect theory with practical exposure.</p></div>
-      <div class="service-card"><h3>Experiential Learning</h3><p>Hands-on projects and visits designed to help students learn by doing.</p></div>
-      <div class="service-card"><h3>SimpLearn Sessions</h3><p>Experts visit schools for civic and academic learning sessions, simplifying complex topics.</p></div>
-      <div class="service-card"><h3>Skill Development Workshops</h3><p>Focused programs that enhance communication, teamwork, and leadership through real experiences.</p></div>
+      <div class="service-card"><h3>Curriculum Integrated Trips</h3><p>Field visits aligned with the academic syllabus for applied understanding.</p></div>
+      <div class="service-card"><h3>Experiential Learning</h3><p>Hands-on learning through projects and guided explorations.</p></div>
+      <div class="service-card"><h3>SimpLearn Sessions</h3><p>Experts visit schools for academic and civic lessons simplified through interaction.</p></div>
+      <div class="service-card"><h3>Skill Development Workshops</h3><p>Interactive sessions designed to strengthen communication, leadership, and collaboration.</p></div>
     </div>
 
     <!-- FORM -->
@@ -323,7 +330,7 @@
         <input type="text" name="City" required>
         <button type="submit">Submit Details</button>
       </form>
-      <div class="thankyou" id="thankyou">✅ Thank you! We have received your details.</div>
+      <div class="thankyou" id="thankyou">✅ Thank you! We’ve received your details.</div>
     </div>
   </section>
 
@@ -355,7 +362,7 @@
   <footer>© 2025 EduTrip India. All Rights Reserved.</footer>
 
   <script>
-    // Hide/Show Header on Scroll
+    // Header hide/show on scroll
     const capsule = document.getElementById('capsule');
     let lastScroll = 0;
     window.addEventListener('scroll', () => {
@@ -368,7 +375,7 @@
       lastScroll = curr;
     });
 
-    // Handle Form Submit
+    // Form submission with smooth message
     const form = document.getElementById('enquiryForm');
     const thank = document.getElementById('thankyou');
     form.addEventListener('submit', async (e) => {
