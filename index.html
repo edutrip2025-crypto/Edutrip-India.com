@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduTrip India – Learning Beyond Classrooms</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #f7f9fc;
+      color: #333;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #0078d7, #00b4db);
+      color: #fff;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 700;
+    }
+
+    nav a {
+      color: #fff;
+      margin-left: 2rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffe57f;
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 5rem 2rem;
+      background: linear-gradient(135deg, #f2fcfe, #1c92d2);
+      color: #222;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      color: #0078d7;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: #444;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.9rem 2.5rem;
+      background-color: #0078d7;
+      color: #fff;
+      border-radius: 40px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #005fa3;
+      transform: scale(1.05);
+    }
+
+    /* ABOUT SECTION */
+    section {
+      padding: 4rem 2rem;
+      text-align: center;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    .line {
+      width: 80px;
+      height: 3px;
+      background-color: #00b4db;
+      margin: 0.8rem auto 2rem;
+      border-radius: 2px;
+    }
+
+    .about p {
+      color: #555;
+      font-size: 1.05rem;
+      line-height: 1.8rem;
+    }
+
+    /* SERVICES */
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .service-card {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .service-card h3 {
+      color: #0078d7;
+      margin-bottom: 1rem;
+    }
+
+    /* TESTIMONIALS */
+    .testimonials {
+      background-color: #e8f5ff;
+      padding: 4rem 2rem;
+    }
+
+    .testimonial {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin: 1rem auto;
+      max-width: 700px;
+    }
+
+    .testimonial p {
+      font-style: italic;
+      color: #444;
+    }
+
+    .testimonial span {
+      display: block;
+      margin-top: 1rem;
+      color: #0078d7;
+      font-weight: 600;
+    }
+
+    /* CONTACT */
+    .contact-info {
+      margin-top: 2rem;
+    }
+
+    .contact-info p {
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    footer {
+      background-color: #0078d7;
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+    }
+
+    footer a {
+      color: #ffe57f;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      nav {
+        margin-top: 0.5rem;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">EduTrip India</div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#services">Programs</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Learning Beyond Classrooms</h1>
+    <p>EduTrip India helps students explore real-world learning experiences through educational trips, workshops, and cultural immersions across India.</p>
+    <a href="#services" class="btn">Explore Programs</a>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about">
+    <h2>About Us</h2>
+    <div class="line"></div>
+    <p>We believe learning should be an adventure. EduTrip India connects education with experience — bridging the gap between theory and practice through curated educational journeys designed for schools and institutions. Every trip is a new lesson in life, culture, and knowledge.</p>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <h2>Our Programs</h2>
+    <div class="line"></div>
+    <div class="services">
+      <div class="service-card">
+        <h3>STEM Field Visits</h3>
+        <p>Hands-on learning through visits to science labs, tech parks, and research facilities to inspire innovation and creativity.</p>
+      </div>
+      <div class="service-card">
+        <h3>Government Service Tours</h3>
+        <p>Understand the functioning of civic and public departments like ISRO, Parliament, and educational institutions.</p>
+      </div>
+      <div class="service-card">
+        <h3>Cultural Learning Trips</h3>
+        <p>Experience India’s heritage, art, and history through curated visits and guided storytelling experiences.</p>
+      </div>
+      <div class="service-card">
+        <h3>Skill Development Camps</h3>
+        <p>Interactive sessions on real-world skills: communication, problem-solving, and leadership through travel and teamwork.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="testimonials">
+    <h2>What Schools Say</h2>
+    <div class="line"></div>
+    <div class="testimonial">
+      <p>"EduTrip transformed how our students perceive learning — it made subjects come alive through experiences!"</p>
+      <span>— Principal, Delhi Public School</span>
+    </div>
+    <div class="testimonial">
+      <p>"Our trip to ISRO and the local governance workshop helped our students understand science and society deeply."</p>
+      <span>— Academic Coordinator, Hyderabad</span>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <div class="line"></div>
+    <div class="contact-info">
+      <p>📧 Email: <strong>info@edutripindia.com</strong></p>
+      <p>📞 Phone: +91 90000 00000</p>
+      <p>🏢 Address: Hyderabad, Telangana, India</p>
+    </div>
+    <a href="mailto:info@edutripindia.com" class="btn">Send an Email</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 EduTrip India. All Rights Reserved.</p>
+    <p>Built with ❤️ by <a href="#">Raghavendra Prasad & Team</a></p>
+  </footer>
+
+</body>
+</html>
