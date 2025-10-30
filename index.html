@@ -1,494 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>EduTrip India — Learning Beyond Classrooms</title>
-  <meta name="description" content="EduTrip India — experiential and curriculum-integrated educational trips and SimpLearn sessions." />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduTrip India – Learning Beyond Classrooms</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* -------------------------
-       Reset & Base
-       ------------------------- */
-    :root{
-      --accent-1: #0078d7;   /* deep blue */
-      --accent-2: #00b4db;   /* aqua */
-      --muted: #f3f8ff;      /* soft paper */
-      --text: #123047;
+    :root {
+      --accent1: #0078d7;
+      --accent2: #00b4db;
+      --bg-soft: #f7fbff;
+      --text: #1a2c40;
       --card: #ffffff;
-      --glass: rgba(255,255,255,0.7);
-      --shadow: 0 10px 30px rgba(16,40,60,0.08);
-      --radius-lg: 16px;
+      --shadow: 0 10px 25px rgba(0,0,0,0.08);
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-      color:var(--text);
-      background: linear-gradient(180deg,var(--muted),#eef8ff 40%);
-      transition: background 600ms ease;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.5;
-      -webkit-tap-highlight-color: transparent;
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: linear-gradient(180deg, #f7fbff, #ffffff);
+      color: var(--text);
+      scroll-behavior: smooth;
+      transition: background 0.6s ease;
     }
 
-    a{color:inherit;text-decoration:none}
-    h1,h2,h3{margin:0 0 12px 0}
-    p{margin:0 0 16px 0;color:#33475b}
-
-    main{max-width:1100px;margin:0 auto;padding:96px 20px 80px}
-
-    /* -------------------------
-       Floating Capsule Header
-       ------------------------- */
+    /* FLOATING CAPSULE HEADER */
     .capsule {
-      position:fixed;
-      left:50%;
-      transform:translateX(-50%);
-      top:18px;
-      z-index:1200;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      padding:10px 14px;
-      background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.8));
-      border-radius:999px;
-      box-shadow: 0 6px 20px rgba(12,34,56,0.08);
-      backdrop-filter: blur(8px);
-      transition: transform 300ms cubic-bezier(.2,.9,.3,1), opacity 200ms ease, top 260ms ease;
-      will-change: transform, opacity, top;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 50px;
+      box-shadow: var(--shadow);
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      padding: 10px 24px;
+      z-index: 999;
+      transition: transform 0.3s ease, opacity 0.3s ease;
     }
 
     .capsule.hidden {
-      transform: translateX(-50%) translateY(-18px) scale(0.98);
-      opacity:0;
-      top:6px;
-      pointer-events:none;
+      transform: translateX(-50%) translateY(-20px);
+      opacity: 0;
+      pointer-events: none;
     }
 
-    .capsule .nav-icon {
-      width:44px;height:44px;border-radius:999px;display:inline-grid;place-items:center;
-      background:linear-gradient(180deg,var(--card),rgba(255,255,255,0.95));
-      box-shadow: 0 6px 18px rgba(12,34,56,0.06);
-      cursor:pointer;
-      transition: transform 220ms ease, box-shadow 220ms ease;
-      position:relative;
+    .capsule a {
+      color: var(--accent1);
+      text-decoration: none;
+      font-weight: 600;
+      position: relative;
+      font-size: 1rem;
+      transition: color 0.3s ease;
     }
 
-    .nav-icon:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(12,34,56,0.12)}
-    .nav-icon svg{display:block;width:20px;height:20px;fill:var(--accent-1)}
+    .capsule a:hover {
+      color: var(--accent2);
+    }
 
-    /* tooltip (simple) */
-    .nav-icon[data-tip]:hover::after {
+    /* Tooltip (below instead of above) */
+    .capsule a[data-tip]:hover::after {
       content: attr(data-tip);
       position: absolute;
-      bottom: calc(100% + 8px);
-      left:50%;
-      transform:translateX(-50%);
-      background: rgba(9,30,63,0.95);
-      color:#fff;padding:6px 8px;border-radius:6px;font-size:12px;white-space:nowrap;
-      box-shadow: 0 6px 20px rgba(12,34,56,0.12);
-      pointer-events:none;
-      opacity:1;
+      top: 130%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 1;
     }
 
-    /* -------------------------
-       Hero
-       ------------------------- */
+    /* HERO */
     .hero {
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:64px 20px;
-      border-radius:12px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.45));
-      box-shadow: var(--shadow);
-      margin-bottom:28px;
+      text-align: center;
+      padding: 6rem 2rem;
+      background: linear-gradient(135deg, #0078d7, #00b4db, #89f7fe);
+      background-size: 300% 300%;
+      animation: gradientShift 12s ease infinite;
+      color: white;
     }
 
-    .hero-inner{max-width:960px}
-    .hero h1{font-size:clamp(26px,4.4vw,40px);color:var(--accent-1);line-height:1.05}
-    .hero p{margin-top:10px;color:#28435a;font-size:1.02rem}
-
-    .hero .cta {
-      margin-top:18px;display:inline-block;padding:12px 20px;border-radius:999px;
-      background:#fff;color:var(--accent-1);font-weight:600;border:1px solid rgba(0,0,0,0.04);
-      transition: transform 200ms ease, background 200ms ease, color 200ms ease;
-    }
-    .hero .cta:hover{transform:translateY(-4px);background:var(--accent-1);color:#fff}
-
-    /* -------------------------
-       Sections & alternating backgrounds
-       ------------------------- */
-    section{padding:48px 0}
-    .section-wrap{padding:32px;border-radius:12px;margin-bottom:20px;transition: background 500ms ease, transform 400ms ease}
-    .section--soft{background:linear-gradient(180deg,#ffffff,#f8fbff);box-shadow:var(--shadow)}
-    .section--muted{background:linear-gradient(180deg,#f7fbff,#ffffff);box-shadow:var(--shadow)}
-
-    h2.section-title{color:var(--accent-1);font-size:1.6rem;margin-bottom:6px}
-    .muted-lead{color:#415b6b;margin-bottom:16px}
-
-    /* services grid */
-    .grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-      gap:18px;
-      margin-top:18px;
-    }
-    .card {
-      background:var(--card);
-      border-radius:12px;padding:18px;
-      box-shadow: 0 8px 20px rgba(16,40,60,0.04);
-      transition: transform 300ms cubic-bezier(.2,.9,.3,1), box-shadow 300ms ease;
-      cursor:default;
-      position:relative;
-    }
-    .card:hover{transform:translateY(-8px);box-shadow:0 18px 40px rgba(16,40,60,0.08)}
-    .card h3{color:var(--accent-1);margin-bottom:8px}
-    .card p{color:#4b6a7a;font-size:0.98rem}
-
-    /* subtle icon at top left of card */
-    .card .mini {
-      position:absolute;left:14px;top:14px;width:36px;height:36px;border-radius:8px;background:linear-gradient(180deg,var(--accent-2),var(--accent-1));
-      display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px;
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    /* -------------------------
-       Elegant small contact form (centered, premium)
-       ------------------------- */
-    .form-container{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:28px 18px;
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
     }
 
-    .form-box {
-      width:100%;
-      max-width:620px;
-      background:linear-gradient(180deg,#ffffff,#fbfdff);
-      border-radius:14px;
-      padding:22px;
-      box-shadow: 0 14px 40px rgba(12,34,56,0.06);
-      border: 1px solid rgba(0,0,0,0.03);
-      transition: transform 420ms ease, opacity 300ms ease;
-      position:relative;
-      overflow:hidden;
+    .hero p {
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+      font-size: 1.1rem;
+      color: #f8f8f8;
     }
 
-    .form-grid {
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
+    .btn {
+      background: #fff;
+      color: var(--accent1);
+      padding: 0.8rem 1.8rem;
+      border-radius: 40px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
     }
-    .form-grid .full{grid-column:1/-1}
-    label{display:block;font-size:13px;color:#114;opacity:0.75;margin-bottom:6px;font-weight:600}
-    input,select,textarea{
-      width:100%;padding:10px;border-radius:10px;border:1px solid #e1e8ef;background:transparent;
-      outline:none;font-size:14px;color:#123;
-      transition: box-shadow 180ms ease, border-color 180ms ease, transform 180ms ease;
+
+    .btn:hover {
+      background: var(--accent1);
+      color: #fff;
+      transform: scale(1.05);
     }
-    input:focus, textarea:focus{
-      box-shadow: 0 8px 20px rgba(0,120,215,0.08);
-      border-color: var(--accent-1);
-      transform: translateY(-2px);
+
+    section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      text-align: center;
     }
-    textarea{min-height:100px;resize:vertical;padding-top:10px}
 
-    .form-actions{margin-top:14px;display:flex;gap:12px;align-items:center}
-    .btn-primary {
-      background:linear-gradient(90deg,var(--accent-1),var(--accent-2));
-      color:#fff;border:none;padding:12px 16px;border-radius:999px;font-weight:700;cursor:pointer;
-      box-shadow:0 10px 30px rgba(7,88,160,0.12);
-      transition:transform 180ms ease, box-shadow 180ms ease;
+    h2 {
+      color: var(--accent1);
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
     }
-    .btn-primary:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(7,88,160,0.14)}
 
-    .btn-ghost {background:transparent;border:1px solid rgba(16,40,60,0.06);padding:10px 14px;border-radius:10px;cursor:pointer}
+    .line {
+      width: 80px;
+      height: 3px;
+      background: var(--accent2);
+      margin: 0.5rem auto 2rem;
+      border-radius: 2px;
+    }
 
-    .note {font-size:13px;color:#416070;margin-left:8px}
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
 
-    /* thank you */
+    .service-card {
+      background: var(--card);
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+    }
+
+    .service-card h3 {
+      color: var(--accent1);
+      margin-bottom: 0.5rem;
+    }
+
+    /* FORM */
+    .form-container {
+      background: linear-gradient(180deg, #ffffff, #f4faff);
+      border-radius: 15px;
+      padding: 2rem;
+      max-width: 550px;
+      margin: 2rem auto 0;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    form label {
+      display: block;
+      text-align: left;
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+    }
+
+    form input {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+
+    form input:focus {
+      border-color: var(--accent1);
+      box-shadow: 0 0 10px rgba(0,120,215,0.1);
+      outline: none;
+    }
+
+    form button {
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      border: none;
+      color: #fff;
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    form button:hover {
+      transform: scale(1.05);
+    }
+
     .thankyou {
-      display:none;
-      text-align:center;
-      padding:30px 10px;
-      font-size:1.05rem;
-      color:var(--accent-1);
-      font-weight:700;
-      animation: popIn 450ms ease forwards;
-    }
-    @keyframes popIn {
-      from { transform: translateY(8px) scale(.98); opacity:0; }
-      to { transform: translateY(0) scale(1); opacity:1; }
+      display: none;
+      text-align: center;
+      color: var(--accent1);
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-top: 1rem;
     }
 
-    /* founders */
-    .founders-grid{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:14px}
-    .founder {
-      width:220px;background:var(--card);border-radius:12px;padding:14px;text-align:center;
-      box-shadow: 0 8px 30px rgba(16,40,60,0.04);transition:transform 260ms ease, box-shadow 260ms ease;
-      cursor:default;
-    }
-    .founder img{width:86px;height:86px;border-radius:50%;object-fit:cover;transition:transform 300ms ease,box-shadow 300ms ease}
-    .founder:hover{transform: translateY(-8px);box-shadow:0 18px 48px rgba(16,40,60,0.08)}
-    .founder:hover img{transform:scale(1.08);box-shadow:0 12px 30px rgba(16,40,60,0.06)}
-    .founder h4{color:var(--accent-1);margin-top:10px;font-size:1rem}
-    .founder p{font-size:13px;color:#385064;margin-top:6px}
-
-    /* footer */
-    footer{margin-top:30px;padding:28px 12px;text-align:center;color:#fff;background:linear-gradient(90deg,var(--accent-1),var(--accent-2))}
-
-    /* responsive */
-    @media (max-width:880px){
-      .form-grid{grid-template-columns:1fr}
-      .capsule{left:50%;transform:translateX(-50%);top:14px;padding:8px}
-      .nav-icon{width:40px;height:40px}
-      main{padding:72px 16px 40px}
-    }
-    @media (max-width:520px){
-      .hero{padding:36px 12px}
-      .capsule{top:10px}
-      .nav-icon{width:36px;height:36px}
-      .founder{width:160px}
+    /* FOUNDERS */
+    .founders-list {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
     }
 
-    /* Respect reduced motion */
-    @media (prefers-reduced-motion: reduce){
-      *{transition:none!important;animation:none!important}
+    .founder-card {
+      background: var(--card);
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      width: 220px;
+      transition: all 0.3s ease;
+    }
+
+    .founder-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .founder-card img {
+      width: 80px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .founder-card:hover img {
+      transform: scale(1.1);
+    }
+
+    footer {
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .capsule { gap: 1rem; padding: 8px 20px; }
+      .capsule a { font-size: 0.9rem; }
+      .hero h1 { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Floating capsule header (icons only) -->
-  <div id="capsule" class="capsule" aria-hidden="false">
-    <!-- Home / About -->
-    <div class="nav-icon" data-tip="About" role="button" tabindex="0" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})" >
-      <!-- simple home/book icon -->
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 6a1 1 0 0 1 1-1h11v2H5v11h11v-4h2v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6zM21 3h-2v2h2v14h-2v2h2a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1z"/></svg>
-    </div>
-
-    <!-- Learning model -->
-    <div class="nav-icon" data-tip="Learning Model" role="button" tabindex="0" onclick="document.getElementById('learning-model').scrollIntoView({behavior:'smooth'})">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16v2H4zM4 10h12v2H4zM4 14h8v2H4z"/></svg>
-    </div>
-
-    <!-- Founders -->
-    <div class="nav-icon" data-tip="Founders" role="button" tabindex="0" onclick="document.getElementById('founders').scrollIntoView({behavior:'smooth'})">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12a5 5 0 1 0-0.001-9.999A5 5 0 0 0 12 12zm0 2c-4 0-8 2-8 4v2h16v-2c0-2-4-4-8-4z"/></svg>
-    </div>
-
-    <!-- Contact -->
-    <div class="nav-icon" data-tip="Contact" role="button" tabindex="0" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 8V7l-3 2-2-1-6 5 2 2 6-5 2 1 3-2zM3 5v12h4v4l4-4h6l4 4v-4h2V5H3z"/></svg>
-    </div>
+  <!-- Floating Header Capsule -->
+  <div class="capsule" id="capsule">
+    <a href="#about" data-tip="About EduTrip">About</a>
+    <a href="#learning-model" data-tip="Learning Model">Learning Model</a>
+    <a href="#founders" data-tip="Founders">Founders</a>
+    <a href="#contact" data-tip="Contact Us">Contact</a>
   </div>
 
-  <main>
-    <!-- HERO -->
-    <div class="hero" id="top-hero">
-      <div class="hero-inner">
-        <h1>Learning Beyond Classrooms</h1>
-        <p>EduTrip India creates curriculum-integrated trips, experiential learning journeys &amp; SimpLearn sessions where experts visit schools — practical learning that matters.</p>
-        <a class="cta" href="#learning-model">Explore Model</a>
-      </div>
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Learning Beyond Classrooms</h1>
+    <p>EduTrip India creates experiential, curriculum-integrated trips and SimpLearn sessions for practical learning that lasts a lifetime.</p>
+    <a href="#learning-model" class="btn">Explore Model</a>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <h2>About EduTrip</h2>
+    <div class="line"></div>
+    <p>EduTrip India bridges education with experience. We bring classrooms to life by connecting academic concepts with real-world exposure through trips, workshops, and civic learning programs.</p>
+  </section>
+
+  <!-- LEARNING MODEL -->
+  <section id="learning-model">
+    <h2>EduTrip Learning Model</h2>
+    <div class="line"></div>
+    <div class="services">
+      <div class="service-card"><h3>Curriculum Integrated Trips</h3><p>Trips aligned with school syllabus where students connect theory with practical exposure.</p></div>
+      <div class="service-card"><h3>Experiential Learning</h3><p>Hands-on projects and visits designed to help students learn by doing.</p></div>
+      <div class="service-card"><h3>SimpLearn Sessions</h3><p>Experts visit schools for civic and academic learning sessions, simplifying complex topics.</p></div>
+      <div class="service-card"><h3>Skill Development Workshops</h3><p>Focused programs that enhance communication, teamwork, and leadership through real experiences.</p></div>
     </div>
 
-    <!-- ABOUT -->
-    <section id="about" class="section-wrap section--soft" data-bg="soft">
-      <h2 class="section-title">About EduTrip</h2>
-      <div class="line" aria-hidden="true"></div>
-      <p class="muted-lead">We connect classroom concepts with real-world experiences — from labs and innovation hubs to cultural and civic sites — shaping responsible, knowledgeable students.</p>
-    </section>
+    <!-- FORM -->
+    <div class="form-container">
+      <form id="enquiryForm" action="https://formsubmit.co/founders@edutripindia.com" method="POST">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="New Institution Enquiry – EduTrip Website">
+        <label>Name</label>
+        <input type="text" name="Name" required>
+        <label>Institution Name</label>
+        <input type="text" name="Institution Name" required>
+        <label>Contact Number</label>
+        <input type="tel" name="Contact Number" required>
+        <label>Email ID</label>
+        <input type="email" name="Email ID" required>
+        <label>City</label>
+        <input type="text" name="City" required>
+        <button type="submit">Submit Details</button>
+      </form>
+      <div class="thankyou" id="thankyou">✅ Thank you! We have received your details.</div>
+    </div>
+  </section>
 
-    <!-- LEARNING MODEL -->
-    <section id="learning-model" class="section-wrap section--muted" data-bg="muted">
-      <h2 class="section-title">EduTrip Learning Model</h2>
-      <div class="line" aria-hidden="true"></div>
-      <p class="muted-lead">A single integrated program that includes:</p>
-
-      <div class="grid" role="list">
-        <article class="card" role="listitem" tabindex="0" title="Curriculum-aligned trips">
-          <div class="mini">CI</div>
-          <h3>Curriculum Integrated Trips</h3>
-          <p>Field visits aligned to school curriculum — applied learning that reinforces classroom concepts.</p>
-        </article>
-
-        <article class="card" role="listitem" tabindex="0" title="Hands-on learning">
-          <div class="mini">EX</div>
-          <h3>Experiential Learning</h3>
-          <p>Hands-on science, arts and culture activities that deepen understanding through doing.</p>
-        </article>
-
-        <article class="card" role="listitem" tabindex="0" title="Expert sessions at schools">
-          <div class="mini">SL</div>
-          <h3>SimpLearn Sessions</h3>
-          <p>Experts visit schools to deliver digestible, engaging sessions on academics & civic education.</p>
-        </article>
-
-        <article class="card" role="listitem" tabindex="0" title="Skill building">
-          <div class="mini">SK</div>
-          <h3>Skill Development Workshops</h3>
-          <p>Interactive programs for leadership, teamwork, communication and problem solving.</p>
-        </article>
+  <!-- FOUNDERS -->
+  <section id="founders">
+    <h2>Founders</h2>
+    <div class="line"></div>
+    <div class="founders-list">
+      <div class="founder-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Raghavendra Prasad">
+        <h4>Raghavendra Prasad</h4>
+        <p>Co-Founder & CEO</p>
       </div>
-
-      <!-- INSTITUTION ENQUIRY FORM (compact premium) -->
-      <div class="form-container" aria-live="polite">
-        <div class="form-box" id="formBox">
-          <form id="enquiryForm" class="form-inner" action="https://formsubmit.co/founders@edutripindia.com" method="POST" novalidate>
-            <!-- FormSubmit hidden fields -->
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_subject" value="New Institution Enquiry — EduTrip Website">
-            <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
-              <h3 style="margin:0;color:var(--accent-1);font-size:1.05rem">Institution Enquiry</h3>
-              <div style="margin-left:auto;font-size:13px;color:#3c5a70">Fill and we'll contact you</div>
-            </div>
-
-            <div class="form-grid">
-              <div>
-                <label for="fname">Name</label>
-                <input id="fname" name="Name" type="text" placeholder="Your full name" required>
-              </div>
-
-              <div>
-                <label for="institution">Institution Name</label>
-                <input id="institution" name="Institution Name" type="text" placeholder="School / Institution" required>
-              </div>
-
-              <div>
-                <label for="phone">Contact Number</label>
-                <input id="phone" name="Contact Number" type="tel" placeholder="+91 9XXXXXXXXX" required>
-              </div>
-
-              <div>
-                <label for="email">Email ID</label>
-                <input id="email" name="Email ID" type="email" placeholder="you@school.edu" required>
-              </div>
-
-              <div class="full">
-                <label for="city">City</label>
-                <input id="city" name="City" type="text" placeholder="City" required>
-              </div>
-
-              <div class="full" style="display:flex;gap:12px;align-items:center;">
-                <button type="submit" class="btn-primary">Submit Details</button>
-                <button type="button" class="btn-ghost" onclick="enquiryClear()">Clear</button>
-                <div class="note" aria-hidden="true">We'll email & call within 24-48 hours</div>
-              </div>
-            </div>
-          </form>
-
-          <div id="thankyou" class="thankyou" role="status" aria-live="polite">
-            ✅ Thank you! We received your enquiry. Our team will contact you shortly.
-          </div>
-        </div>
+      <div class="founder-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Koteswara Rao">
+        <h4>Koteswara Rao</h4>
+        <p>Co-Founder & Director</p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- FOUNDERS -->
-    <section id="founders" class="section-wrap section--soft" data-bg="soft">
-      <h2 class="section-title">Founders</h2>
-      <div class="line" aria-hidden="true"></div>
-      <p class="muted-lead">The team behind EduTrip India</p>
+  <!-- CONTACT -->
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <div class="line"></div>
+    <p>📧 founders@edutripindia.com | 📞 +91 90000 00000 | Hyderabad, Telangana</p>
+  </section>
 
-      <div class="founders-grid" role="list">
-        <div class="founder" title="Raghavendra Prasad — Co-Founder & CEO" role="listitem" tabindex="0">
-          <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Raghavendra Prasad">
-          <h4>Raghavendra Prasad</h4>
-          <p>Co-Founder &amp; CEO</p>
-        </div>
-
-        <div class="founder" title="Koteswara Rao — Co-Founder & Director" role="listitem" tabindex="0">
-          <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Koteswara Rao">
-          <h4>Koteswara Rao</h4>
-          <p>Co-Founder &amp; Director</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="section-wrap section--muted" data-bg="muted">
-      <h2 class="section-title">Contact</h2>
-      <div class="line" aria-hidden="true"></div>
-      <p class="muted-lead">Reach us for partnerships, bookings, and custom programs.</p>
-      <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:12px">
-        <div style="background:var(--card);padding:12px 16px;border-radius:12px;box-shadow:var(--shadow)"><strong>Email:</strong> <a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></div>
-        <div style="background:var(--card);padding:12px 16px;border-radius:12px;box-shadow:var(--shadow)"><strong>Phone:</strong> +91 90000 00000</div>
-        <div style="background:var(--card);padding:12px 16px;border-radius:12px;box-shadow:var(--shadow)"><strong>Location:</strong> Hyderabad, Telangana</div>
-      </div>
-    </section>
-
-    <footer>
-      <div style="max-width:900px;margin:0 auto;padding:8px 10px;">
-        © 2025 EduTrip India. All Rights Reserved.
-      </div>
-    </footer>
-  </main>
+  <footer>© 2025 EduTrip India. All Rights Reserved.</footer>
 
   <script>
-    // ------------- Header show/hide on scroll up/down -------------
-    (function() {
-      const capsule = document.getElementById('capsule');
-      let lastY = window.scrollY;
-      let ticking = false;
-      const threshold = 10;
-
-      function onScroll() {
-        const y = window.scrollY;
-        if (Math.abs(y - lastY) < threshold) {
-          lastY = y;
-          return;
-        }
-        if (y > lastY && y > 120) {
-          // scrolling down: hide
-          capsule.classList.add('hidden');
-        } else {
-          // scrolling up: show
-          capsule.classList.remove('hidden');
-        }
-        lastY = y;
+    // Hide/Show Header on Scroll
+    const capsule = document.getElementById('capsule');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const curr = window.scrollY;
+      if (curr > lastScroll && curr > 100) {
+        capsule.classList.add('hidden');
+      } else {
+        capsule.classList.remove('hidden');
       }
+      lastScroll = curr;
+    });
 
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            onScroll();
-            ticking = false;
-          });
-          ticking = true;
-        }
-      }, { passive: true });
-    })();
-
-    // ------------- Section-aware background gradient change -------------
-    (function(){
-      const sections = document.querySelectorAll('section[data-bg]');
-      const body = document.body;
-      const bgMap = {
-        'soft': 'linear-gradient(180deg,#f7fbff,#ffffff)',
-        'muted': 'linear-gradient(180deg,#f0f8ff,#f7fbff)'
-      };
-
-      const obs = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const key = entry.target.getAttribute('data-bg') || 'soft';
-            const bg = bgMap[key] || bgMap['soft'];
-            body.style.background = bg;
-          }
-        });
-      }, { threshold: 0.45 });
-
-      sections.forEach(s => obs.observe(s));
-    })();
-
-    // ------------- Form submission with FormSubmit + smooth transition -------------
-    (function(){
-      const form = document.getElementById('enquiryForm');
-      const formBo
+    // Handle Form Submit
+    const form = document.getElementById('enquiryForm');
+    const thank = document.getElementById('thankyou');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      await fetch(form.action, { method: 'POST', body: data });
+      form.style.display = 'none';
+      thank.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
