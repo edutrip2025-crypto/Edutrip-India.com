@@ -6,333 +6,226 @@
 <title>EduTrip — Learning Beyond Classrooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg: #eaf7ff;
-    --accent-1: #0078d7;
-    --accent-2: #00b4db;
-    --text: #0f2940;
-    --muted: #617585;
-    --footer-h: 88px;
-  }
-
-  /* Reset */
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
-  a{color:inherit;text-decoration:none}
-  img{max-width:100%;display:block}
-
-  /* Animated icons layer (safe z-index 0) */
-  .animated-bg{
-    position:fixed;
-    inset:0; /* top:0; right:0; bottom:0; left:0; */
-    z-index:0;
-    pointer-events:none;
-    overflow:hidden;
-    background:transparent;
-  }
-  .animated-bg .icon{
-    position:absolute;
-    width:42px;
-    height:42px;
-    opacity:0.12;
-    will-change:transform,opacity;
-    transform-origin:center center;
-    filter: drop-shadow(0 8px 18px rgba(5,20,40,0.06));
-  }
-  .animated-bg .icon img{width:100%;height:100%;object-fit:contain;display:block;opacity:0.98;}
-
-  /* Header (transparent, text-only, evenly spread) - z-index 30 */
-  header.site-header{
-    position:fixed;
-    top:0;left:0;right:0;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    padding:16px 6%;
-    z-index:30;
-    background:transparent; /* must remain transparent */
-    transition:transform .28s ease,opacity .24s ease;
-  }
-  header.site-header.hidden{ transform: translateY(-120%); opacity:0; pointer-events:none; }
-  header.site-header a{ color:#ffffff; font-weight:600; font-size:1rem; padding:6px 6px; }
-  header.site-header a:hover{ color:var(--accent-2); }
-
-  /* Hero (z-index 20) */
-  .hero{
-    position:relative;
-    z-index:20;
-    min-height:82vh;
-    padding:120px 20px 60px; /* leave space for header */
-    text-align:center;
-    color:#fff;
-    background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
-    border-bottom-left-radius:36px;
-    border-bottom-right-radius:36px;
-    box-shadow:0 18px 48px rgba(6,18,40,0.12);
-  }
-  .hero .wrap{ max-width:1100px; margin:0 auto; }
-  .hero h1{ font-size:clamp(28px,4.4vw,44px); margin-bottom:12px; font-weight:700; }
-  .hero p{ max-width:760px; margin:0 auto 18px; color:rgba(255,255,255,0.95); font-size:1.05rem; }
-  .hero .cta{ display:inline-block; padding:12px 20px; border-radius:999px; background:#fff; color:var(--accent-1); font-weight:700; box-shadow:0 12px 36px rgba(6,18,40,0.12); }
-
-  /* Main content area (z-index 20) */
-  main { position:relative; z-index:20; }
-
-  section{
-    max-width:1100px;
-    margin:0 auto;
-    padding:56px 20px;
-    text-align:center;
-    position:relative;
-  }
-  section h2{ color:var(--accent-1); font-size:1.6rem; margin-bottom:8px; font-weight:700; }
-  .decor{ width:72px; height:6px; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); border-radius:8px; margin:10px auto 20px; }
-
-  /* Services grid */
-  .services{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; margin-top:12px; }
-  .card{ background:#fff; border-radius:12px; padding:16px; text-align:left; box-shadow:0 10px 28px rgba(6,18,40,0.06); transition:transform .28s ease; }
-  .card:hover{ transform: translateY(-8px); box-shadow:0 22px 48px rgba(6,18,40,0.08); }
-  .card h3{ color:var(--accent-1); margin-bottom:8px; font-size:16px; }
-  .card p{ color:var(--muted); font-size:14px; line-height:1.6; }
-
-  /* Form block with larger spacing */
-  .form-block{ margin-top:72px; }
-  .form-wrap{ max-width:640px; margin:0 auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 16px 40px rgba(6,18,40,0.06); }
-  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  .form-row .full{ grid-column:1 / -1; }
-  label{ display:block; font-weight:600; margin-bottom:6px; font-size:13px; }
-  input, textarea{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e6f0fa; font-size:14px; }
-  .submit{ margin-top:10px; width:100%; padding:12px; border-radius:999px; border:none; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#fff; font-weight:700; cursor:pointer; }
-
-  /* Founders & footer */
-  .founders{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:10px; }
-  .founder{ width:220px; background:#fff; padding:14px; border-radius:12px; box-shadow:0 12px 36px rgba(6,18,40,0.06); text-align:center; }
-  .founder img{ width:84px; height:84px; border-radius:50%; display:block; margin:0 auto; }
-  footer{ height:var(--footer-h); display:flex; align-items:center; justify-content:center; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#fff; font-weight:700; }
-
-  /* Reveal helper (intersection observer will add .visible) */
-  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s cubic-bezier(.2,.9,.3,1); }
-  .reveal.visible{ opacity:1; transform:translateY(0); }
-
-  /* Responsive */
-  @media (max-width:880px){
-    header.site-header{ padding:12px 4%; }
-    .hero{ padding:100px 16px 40px; border-bottom-left-radius:22px; border-bottom-right-radius:22px; }
-    .form-row{ grid-template-columns: 1fr; }
-  }
+:root{
+  --bg:#eaf7ff;
+  --accent-1:#0078d7;
+  --accent-2:#00b4db;
+  --text:#0f2940;
+  --muted:#617585;
+  --footer-h:88px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.animated-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.animated-bg .icon{position:absolute;width:48px;height:48px;opacity:0.12;will-change:transform,opacity;transform-origin:center center;filter:drop-shadow(0 8px 18px rgba(5,20,40,0.06));}
+.animated-bg .icon img{width:100%;height:100%;object-fit:contain;display:block;opacity:0.95;}
+header.site-header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-around;align-items:center;padding:14px 6%;background:rgba(255,255,255,0.15);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.2);z-index:30;transition:transform .3s ease,opacity .3s ease;}
+header.site-header.hidden{transform:translateY(-120%);opacity:0;pointer-events:none;}
+header.site-header a{color:#fff;font-weight:600;font-size:1rem;padding:6px 8px;}
+header.site-header a:hover{color:var(--accent-2);}
+.hero{position:relative;z-index:20;min-height:75vh;padding:120px 20px 60px;text-align:center;color:#fff;background:linear-gradient(135deg,var(--accent-1),var(--accent-2));border-bottom-left-radius:36px;border-bottom-right-radius:36px;box-shadow:0 18px 48px rgba(6,18,40,0.12);overflow:hidden;}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(255,255,255,0.15),transparent 60%);animation:moveGlow 10s linear infinite alternate;}
+@keyframes moveGlow{from{background-position:0 0;}to{background-position:100% 100%;}}
+.hero .wrap{max-width:900px;margin:0 auto;}
+.hero h1{font-size:clamp(28px,4.4vw,44px);margin-bottom:12px;font-weight:700;}
+.hero p{max-width:720px;margin:0 auto 22px;color:rgba(255,255,255,0.95);font-size:1.05rem;}
+.hero .cta{display:inline-block;padding:14px 28px;border-radius:999px;background:#fff;color:var(--accent-1);font-weight:700;box-shadow:0 12px 36px rgba(6,18,40,0.15);transition:transform .3s ease,box-shadow .3s ease;}
+.hero .cta:hover{transform:translateY(-4px);box-shadow:0 18px 46px rgba(6,18,40,0.2);}
+main{position:relative;z-index:20;}
+section{max-width:1100px;margin:0 auto;padding:56px 20px;text-align:center;}
+section h2{color:var(--accent-1);font-size:1.6rem;margin-bottom:8px;font-weight:700;}
+.decor{width:72px;height:6px;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));border-radius:8px;margin:10px auto 20px;}
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:12px;}
+.card{background:#fff;border-radius:12px;padding:16px;text-align:left;box-shadow:0 10px 28px rgba(6,18,40,0.06);transition:transform .28s ease;}
+.card:hover{transform:translateY(-8px);box-shadow:0 22px 48px rgba(6,18,40,0.08);}
+.card h3{color:var(--accent-1);margin-bottom:8px;font-size:16px;}
+.card p{color:var(--muted);font-size:14px;line-height:1.6;}
+.form-block{margin-top:72px;}
+.form-wrap{max-width:640px;margin:0 auto;background:#fff;padding:24px;border-radius:12px;box-shadow:0 16px 40px rgba(6,18,40,0.06);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-row .full{grid-column:1 / -1;}
+label{display:block;font-weight:600;margin-bottom:6px;font-size:13px;}
+input,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #e6f0fa;font-size:14px;}
+.submit{margin-top:10px;width:100%;padding:12px;border-radius:999px;border:none;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;font-weight:700;cursor:pointer;position:relative;overflow:hidden;}
+.submit::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,0.3),transparent 60%);opacity:0;transition:opacity .4s;}
+.submit:hover::after{opacity:1;}
+.founders{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
+.founder{width:220px;background:#fff;padding:14px;border-radius:12px;box-shadow:0 12px 36px rgba(6,18,40,0.06);text-align:center;}
+.founder img{width:84px;height:84px;border-radius:50%;margin:0 auto;}
+footer{height:var(--footer-h);display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;font-weight:700;}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.9,.3,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+#scrollTopBtn{position:fixed;bottom:24px;right:24px;z-index:40;background:linear-gradient(135deg,var(--accent-1),var(--accent-2));color:#fff;border:none;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;box-shadow:0 8px 22px rgba(6,18,40,0.18);opacity:0;pointer-events:none;transition:opacity .3s ease;}
+#scrollTopBtn.visible{opacity:1;pointer-events:auto;}
+@media(max-width:880px){header.site-header{padding:12px 4%;}.hero{padding:100px 16px 40px;border-bottom-left-radius:22px;border-bottom-right-radius:22px;}.form-row{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-
-  <!-- Animated icon layer (z-index 0) -->
-  <div class="animated-bg" id="animatedBg" aria-hidden="true"></div>
-
-  <!-- Transparent Header -->
-  <header class="site-header" id="siteHeader" role="banner" aria-label="Main nav">
-    <a href="#home" data-tip="Home">Home</a>
-    <a href="#about" data-tip="About">About</a>
-    <a href="#learning" data-tip="Learning Model">Learning Model</a>
-    <a href="#founders" data-tip="Founders">Founders</a>
-    <a href="#contact" data-tip="Contact">Contact</a>
-  </header>
-
-  <!-- Hero (z-index 20) -->
-  <section id="home" class="hero" aria-labelledby="heroTitle">
-    <div class="wrap">
-      <h1 id="heroTitle">Learning Beyond Classrooms</h1>
-      <p>EduTrip curates curriculum-integrated trips, SimpLearn sessions and practical workshops that bring subjects to life.</p>
-      <a class="cta" href="#learning">Explore Model</a>
+<div class="animated-bg" id="animatedBg" aria-hidden="true"></div>
+<header class="site-header" id="siteHeader">
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#learning">Learning Model</a>
+  <a href="#founders">Founders</a>
+  <a href="#contact">Contact</a>
+</header>
+<section id="home" class="hero">
+  <div class="wrap">
+    <h1>Learning Beyond Classrooms</h1>
+    <p>EduTrip curates curriculum-integrated trips, SimpLearn sessions, and workshops that make subjects come alive.</p>
+    <a class="cta" href="#learning">Explore Model</a>
+  </div>
+</section>
+<main>
+  <section id="about" class="reveal">
+    <h2>About EduTrip</h2>
+    <div class="decor"></div>
+    <p style="max-width:900px;margin:0 auto;color:var(--muted);line-height:1.6;">EduTrip bridges classroom learning with hands-on exposure — experiential trips, sessions, and projects designed to nurture real-world understanding.</p>
+  </section>
+  <section id="learning" class="reveal">
+    <h2>Learning Model</h2>
+    <div class="decor"></div>
+    <div class="services">
+      <article class="card"><h3>Curriculum Integrated Trips</h3><p>Topic-linked field visits that make lessons real.</p></article>
+      <article class="card"><h3>Experiential Projects</h3><p>Projects that allow students to test and apply knowledge.</p></article>
+      <article class="card"><h3>SimpLearn Sessions</h3><p>Experts simplify academics and civic ideas in schools.</p></article>
+      <article class="card"><h3>Skill Workshops</h3><p>Communication, leadership, and teamwork through guided exercises.</p></article>
+    </div>
+    <div class="form-block reveal">
+      <div class="form-wrap">
+        <form id="inquiryForm" action="https://formsubmit.co/founders@edutripindia.com" method="POST">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_subject" value="Institution Enquiry - EduTrip">
+          <div class="form-row">
+            <div><label for="fname">Name</label><input id="fname" name="Name" type="text" required></div>
+            <div><label for="inst">Institution</label><input id="inst" name="Institution" type="text" required></div>
+            <div class="full"><label for="phone">Contact Number</label><input id="phone" name="Phone" type="tel" required></div>
+            <div><label for="email">Email</label><input id="email" name="Email" type="email" required></div>
+            <div><label for="city">City</label><input id="city" name="City" type="text" required></div>
+          </div>
+          <button class="submit" type="submit">Submit Details</button>
+        </form>
+        <div id="formThanks" style="display:none;margin-top:12px;text-align:center;font-weight:700;color:var(--accent-1)">✅ Thanks — we received your enquiry.</div>
+      </div>
     </div>
   </section>
-
-  <main>
-    <section id="about" class="reveal">
-      <h2>About EduTrip</h2>
-      <div class="decor" aria-hidden="true"></div>
-      <p style="max-width:900px;margin:0 auto;color:var(--muted);line-height:1.6;">EduTrip bridges classroom learning with hands-on exposure — trips, sessions and projects designed to build skill and civic understanding.</p>
-    </section>
-
-    <section id="learning" class="reveal">
-      <h2>Learning Model</h2>
-      <div class="decor" aria-hidden="true"></div>
-      <div class="services" role="list">
-        <article class="card" role="listitem"><h3>Curriculum Integrated Trips</h3><p>Topic-linked field visits that make lessons real.</p></article>
-        <article class="card" role="listitem"><h3>Experiential Projects</h3><p>Small projects that let students test and apply concepts.</p></article>
-        <article class="card" role="listitem"><h3>SimpLearn Sessions</h3><p>Experts who simplify academics and civic ideas in schools.</p></article>
-        <article class="card" role="listitem"><h3>Skill Workshops</h3><p>Communication, leadership and teamwork through guided exercises.</p></article>
-      </div>
-
-      <div class="form-block reveal" style="margin-top:72px;">
-        <div class="form-wrap">
-          <form id="inquiryForm" action="https://formsubmit.co/founders@edutripindia.com" method="POST">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_subject" value="Institution Enquiry - EduTrip">
-            <div class="form-row">
-              <div><label for="fname">Name</label><input id="fname" name="Name" type="text" required></div>
-              <div><label for="inst">Institution</label><input id="inst" name="Institution" type="text" required></div>
-              <div class="full"><label for="phone">Contact Number</label><input id="phone" name="Phone" type="tel" required></div>
-              <div><label for="email">Email</label><input id="email" name="Email" type="email" required></div>
-              <div><label for="city">City</label><input id="city" name="City" type="text" required></div>
-            </div>
-            <button class="submit" type="submit">Submit Details</button>
-          </form>
-          <div id="formThanks" style="display:none;margin-top:12px;text-align:center;font-weight:700;color:var(--accent-1)">✅ Thanks — we received your enquiry.</div>
-        </div>
-      </div>
-    </section>
-
-    <section id="founders" class="reveal">
-      <h2>Founders</h2>
-      <div class="decor" aria-hidden="true"></div>
-      <div class="founders" role="list">
-        <div class="founder" role="listitem"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt=""><h4>Raghavendra Prasad</h4><p style="color:var(--muted)">Co-Founder & CEO</p></div>
-        <div class="founder" role="listitem"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt=""><h4>Koteswara Rao</h4><p style="color:var(--muted)">Co-Founder & Director</p></div>
-      </div>
-    </section>
-
-    <section id="contact" class="reveal">
-      <h2>Contact</h2>
-      <div class="decor" aria-hidden="true"></div>
-      <p style="color:var(--muted);">Email: <strong>founders@edutripindia.com</strong><br>Phone: <strong>+91 90000 00000</strong> — Hyderabad, India</p>
-    </section>
-  </main>
-
-  <footer>© 2025 EduTrip</footer>
-
+  <section id="founders" class="reveal">
+    <h2>Founders</h2>
+    <div class="decor"></div>
+    <div class="founders">
+      <div class="founder"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt=""><h4>Raghavendra Prasad</h4><p style="color:var(--muted)">Co-Founder & CEO</p></div>
+      <div class="founder"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt=""><h4>Koteswara Rao</h4><p style="color:var(--muted)">Co-Founder & Director</p></div>
+    </div>
+  </section>
+  <section id="contact" class="reveal">
+    <h2>Contact</h2>
+    <div class="decor"></div>
+    <p style="color:var(--muted);">Email: <strong>founders@edutripindia.com</strong><br>Phone: <strong>+91 81792 88678</strong> — Hyderabad, India</p>
+  </section>
+</main>
+<footer>© 2025 EduTrip</footer>
+<button id="scrollTopBtn" title="Back to top">↑</button>
 <script>
-/* ------------------------------
-  Build animated icons safely (z-index 0)
-  - uses percent placement so icons never create scrollbars
-  - simple sine/cos animation via requestAnimationFrame
-------------------------------- */
 (function(){
-  const ICONS = [
-    "https://cdn-icons-png.flaticon.com/512/3095/3095583.png","https://cdn-icons-png.flaticon.com/512/2038/2038619.png",
-    "https://cdn-icons-png.flaticon.com/512/2972/2972085.png","https://cdn-icons-png.flaticon.com/512/2849/2849723.png",
-    "https://cdn-icons-png.flaticon.com/512/482/482476.png","https://cdn-icons-png.flaticon.com/512/889/889016.png",
-    "https://cdn-icons-png.flaticon.com/512/992/992700.png","https://cdn-icons-png.flaticon.com/512/4206/4206599.png",
-    "https://cdn-icons-png.flaticon.com/512/3580/3580295.png","https://cdn-icons-png.flaticon.com/512/2784/2784445.png",
-    "https://cdn-icons-png.flaticon.com/512/2711/2711642.png","https://cdn-icons-png.flaticon.com/512/3159/3159334.png",
-    "https://cdn-icons-png.flaticon.com/512/1197/1197511.png","https://cdn-icons-png.flaticon.com/512/2909/2909756.png",
-    "https://cdn-icons-png.flaticon.com/512/992/992687.png","https://cdn-icons-png.flaticon.com/512/3135/3135705.png",
-    "https://cdn-icons-png.flaticon.com/512/2303/2303693.png","https://cdn-icons-png.flaticon.com/512/3649/3649465.png",
-    "https://cdn-icons-png.flaticon.com/512/4301/4301710.png","https://cdn-icons-png.flaticon.com/512/4287/4287723.png",
-    "https://cdn-icons-png.flaticon.com/512/4406/4406526.png","https://cdn-icons-png.flaticon.com/512/1239/1239426.png",
-    "https://cdn-icons-png.flaticon.com/512/3313/3313807.png","https://cdn-icons-png.flaticon.com/512/2965/2965567.png",
-    "https://cdn-icons-png.flaticon.com/512/2917/2917242.png"
+  const ICONS=[
+    "https://cdn-icons-png.flaticon.com/512/2921/2921822.png",
+    "https://cdn-icons-png.flaticon.com/512/3135/3135768.png",
+    "https://cdn-icons-png.flaticon.com/512/3135/3135711.png",
+    "https://cdn-icons-png.flaticon.com/512/3143/3143623.png",
+    "https://cdn-icons-png.flaticon.com/512/3135/3135726.png",
+    "https://cdn-icons-png.flaticon.com/512/2879/2879517.png",
+    "https://cdn-icons-png.flaticon.com/512/3037/3037928.png",
+    "https://cdn-icons-png.flaticon.com/512/3135/3135779.png",
+    "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+    "https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
   ];
-  const container = document.getElementById('animatedBg');
-  if(!container) return;
-  const items = [];
-  const count = 25;
-  function rnd(min,max){return Math.random()*(max-min)+min}
+  const container=document.getElementById("animatedBg");
+  const count=25;
+  function rnd(min,max){return Math.random()*(max-min)+min;}
   for(let i=0;i<count;i++){
-    const div = document.createElement('div');
-    div.className='icon';
-    const img = document.createElement('img');
-    img.src = ICONS[i % ICONS.length];
-    img.alt = '';
+    const div=document.createElement("div");
+    div.className="icon";
+    const img=document.createElement("img");
+    img.src=ICONS[i%ICONS.length];
     div.appendChild(img);
-    // percent placement across width & height (avoid footer bottom)
-    const left = rnd(2,96);
-    const top = rnd(2,84); // leave bottom area for footer
-    div.style.left = left + '%';
-    div.style.top = top + '%';
-    // store motion params
-    div._ampX = rnd(8,48);
-    div._ampY = rnd(8,64);
-    div._speed = rnd(8,36); // seconds cycle
-    div._phase = rnd(0,Math.PI*2);
+    div.style.left=rnd(2,96)+"%";
+    div.style.top=rnd(4,84)+"%";
+    div._ampX=rnd(8,48);
+    div._ampY=rnd(8,64);
+    div._speed=rnd(10,36);
+    div._phase=rnd(0,Math.PI*2);
     container.appendChild(div);
-    items.push(div);
   }
-
+  const items=[...container.children];
   let t0;
   function step(ts){
-    if(!t0) t0 = ts;
-    const elapsed = (ts - t0)/1000;
-    items.forEach((el, idx)=>{
-      const p = elapsed / el._speed + el._phase;
-      const ox = Math.sin(p*2*Math.PI) * el._ampX;
-      const oy = Math.cos(p*2*Math.PI) * el._ampY;
-      const scale = 0.9 + 0.2 * Math.sin(p*2*Math.PI + idx);
-      el.style.transform = `translate(calc(-50% + ${ox}px), calc(-50% + ${oy}px)) scale(${scale})`;
+    if(!t0)t0=ts;
+    const elapsed=(ts-t0)/1000;
+    items.forEach((el,idx)=>{
+      const p=elapsed/el._speed+el._phase;
+      const ox=Math.sin(p*2*Math.PI)*el._ampX;
+      const oy=Math.cos(p*2*Math.PI)*el._ampY;
+      const scale=0.9+0.2*Math.sin(p*2*Math.PI+idx);
+      el.style.transform=`translate(calc(-50% + ${ox}px), calc(-50% + ${oy}px)) scale(${scale})`;
     });
-    window.requestAnimationFrame(step);
+    requestAnimationFrame(step);
   }
-  window.requestAnimationFrame(step);
-
-  // small parallax on mouse for desktop
-  if (!('ontouchstart' in window) && window.matchMedia('(pointer:fine)').matches) {
-    window.addEventListener('mousemove', (e) => {
-      const cx = e.clientX / window.innerWidth - 0.5;
-      const cy = e.clientY / window.innerHeight - 0.5;
-      items.forEach((el, idx)=>{
-        const factor = 6 + (idx % 6);
-        const px = cx * factor;
-        const py = cy * factor;
-        // combine with current transform by adding small translate
-        el.style.transform = el.style.transform + ` translate(${px}px, ${py}px)`;
-      });
-    }, {passive:true});
-  }
+  requestAnimationFrame(step);
 })();
-
-/* Header hide on scroll (smart) */
 (function(){
-  const header = document.getElementById('siteHeader');
-  let lastY = window.scrollY;
-  window.addEventListener('scroll', ()=> {
-    const y = window.scrollY;
-    if (y > lastY && y > 110) header.classList.add('hidden'); else header.classList.remove('hidden');
-    lastY = y;
-  }, {passive:true});
+  const header=document.getElementById('siteHeader');
+  let lastY=window.scrollY;
+  window.addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    if(y>lastY&&y>110)header.classList.add('hidden');else header.classList.remove('hidden');
+    lastY=y;
+  },{passive:true});
 })();
-
-/* IntersectionObserver reveal */
 (function(){
-  const obs = new IntersectionObserver((entries, o) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); o.unobserve(e.target); }
+  const obs=new IntersectionObserver((entries,o)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){e.target.classList.add('visible');o.unobserve(e.target);}
     });
-  }, { threshold: 0.18 });
-  document.querySelectorAll('.reveal').forEach(n => obs.observe(n));
+  },{threshold:0.18});
+  document.querySelectorAll('.reveal').forEach(n=>obs.observe(n));
 })();
-
-/* Smooth scroll for header links */
 (function(){
   document.querySelectorAll('header.site-header a[href^="#"]').forEach(a=>{
-    a.addEventListener('click', (ev)=>{
+    a.addEventListener('click',ev=>{
       ev.preventDefault();
-      const id = a.getAttribute('href').slice(1);
-      const el = document.getElementById(id);
-      if(!el) return;
-      const offset = 14; // small offset so header doesn't exactly overlap
-      const top = el.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({top, behavior:'smooth'});
+      const id=a.getAttribute('href').slice(1);
+      const el=document.getElementById(id);
+      if(!el)return;
+      const top=el.getBoundingClientRect().top+window.scrollY-14;
+      window.scrollTo({top,behavior:'smooth'});
     });
   });
 })();
-
-/* Form submit with fetch -> thank you message */
 (function(){
-  const form = document.getElementById('inquiryForm');
-  const thanks = document.getElementById('formThanks');
-  if(!form) return;
-  form.addEventListener('submit', async (ev) => {
+  const form=document.getElementById('inquiryForm');
+  const thanks=document.getElementById('formThanks');
+  if(!form)return;
+  form.addEventListener('submit',async ev=>{
     ev.preventDefault();
-    const data = new FormData(form);
-    try {
-      await fetch(form.action, { method:'POST', body: data });
-      form.style.display = 'none';
-      thanks.style.display = 'block';
-    } catch(e){
-      form.style.display = 'none';
-      thanks.style.display = 'block';
-      thanks.innerText = '✅ Thanks — If sending fails, email founders@edutripindia.com';
+    const data=new FormData(form);
+    try{
+      await fetch(form.action,{method:'POST',body:data});
+      form.style.display='none';
+      thanks.style.display='block';
+    }catch(e){
+      form.style.display='none';
+      thanks.style.display='block';
+      thanks.innerText='✅ Thanks — If sending fails, email founders@edutripindia.com';
     }
   });
 })();
+(function(){
+  const btn=document.getElementById('scrollTopBtn');
+  window.addEventListener('scroll',()=>{if(window.scrollY>400)btn.classList.add('visible');else btn.classList.remove('visible');});
+  btn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+})();
 </script>
 </body>
-  </html>
+</html>
