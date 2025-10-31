@@ -1,2 +1,1 @@
-# Edutrip-India.com
-Edutrip website
+# Here are your Instructions
