@@ -6,441 +6,333 @@
 <title>EduTrip — Learning Beyond Classrooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-  /* -------- Root theme -------- */
   :root{
-    --bg:#eaf7ff;
-    --accent-1:#0078d7;
-    --accent-2:#00b4db;
-    --text:#0f2940;
-    --muted:#6b8597;
-    --glass: rgba(255,255,255,0.06);
-    --footer-height:88px;
-    --icon-opacity:0.12;
-    --max-width:1100px;
+    --bg: #eaf7ff;
+    --accent-1: #0078d7;
+    --accent-2: #00b4db;
+    --text: #0f2940;
+    --muted: #617585;
+    --footer-h: 88px;
   }
 
-  /* Respect reduced motion */
-  @media (prefers-reduced-motion: reduce){
-    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
-  }
-
-  /* -------- Reset & base -------- */
+  /* Reset */
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;background:var(--bg);color:var(--text);font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+  html,body{height:100%;font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
   a{color:inherit;text-decoration:none}
   img{max-width:100%;display:block}
-  main{position:relative;z-index:5} /* above background */
 
-  /* -------- Animated background layer (behind everything except footer) -------- */
+  /* Animated icons layer (safe z-index 0) */
   .animated-bg{
     position:fixed;
-    left:0;right:0;top:0;
-    bottom:var(--footer-height); /* keep footer free */
+    inset:0; /* top:0; right:0; bottom:0; left:0; */
     z-index:0;
     pointer-events:none;
     overflow:hidden;
-    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+    background:transparent;
   }
-
-  /* Each icon is positioned absolute and animated via inline styles set by JS */
-  .bg-icon{
+  .animated-bg .icon{
     position:absolute;
-    width:48px;
-    height:48px;
-    opacity:var(--icon-opacity);
+    width:42px;
+    height:42px;
+    opacity:0.12;
+    will-change:transform,opacity;
     transform-origin:center center;
-    will-change: transform, opacity;
-    transition:transform .25s ease;
-    filter: drop-shadow(0 8px 18px rgba(5,20,40,0.08));
+    filter: drop-shadow(0 8px 18px rgba(5,20,40,0.06));
   }
-  .bg-icon img{width:100%;height:100%;object-fit:contain;display:block;opacity:0.98;filter: grayscale(0.05) contrast(1.02);}
+  .animated-bg .icon img{width:100%;height:100%;object-fit:contain;display:block;opacity:0.98;}
 
-  /* subtle parallax on pointer (applied via JS) */
-  .bg-icon.parallax{transition: transform 0.12s linear;}
-
-  /* -------- Header (transparent, text-only, evenly spread) -------- */
+  /* Header (transparent, text-only, evenly spread) - z-index 30 */
   header.site-header{
     position:fixed;
     top:0;left:0;right:0;
     display:flex;
-    justify-content:space-between;
+    justify-content:space-around;
     align-items:center;
-    padding:18px 36px;
-    z-index:20; /* above content */
-    background:transparent; /* IMPORTANT: transparent */
-    transition:transform .32s cubic-bezier(.2,.9,.3,1),opacity .24s ease;
-    pointer-events:auto;
+    padding:16px 6%;
+    z-index:30;
+    background:transparent; /* must remain transparent */
+    transition:transform .28s ease,opacity .24s ease;
   }
-  /* We make nav items occupy the full width by using flex and spacing */
-  .nav-row{
-    display:flex;
-    gap:0;
-    width:100%;
-    justify-content:space-around; /* evenly spread across width */
-    align-items:center;
-  }
-  .nav-row a{
-    color:#ffffff;
-    font-weight:600;
-    font-size:1rem;
-    padding:6px 10px;
-    position:relative;
-    white-space:nowrap;
-  }
-  .nav-row a::after{
-    content:attr(data-tip);
-    position:absolute;
-    left:50%; transform:translateX(-50%);
-    bottom:-34px;
-    background:rgba(6,18,32,0.92);
-    color:white;
-    font-size:12px;
-    padding:6px 8px;
-    border-radius:8px;
-    opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
-    transform-origin:center top;
-    transform:translateX(-50%) translateY(-6px);
-    white-space:nowrap;
-  }
-  .nav-row a:hover::after{opacity:1; transform:translateX(-50%) translateY(0);}
+  header.site-header.hidden{ transform: translateY(-120%); opacity:0; pointer-events:none; }
+  header.site-header a{ color:#ffffff; font-weight:600; font-size:1rem; padding:6px 6px; }
+  header.site-header a:hover{ color:var(--accent-2); }
 
-  /* hide header when class .hidden set */
-  header.site-header.hidden{ transform: translateY(-110%); opacity:0; pointer-events:none; }
-
-  /* Mobile wrap behavior */
-  @media (max-width:760px){
-    header.site-header{ padding:12px 18px; }
-    .nav-row a{ font-size:0.95rem; padding:10px 8px; }
-  }
-
-  /* -------- Hero (content visible above background, not under header) -------- */
+  /* Hero (z-index 20) */
   .hero{
-    min-height:84vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    color: #fff;
-    padding:120px 20px 64px; /* top padding to avoid header overlap */
-    background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
     position:relative;
-    z-index:6;
-    border-bottom-left-radius:48px;
-    border-bottom-right-radius:48px;
-    box-shadow:0 18px 60px rgba(6,18,40,0.12);
+    z-index:20;
+    min-height:82vh;
+    padding:120px 20px 60px; /* leave space for header */
+    text-align:center;
+    color:#fff;
+    background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+    border-bottom-left-radius:36px;
+    border-bottom-right-radius:36px;
+    box-shadow:0 18px 48px rgba(6,18,40,0.12);
   }
-  .hero .container{ max-width:var(--max-width); margin:0 auto; }
-  .hero h1{ font-size: clamp(28px, 4.2vw, 44px); line-height:1.02; margin-bottom:14px; font-weight:700; letter-spacing:-0.02em; }
-  .hero p{ font-size: clamp(15px,2vw,18px); max-width:780px; margin:0 auto 22px; color:rgba(255,255,255,0.95); }
-  .hero .cta{
-    display:inline-block;
-    padding:12px 22px;
-    border-radius:999px;
-    font-weight:700;
-    background: #fff;
-    color:var(--accent-1);
-    box-shadow:0 12px 36px rgba(6,18,40,0.12);
-    transition:transform .18s ease, box-shadow .18s ease;
-  }
-  .hero .cta:hover{ transform: translateY(-4px); box-shadow:0 22px 48px rgba(6,18,40,0.16); }
+  .hero .wrap{ max-width:1100px; margin:0 auto; }
+  .hero h1{ font-size:clamp(28px,4.4vw,44px); margin-bottom:12px; font-weight:700; }
+  .hero p{ max-width:760px; margin:0 auto 18px; color:rgba(255,255,255,0.95); font-size:1.05rem; }
+  .hero .cta{ display:inline-block; padding:12px 20px; border-radius:999px; background:#fff; color:var(--accent-1); font-weight:700; box-shadow:0 12px 36px rgba(6,18,40,0.12); }
 
-  /* -------- Page sections -------- */
-  main { padding-top:36px; }
-  section { padding:64px 20px; max-width:var(--max-width); margin:0 auto; text-align:center; z-index:6; position:relative; }
-  section h2{ color:var(--accent-1); font-size:22px; margin-bottom:8px; font-weight:700; }
-  .decor-line{ width:84px; height:6px; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); border-radius:12px; margin:10px auto 24px; }
+  /* Main content area (z-index 20) */
+  main { position:relative; z-index:20; }
+
+  section{
+    max-width:1100px;
+    margin:0 auto;
+    padding:56px 20px;
+    text-align:center;
+    position:relative;
+  }
+  section h2{ color:var(--accent-1); font-size:1.6rem; margin-bottom:8px; font-weight:700; }
+  .decor{ width:72px; height:6px; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); border-radius:8px; margin:10px auto 20px; }
 
   /* Services grid */
-  .services { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; margin-top:14px; }
-  .card {
-    background:white; border-radius:14px; padding:18px; text-align:left;
-    box-shadow:0 12px 30px rgba(6,18,40,0.06); transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s ease;
-  }
-  .card:hover{ transform: translateY(-8px); box-shadow:0 26px 60px rgba(6,18,40,0.09); }
+  .services{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; margin-top:12px; }
+  .card{ background:#fff; border-radius:12px; padding:16px; text-align:left; box-shadow:0 10px 28px rgba(6,18,40,0.06); transition:transform .28s ease; }
+  .card:hover{ transform: translateY(-8px); box-shadow:0 22px 48px rgba(6,18,40,0.08); }
   .card h3{ color:var(--accent-1); margin-bottom:8px; font-size:16px; }
-  .card p{ color:var(--muted); font-size:14px; line-height:1.5; }
+  .card p{ color:var(--muted); font-size:14px; line-height:1.6; }
 
-  /* big spacing before the enquiry form (premium) */
-  .form-block{ margin-top:72px; margin-bottom:14px; }
-  .form-wrap{
-    max-width:620px; margin:0 auto; background:white; padding:22px; border-radius:16px;
-    box-shadow:0 16px 48px rgba(6,18,40,0.08);
-  }
+  /* Form block with larger spacing */
+  .form-block{ margin-top:72px; }
+  .form-wrap{ max-width:640px; margin:0 auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 16px 40px rgba(6,18,40,0.06); }
   .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  .form-row .full{ grid-column: 1 / -1; }
-  label{ display:block; font-weight:600; margin-bottom:6px; font-size:13px; color:var(--text); }
-  input, textarea{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid #e3eef8; font-size:14px; background:#fff; color:var(--text); }
-  textarea{ min-height:120px; resize:vertical; }
-  .submit-btn{ margin-top:10px; display:inline-block; width:100%; padding:12px 14px; border-radius:999px; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:white; font-weight:700; border:none; cursor:pointer; transition: transform .14s ease; }
-  .submit-btn:hover{ transform:translateY(-4px); }
+  .form-row .full{ grid-column:1 / -1; }
+  label{ display:block; font-weight:600; margin-bottom:6px; font-size:13px; }
+  input, textarea{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e6f0fa; font-size:14px; }
+  .submit{ margin-top:10px; width:100%; padding:12px; border-radius:999px; border:none; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#fff; font-weight:700; cursor:pointer; }
 
-  /* Founders */
-  .founders{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-top:10px; }
-  .founder{ width:220px; background:white; padding:16px; border-radius:12px; box-shadow:0 12px 30px rgba(6,18,40,0.06); text-align:center; }
-  .founder img{ width:84px; height:84px; border-radius:50%; object-fit:cover; margin:0 auto; }
-  .founder h4{ color:var(--accent-1); margin-top:10px; font-size:16px; }
-  .founder p{ color:var(--muted); font-size:13px; margin-top:6px; }
+  /* Founders & footer */
+  .founders{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:10px; }
+  .founder{ width:220px; background:#fff; padding:14px; border-radius:12px; box-shadow:0 12px 36px rgba(6,18,40,0.06); text-align:center; }
+  .founder img{ width:84px; height:84px; border-radius:50%; display:block; margin:0 auto; }
+  footer{ height:var(--footer-h); display:flex; align-items:center; justify-content:center; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#fff; font-weight:700; }
 
-  /* Footer */
-  footer.site-footer{ height:var(--footer-height); display:flex; align-items:center; justify-content:center; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:white; font-weight:600; }
+  /* Reveal helper (intersection observer will add .visible) */
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s cubic-bezier(.2,.9,.3,1); }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
 
-  /* Reveal helper (invisible to start) */
-  .reveal { opacity:0; transform: translateY(26px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.3,1); }
-  .reveal.visible { opacity:1; transform: translateY(0); }
-
-  /* small screens adjustments */
+  /* Responsive */
   @media (max-width:880px){
-    .hero{ padding:110px 16px 44px; border-radius:0 0 22px 22px; }
-    .nav-row a{ font-size:15px; }
-    .card{ padding:16px; }
-    .form-row{ grid-template-columns:1fr; }
-    header.site-header{ padding:12px 12px; }
+    header.site-header{ padding:12px 4%; }
+    .hero{ padding:100px 16px 40px; border-bottom-left-radius:22px; border-bottom-right-radius:22px; }
+    .form-row{ grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-  <!-- Animated icon layer (behind content, above background) -->
+  <!-- Animated icon layer (z-index 0) -->
   <div class="animated-bg" id="animatedBg" aria-hidden="true"></div>
 
-  <!-- Transparent header: text-only, evenly spread -->
-  <header class="site-header" id="siteHeader" role="banner" aria-label="Main navigation">
-    <nav class="nav-row" role="navigation" aria-label="Primary">
-      <a href="#home" data-tip="Home">Home</a>
-      <a href="#about" data-tip="About EduTrip">About</a>
-      <a href="#learning" data-tip="Our Learning Model">Learning Model</a>
-      <a href="#founders" data-tip="Founders & Team">Founders</a>
-      <a href="#contact" data-tip="Contact Us">Contact</a>
-    </nav>
+  <!-- Transparent Header -->
+  <header class="site-header" id="siteHeader" role="banner" aria-label="Main nav">
+    <a href="#home" data-tip="Home">Home</a>
+    <a href="#about" data-tip="About">About</a>
+    <a href="#learning" data-tip="Learning Model">Learning Model</a>
+    <a href="#founders" data-tip="Founders">Founders</a>
+    <a href="#contact" data-tip="Contact">Contact</a>
   </header>
 
-  <!-- Hero -->
+  <!-- Hero (z-index 20) -->
   <section id="home" class="hero" aria-labelledby="heroTitle">
-    <div class="container">
+    <div class="wrap">
       <h1 id="heroTitle">Learning Beyond Classrooms</h1>
-      <p>EduTrip brings experiential trips, SimpLearn sessions and hands-on workshops that connect curriculum to real-life learning.</p>
-      <a class="cta" href="#learning">Explore Our Model</a>
+      <p>EduTrip curates curriculum-integrated trips, SimpLearn sessions and practical workshops that bring subjects to life.</p>
+      <a class="cta" href="#learning">Explore Model</a>
     </div>
   </section>
 
   <main>
-
-    <!-- About -->
-    <section id="about" class="reveal" aria-labelledby="aboutTitle">
-      <h2 id="aboutTitle">About EduTrip</h2>
-      <div class="decor-line" aria-hidden="true"></div>
-      <p style="max-width:900px;margin:0 auto;color:var(--muted);line-height:1.6;">EduTrip curates curriculum-integrated educational trips, expert-led sessions in schools, and practical workshops that build civic sense, confidence and real skills. We blend pedagogy with experience so students learn by doing.</p>
+    <section id="about" class="reveal">
+      <h2>About EduTrip</h2>
+      <div class="decor" aria-hidden="true"></div>
+      <p style="max-width:900px;margin:0 auto;color:var(--muted);line-height:1.6;">EduTrip bridges classroom learning with hands-on exposure — trips, sessions and projects designed to build skill and civic understanding.</p>
     </section>
 
-    <!-- Learning Model -->
-    <section id="learning" class="reveal" aria-labelledby="learningTitle">
-      <h2 id="learningTitle">Learning Model</h2>
-      <div class="decor-line" aria-hidden="true"></div>
-
-      <div class="services" role="list" aria-label="Learning offerings">
-        <article class="card" role="listitem"><h3>Curriculum Integrated Trips</h3><p>Field visits tied to syllabus that transform abstract concepts into memorable experience.</p></article>
-        <article class="card" role="listitem"><h3>Experiential Projects</h3><p>Hands-on exercises and small projects to practice and internalize learning.</p></article>
-        <article class="card" role="listitem"><h3>SimpLearn Sessions</h3><p>Domain experts conduct short, focused sessions that simplify complex academic or civic topics.</p></article>
-        <article class="card" role="listitem"><h3>Skill Workshops</h3><p>Workshops on communication, teamwork, leadership and applied problem solving.</p></article>
+    <section id="learning" class="reveal">
+      <h2>Learning Model</h2>
+      <div class="decor" aria-hidden="true"></div>
+      <div class="services" role="list">
+        <article class="card" role="listitem"><h3>Curriculum Integrated Trips</h3><p>Topic-linked field visits that make lessons real.</p></article>
+        <article class="card" role="listitem"><h3>Experiential Projects</h3><p>Small projects that let students test and apply concepts.</p></article>
+        <article class="card" role="listitem"><h3>SimpLearn Sessions</h3><p>Experts who simplify academics and civic ideas in schools.</p></article>
+        <article class="card" role="listitem"><h3>Skill Workshops</h3><p>Communication, leadership and teamwork through guided exercises.</p></article>
       </div>
 
-      <!-- enquiry form (big gap above) -->
-      <div class="form-block reveal" aria-hidden="false">
+      <div class="form-block reveal" style="margin-top:72px;">
         <div class="form-wrap">
           <form id="inquiryForm" action="https://formsubmit.co/founders@edutripindia.com" method="POST">
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_subject" value="Institution Enquiry - EduTrip" />
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_subject" value="Institution Enquiry - EduTrip">
             <div class="form-row">
-              <div><label for="name">Name</label><input id="name" name="name" type="text" required></div>
-              <div><label for="institution">Institution</label><input id="institution" name="institution" type="text" required></div>
-              <div class="full"><label for="phone">Contact Number</label><input id="phone" name="phone" type="tel" required></div>
-              <div><label for="email">Email</label><input id="email" name="email" type="email" required></div>
-              <div><label for="city">City</label><input id="city" name="city" type="text" required></div>
+              <div><label for="fname">Name</label><input id="fname" name="Name" type="text" required></div>
+              <div><label for="inst">Institution</label><input id="inst" name="Institution" type="text" required></div>
+              <div class="full"><label for="phone">Contact Number</label><input id="phone" name="Phone" type="tel" required></div>
+              <div><label for="email">Email</label><input id="email" name="Email" type="email" required></div>
+              <div><label for="city">City</label><input id="city" name="City" type="text" required></div>
             </div>
-            <button type="submit" class="submit-btn">Submit Details</button>
+            <button class="submit" type="submit">Submit Details</button>
           </form>
-
-          <div id="formThanks" style="display:none;margin-top:12px;text-align:center;font-weight:700;color:var(--accent-1);">✅ Thanks — we received your enquiry.</div>
+          <div id="formThanks" style="display:none;margin-top:12px;text-align:center;font-weight:700;color:var(--accent-1)">✅ Thanks — we received your enquiry.</div>
         </div>
       </div>
     </section>
 
-    <!-- Founders -->
-    <section id="founders" class="reveal" aria-labelledby="foundersTitle">
-      <h2 id="foundersTitle">Founders</h2>
-      <div class="decor-line" aria-hidden="true"></div>
+    <section id="founders" class="reveal">
+      <h2>Founders</h2>
+      <div class="decor" aria-hidden="true"></div>
       <div class="founders" role="list">
-        <div class="founder" role="listitem"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Raghavendra Prasad"><h4>Raghavendra Prasad</h4><p>Co-Founder & CEO</p></div>
-        <div class="founder" role="listitem"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Koteswara Rao"><h4>Koteswara Rao</h4><p>Co-Founder & Director</p></div>
+        <div class="founder" role="listitem"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt=""><h4>Raghavendra Prasad</h4><p style="color:var(--muted)">Co-Founder & CEO</p></div>
+        <div class="founder" role="listitem"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt=""><h4>Koteswara Rao</h4><p style="color:var(--muted)">Co-Founder & Director</p></div>
       </div>
     </section>
 
-    <!-- Contact section -->
-    <section id="contact" class="reveal" aria-labelledby="contactTitle">
-      <h2 id="contactTitle">Contact</h2>
-      <div class="decor-line" aria-hidden="true"></div>
+    <section id="contact" class="reveal">
+      <h2>Contact</h2>
+      <div class="decor" aria-hidden="true"></div>
       <p style="color:var(--muted);">Email: <strong>founders@edutripindia.com</strong><br>Phone: <strong>+91 90000 00000</strong> — Hyderabad, India</p>
     </section>
-
   </main>
 
-  <footer class="site-footer">© 2025 EduTrip</footer>
+  <footer>© 2025 EduTrip</footer>
 
 <script>
-/* ---------------------------
-   Utility: create background icons
-   - We create ~25 icons (mix of science/math/tech)
-   - Each icon gets randomized start position, scale, duration, direction
-   - Parallax effect on mousemove (desktop)
-   - Icons remain behind content (z-index controlled by CSS)
----------------------------- */
-
+/* ------------------------------
+  Build animated icons safely (z-index 0)
+  - uses percent placement so icons never create scrollbars
+  - simple sine/cos animation via requestAnimationFrame
+------------------------------- */
 (function(){
-  const ICON_SOURCES = [
-    /* math / geometry / stationery */
-    "https://cdn-icons-png.flaticon.com/512/3095/3095583.png", // book
-    "https://cdn-icons-png.flaticon.com/512/2038/2038619.png", // calculator
-    "https://cdn-icons-png.flaticon.com/512/2972/2972085.png", // pen
-    "https://cdn-icons-png.flaticon.com/512/2849/2849723.png", // protractor
-    "https://cdn-icons-png.flaticon.com/512/482/482476.png", // compass
-    "https://cdn-icons-png.flaticon.com/512/889/889016.png", // bulb
-    "https://cdn-icons-png.flaticon.com/512/992/992700.png", // globe
-    "https://cdn-icons-png.flaticon.com/512/4206/4206599.png", // stethoscope
-    "https://cdn-icons-png.flaticon.com/512/3580/3580295.png", // laptop
-    "https://cdn-icons-png.flaticon.com/512/2784/2784445.png", // atom
-    "https://cdn-icons-png.flaticon.com/512/2711/2711642.png", // microscope
-    "https://cdn-icons-png.flaticon.com/512/3159/3159334.png", // DNA
-    "https://cdn-icons-png.flaticon.com/512/1197/1197511.png", // test tube
-    "https://cdn-icons-png.flaticon.com/512/2909/2909756.png", // gear
-    "https://cdn-icons-png.flaticon.com/512/992/992687.png", // ruler
-    "https://cdn-icons-png.flaticon.com/512/3135/3135705.png", // brain
-    "https://cdn-icons-png.flaticon.com/512/2303/2303693.png", // graduation cap
-    "https://cdn-icons-png.flaticon.com/512/3649/3649465.png", // chemistry
-    "https://cdn-icons-png.flaticon.com/512/4301/4301710.png", // physics
-    "https://cdn-icons-png.flaticon.com/512/4287/4287723.png", // code
-    "https://cdn-icons-png.flaticon.com/512/4406/4406526.png", // notebook
-    "https://cdn-icons-png.flaticon.com/512/1239/1239426.png", // pencil
-    "https://cdn-icons-png.flaticon.com/512/3313/3313807.png", // calendar
-    "https://cdn-icons-png.flaticon.com/512/2965/2965567.png", // lightbulb outline
-    "https://cdn-icons-png.flaticon.com/512/2917/2917242.png"  // award/star
+  const ICONS = [
+    "https://cdn-icons-png.flaticon.com/512/3095/3095583.png","https://cdn-icons-png.flaticon.com/512/2038/2038619.png",
+    "https://cdn-icons-png.flaticon.com/512/2972/2972085.png","https://cdn-icons-png.flaticon.com/512/2849/2849723.png",
+    "https://cdn-icons-png.flaticon.com/512/482/482476.png","https://cdn-icons-png.flaticon.com/512/889/889016.png",
+    "https://cdn-icons-png.flaticon.com/512/992/992700.png","https://cdn-icons-png.flaticon.com/512/4206/4206599.png",
+    "https://cdn-icons-png.flaticon.com/512/3580/3580295.png","https://cdn-icons-png.flaticon.com/512/2784/2784445.png",
+    "https://cdn-icons-png.flaticon.com/512/2711/2711642.png","https://cdn-icons-png.flaticon.com/512/3159/3159334.png",
+    "https://cdn-icons-png.flaticon.com/512/1197/1197511.png","https://cdn-icons-png.flaticon.com/512/2909/2909756.png",
+    "https://cdn-icons-png.flaticon.com/512/992/992687.png","https://cdn-icons-png.flaticon.com/512/3135/3135705.png",
+    "https://cdn-icons-png.flaticon.com/512/2303/2303693.png","https://cdn-icons-png.flaticon.com/512/3649/3649465.png",
+    "https://cdn-icons-png.flaticon.com/512/4301/4301710.png","https://cdn-icons-png.flaticon.com/512/4287/4287723.png",
+    "https://cdn-icons-png.flaticon.com/512/4406/4406526.png","https://cdn-icons-png.flaticon.com/512/1239/1239426.png",
+    "https://cdn-icons-png.flaticon.com/512/3313/3313807.png","https://cdn-icons-png.flaticon.com/512/2965/2965567.png",
+    "https://cdn-icons-png.flaticon.com/512/2917/2917242.png"
   ];
-
   const container = document.getElementById('animatedBg');
-  if (!container) return;
-
-  const viewportW = () => Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-  const viewportH = () => Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-
-  // create n icons
-  const ICON_COUNT = 25;
-  const icons = [];
-
-  function rand(min, max){ return Math.random() * (max - min) + min; }
-
-  for (let i=0;i<ICON_COUNT;i++){
-    const src = ICON_SOURCES[i % ICON_SOURCES.length];
-    const el = document.createElement('div');
-    el.className = 'bg-icon';
-    el.style.opacity = (0.06 + Math.random()*0.16).toFixed(2);
-    // random initial pos across viewport except bottom footer
-    const x = rand(2, 94); // percent
-    const y = rand(2, 86); // percent (leave footer area)
-    el.style.left = `${x}%`;
-    el.style.top = `${y}%`;
-    // scale variation
-    const scale = rand(0.6, 1.25);
-    el.style.transform = `translate(-50%,-50%) scale(${scale})`;
-    // jitter / animation properties stored in dataset
-    el.dataset._dx = rand(-40,40); // x movement px
-    el.dataset._dy = rand(-40,-80); // y movement px (mostly upward)
-    el.dataset._dur = rand(18,46); // seconds
-    el.dataset._delay = rand(0,12); // sec
-    el.dataset._rot = rand(-14,14); // degrees rotation range
-    el.dataset._scale = scale;
-
+  if(!container) return;
+  const items = [];
+  const count = 25;
+  function rnd(min,max){return Math.random()*(max-min)+min}
+  for(let i=0;i<count;i++){
+    const div = document.createElement('div');
+    div.className='icon';
     const img = document.createElement('img');
-    img.src = src;
+    img.src = ICONS[i % ICONS.length];
     img.alt = '';
-    el.appendChild(img);
-    container.appendChild(el);
-    icons.push(el);
+    div.appendChild(img);
+    // percent placement across width & height (avoid footer bottom)
+    const left = rnd(2,96);
+    const top = rnd(2,84); // leave bottom area for footer
+    div.style.left = left + '%';
+    div.style.top = top + '%';
+    // store motion params
+    div._ampX = rnd(8,48);
+    div._ampY = rnd(8,64);
+    div._speed = rnd(8,36); // seconds cycle
+    div._phase = rnd(0,Math.PI*2);
+    container.appendChild(div);
+    items.push(div);
   }
 
-  // animate icons using requestAnimationFrame (gives more control)
-  // Each icon moves on an individual sine/cos path based on time, duration, amplitude
-  let startTs = null;
-  function animateIcons(ts){
-    if (!startTs) startTs = ts;
-    const t = (ts - startTs)/1000; // seconds
-    icons.forEach((el, idx) => {
-      // read params
-      const dur = parseFloat(el.dataset._dur);
-      const delay = parseFloat(el.dataset._delay);
-      const dx = parseFloat(el.dataset._dx);
-      const dy = parseFloat(el.dataset._dy);
-      const rot = parseFloat(el.dataset._rot);
-      const baseScale = parseFloat(el.dataset._scale) || 1;
-
-      const localT = Math.max(0, t - delay);
-      const phase = (localT % dur) / dur; // 0..1
-      // Sine/cos motion for natural float
-      const ox = Math.sin(phase * Math.PI * 2 * (0.5 + idx*0.01)) * dx;
-      const oy = Math.cos(phase * Math.PI * 2 * (0.5 + idx*0.013)) * dy;
-      const r = Math.sin(phase * Math.PI * 2) * rot;
-
-      // parallax offset handled separately
-      const parx = el.dataset.px ? parseFloat(el.dataset.px) : 0;
-      const pary = el.dataset.py ? parseFloat(el.dataset.py) : 0;
-
-      // apply style
-      el.style.transform = `translate(calc(-50% + ${ox + parx}px), calc(-50% + ${oy + pary}px)) rotate(${r}deg) scale(${baseScale})`;
+  let t0;
+  function step(ts){
+    if(!t0) t0 = ts;
+    const elapsed = (ts - t0)/1000;
+    items.forEach((el, idx)=>{
+      const p = elapsed / el._speed + el._phase;
+      const ox = Math.sin(p*2*Math.PI) * el._ampX;
+      const oy = Math.cos(p*2*Math.PI) * el._ampY;
+      const scale = 0.9 + 0.2 * Math.sin(p*2*Math.PI + idx);
+      el.style.transform = `translate(calc(-50% + ${ox}px), calc(-50% + ${oy}px)) scale(${scale})`;
     });
-    window.requestAnimationFrame(animateIcons);
+    window.requestAnimationFrame(step);
   }
-  window.requestAnimationFrame(animateIcons);
+  window.requestAnimationFrame(step);
 
-  // pointer parallax for desktop
-  const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
-  if (!isTouch) {
-    window.addEventListener('mousemove', (ev) => {
-      const cx = ev.clientX / viewportW(); // 0..1
-      const cy = ev.clientY / viewportH();
-      icons.forEach((el, idx) => {
-        // subtle parallax factor based on element index
-        const f = 8 + (idx % 7); // 8..14 px range
-        const px = (cx - 0.5) * f * ( (idx % 2) ? 1 : -1 );
-        const py = (cy - 0.5) * f * ( (idx % 3) ? 1 : -1 );
-        el.dataset.px = px.toFixed(2);
-        el.dataset.py = py.toFixed(2);
-        el.classList.add('parallax');
+  // small parallax on mouse for desktop
+  if (!('ontouchstart' in window) && window.matchMedia('(pointer:fine)').matches) {
+    window.addEventListener('mousemove', (e) => {
+      const cx = e.clientX / window.innerWidth - 0.5;
+      const cy = e.clientY / window.innerHeight - 0.5;
+      items.forEach((el, idx)=>{
+        const factor = 6 + (idx % 6);
+        const px = cx * factor;
+        const py = cy * factor;
+        // combine with current transform by adding small translate
+        el.style.transform = el.style.transform + ` translate(${px}px, ${py}px)`;
       });
     }, {passive:true});
-    // clear small parallax on mouseleave
-    window.addEventListener('mouseleave', ()=> {
-      icons.forEach(el => { el.dataset.px = 0; el.dataset.py = 0; });
-    });
   }
-
-  // Resize: ensure icons remain within viewport bounds (no extra code needed; percent positions used)
 })();
 
-/* ---------------------------
-   Header hide on scroll (smart)
----------------------------- */
+/* Header hide on scroll (smart) */
 (function(){
   const header = document.getElementById('siteHeader');
   let lastY = window.scrollY;
-  let ticking = false;
-  function onScroll(){
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        const y = window.scrollY;
-        if (y > lastY && y > 120) header.classList.add('hidden');
-        else header.classList.remove('hidden');
-        lastY = y;
-        ticking = false;
-      });
-      ticking = true;
+  window.addEventListener('scroll', ()=> {
+    const y = window.scrollY;
+    if (y > lastY && y > 110) header.classList.add('hidden'); else header.classList.remove('hidden');
+    lastY = y;
+  }, {passive:true});
+})();
+
+/* IntersectionObserver reveal */
+(function(){
+  const obs = new IntersectionObserver((entries, o) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); o.unobserve(e.target); }
+    });
+  }, { threshold: 0.18 });
+  document.querySelectorAll('.reveal').forEach(n => obs.observe(n));
+})();
+
+/* Smooth scroll for header links */
+(function(){
+  document.querySelectorAll('header.site-header a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', (ev)=>{
+      ev.preventDefault();
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if(!el) return;
+      const offset = 14; // small offset so header doesn't exactly overlap
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({top, behavior:'smooth'});
+    });
+  });
+})();
+
+/* Form submit with fetch -> thank you message */
+(function(){
+  const form = document.getElementById('inquiryForm');
+  const thanks = document.getElementById('formThanks');
+  if(!form) return;
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const data = new FormData(form);
+    try {
+      await fetch(form.action, { method:'POST', body: data });
+      form.style.display = 'none';
+      thanks.style.display = 'block';
+    } catch(e){
+      form.style.display = 'none';
+      thanks.style.display = 'block';
+      thanks.innerText = '✅ Thanks — If sending fails, email founders@edutripindia.com';
     }
-  }
-  
+  });
+})();
+</script>
+</body>
+  </html>
