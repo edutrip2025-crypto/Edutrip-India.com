@@ -1,803 +1,118 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Edutrip India • Curriculum‑Linked Student Travel & Learning</title>
-  <meta name="description" content="Edutrip India — curriculum-aligned educational trips, SimpLearn expert sessions, workshops & premium plans." />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <meta name="theme-color" content="#082454">
-  <style>
-    :root{
-      --bg:#f4fbff;
-      --card:#ffffff;
-      --muted:#566173;
-      --accent:#082454;
-      --accent-2:#1e90ff;
-      --glass:rgba(255,255,255,0.7);
-      --radius:14px;
-      --max-width:1300px;
-      --shadow: 0 18px 50px rgba(4,20,50,0.08);
-      --glass-shadow: 0 8px 28px rgba(13,58,130,0.06);
-      --accent-gradient: linear-gradient(90deg,var(--accent),var(--accent-2));
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      color-scheme: light;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#fff 60%);color:#081426;-webkit-font-smoothing:antialiased}
-    a{color:inherit}
-    .wrap{max-width:var(--max-width);margin:0 auto;padding:28px}
-    /* Background animated icons */
-    .bg-icons{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-    .bg-icon{
-      position:absolute;
-      width:80px;height:80px;opacity:0.08;filter:blur(0.2px);
-      transform-origin:center;
-      will-change:transform,opacity;
-    }
-    @keyframes float-slow {0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-30px) rotate(10deg)}100%{transform:translateY(0) rotate(0)}}
-    @keyframes float-long {0%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(50px) rotate(5deg)}100%{transform:translateY(0) rotate(-5deg)}}
-    @keyframes glide-left {0%{transform:translateX(110vw)}100%{transform:translateX(-30vw)}}
-    @keyframes glide-right {0%{transform:translateX(-30vw)}100%{transform:translateX(110vw)}}
-    .bg-icon.slow{animation:float-slow 8s ease-in-out infinite}
-    .bg-icon.slower{animation:float-long 12s ease-in-out infinite}
-    .bg-icon.glide-left{animation:glide-left 36s linear infinite}
-    .bg-icon.glide-right{animation:glide-right 42s linear infinite}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Edutrip India • Premium Learning Journeys</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4fbff;
+  --card:#ffffff;
+  --muted:#566173;
+  --accent:#082454;
+  --accent-2:#1e90ff;
+  --accent-gradient:linear-gradient(90deg,var(--accent),var(--accent-2));
+  --radius:14px;
+  --shadow:0 18px 50px rgba(4,20,50,0.08);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+}
+body{margin:0;background:linear-gradient(180deg,var(--bg),#fff 60%);color:#081426;}
+.wrap{max-width:1300px;margin:0 auto;padding:28px}
 
-    /* Header */
-    header.site-header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,0.88);backdrop-filter:blur(6px);border-bottom:1px solid rgba(10,20,40,0.04);transition:transform .28s ease,box-shadow .2s ease}
-    header.site-header.hidden{transform:translateY(-120%);box-shadow:none}
-    .header-inner{display:flex;gap:20px;align-items:center;justify-content:space-between;padding:12px 28px;max-width:var(--max-width);margin:0 auto}
-    .brand{display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit;z-index:70}
-    .logo{
-      width:56px;height:56px;border-radius:10px;background:var(--accent-gradient);display:inline-grid;place-items:center;color:#fff;font-weight:800;font-family:'Playfair Display',serif;font-size:20px;box-shadow:0 8px 30px rgba(10,40,90,0.12)
-    }
-    .brand .title{font-weight:800;font-size:1.05rem;line-height:1}
-    .brand .tag{font-size:0.78rem;color:var(--muted)}
-    nav.main-nav{display:flex;align-items:center;gap:18px}
-    .menu{display:flex;gap:12px;list-style:none;margin:0;padding:0}
-    .menu a{display:inline-flex;padding:10px 12px;border-radius:10px;text-decoration:none;color:var(--muted);font-weight:600}
-    .menu a:hover{color:var(--accent);background:rgba(13,61,145,0.04)}
-    .menu .cta{background:var(--accent-gradient);color:#fff;box-shadow:0 10px 28px rgba(11,61,145,0.12)}
-    .header-tools{display:flex;gap:12px;align-items:center}
-    .phone{font-weight:700;color:var(--accent)}
-    /* Mobile menu */
-    .hamburger{display:none;border:0;background:transparent;padding:8px;border-radius:8px}
-    .hamburger .bar{width:22px;height:2px;background:var(--muted);display:block;position:relative}
-    .hamburger .bar:before,.hamburger .bar:after{content:"";position:absolute;left:0;right:0;height:2px;background:var(--muted)}
-    .hamburger .bar:before{top:-7px}.hamburger .bar:after{top:7px}
-    .mobile-drawer{display:none;position:fixed;right:18px;top:74px;background:var(--card);border-radius:12px;padding:12px;box-shadow:var(--shadow);z-index:80}
-    /* Hero */
-    .hero{padding:48px 0 36px;position:relative;z-index:10}
-    .hero-grid{display:grid;grid-template-columns:1fr 480px;gap:30px;align-items:center}
-    .hero h1{font-family:'Playfair Display',serif;font-size:2.6rem;margin:0 0 12px}
-    .lead{color:var(--muted);font-size:1.05rem;margin-bottom:16px}
-    .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
-    .hero-features{list-style:none;padding:0;margin:18px 0 0;color:var(--muted);display:grid;gap:8px}
-    .hero-side{background:linear-gradient(180deg,rgba(255,255,255,0.98),#fff);border-radius:16px;padding:18px;box-shadow:var(--glass-shadow);min-height:260px;display:flex;flex-direction:column;gap:12px}
+/* background icons brighter */
+.bg-icons{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.bg-icon{position:absolute;opacity:0.15;animation:float 12s ease-in-out infinite alternate;}
+@keyframes float{0%{transform:translateY(0) scale(1)}100%{transform:translateY(-20px) scale(1.1)}}
 
-    /* Buttons */
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;text-decoration:none;border:0}
-    .btn-primary{background:var(--accent-gradient);color:#fff;box-shadow:0 8px 28px rgba(11,61,145,0.12)}
-    .btn-ghost{background:transparent;color:var(--accent);border:1px solid rgba(11,61,145,0.08)}
-    .btn-outline{background:transparent;border:1px solid rgba(15,23,42,0.06);color:#07102a}
-    .btn.large{padding:14px 20px;font-size:1.05rem}
-    .pill{display:inline-block;padding:8px 10px;background:rgba(13,61,145,0.06);border-radius:999px;color:var(--accent);font-weight:800}
+/* header fixed */
+header.site-header{position:sticky;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,0.05);z-index:50;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;max-width:1300px;margin:0 auto;}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.logo{width:56px;height:56px;border-radius:10px;background:var(--accent-gradient);display:grid;place-items:center;color:#fff;font-weight:800;font-family:"Playfair Display",serif;box-shadow:0 6px 20px rgba(30,144,255,0.25)}
+nav.main-nav ul{list-style:none;margin:0;padding:0;display:flex;gap:12px;}
+nav.main-nav a{text-decoration:none;color:var(--muted);padding:8px 12px;border-radius:8px;font-weight:600;}
+nav.main-nav a:hover{background:rgba(13,61,145,0.08);color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;text-decoration:none;border:0;}
+.btn-primary{background:var(--accent-gradient);color:#fff;box-shadow:0 8px 28px rgba(11,61,145,0.12);}
+.btn-outline{background:transparent;border:1px solid rgba(15,23,42,0.06);color:#07102a}
+.pill{display:inline-block;padding:8px 10px;background:rgba(13,61,145,0.06);border-radius:999px;color:var(--accent);font-weight:800}
 
-    /* Premium tiles marquee (auto horizontal scroll) */
-    .marquee-wrap{overflow:hidden;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:var(--glass-shadow);padding:14px;margin:20px 0}
-    .marquee{display:flex;gap:14px;align-items:stretch;white-space:nowrap}
-    .tile{min-width:280px;background:linear-gradient(180deg,#fff,#ffffff);border-radius:12px;padding:16px;box-shadow:0 18px 36px rgba(6,22,50,0.06);flex:0 0 auto;display:flex;flex-direction:column;gap:10px}
-    .tile h4{margin:0;color:var(--accent)}
-    .tile .sub{color:var(--muted);font-size:0.92rem}
-    .marquee.paused{animation-play-state:paused}
-    @keyframes scroll-left {
-      0% {transform:translateX(0)}
-      100% {transform:translateX(-50%)}
-    }
-    .marquee-track{display:flex;gap:14px;animation:scroll-left 28s linear infinite}
+/* hero */
+.hero{padding:60px 0;position:relative;z-index:10;}
+.hero h1{font-family:'Playfair Display',serif;font-size:2.8rem;margin:0 0 12px;}
+.hero-grid{display:grid;grid-template-columns:1fr 420px;gap:30px;align-items:center;}
+.lead{color:var(--muted);font-size:1.1rem;margin-bottom:20px;}
 
-    /* Grid sections */
-    section{padding:24px 0}
-    .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
-    .section-title{font-size:1.3rem;font-weight:700;margin:0}
-    .muted{color:var(--muted)}
-    .program-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:12px}
-    .program-card{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;min-height:120px}
-    .program-icon{font-size:26px}
+/* tile cards - hover animation */
+.tile{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:20px;transition:transform .3s ease,box-shadow .3s ease;}
+.tile:hover{transform:scale(1.05);box-shadow:0 20px 60px rgba(4,20,50,0.12);}
 
-    /* Pricing */
-    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:12px}
-    .price-card{background:linear-gradient(180deg,#fff,#fcfeff);padding:20px;border-radius:14px;box-shadow:var(--shadow);position:relative;display:flex;flex-direction:column;gap:12px}
-    .price-card.recommended{border:2px solid rgba(30,144,255,0.08)}
-    .price-tier{font-weight:800;color:var(--accent);font-size:1.25rem}
-    .price{font-size:1.8rem;font-weight:900;color:var(--accent-2)}
-    .badge-top{position:absolute;right:14px;top:12px;background:var(--accent-2);color:#fff;padding:8px 12px;border-radius:10px;font-weight:800;box-shadow:0 10px 26px rgba(30,144,255,0.12)}
-    .features-list{list-style:none;padding:0;margin:0;display:grid;gap:8px}
-
-    /* Footer */
-    footer.site-footer{background:#06182b;color:#dff0ff;padding:36px 0;margin-top:36px}
-    .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px}
-    .footer-grid a{color:inherit;text-decoration:none}
-    .brand-legal{font-weight:700}
-    .copyright{opacity:0.9;margin-top:18px;color:rgba(223,239,255,0.8)}
-
-    /* Modal */
-    .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(4,8,18,0.5);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:100}
-    .modal[aria-hidden="false"]{opacity:1;pointer-events:auto}
-    .modal-panel{background:var(--card);width:min(900px,94%);border-radius:12px;padding:20px;box-shadow:0 30px 90px rgba(2,8,23,0.6)}
-
-    /* Responsive */
-    @media (max-width:1100px){
-      .hero-grid{grid-template-columns:1fr 360px}
-      .pricing-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-    }
-    @media (max-width:880px){
-      .hero-grid{grid-template-columns:1fr}
-      .header-inner{padding:12px 18px}
-      .menu{display:none}
-      .hamburger{display:inline-flex}
-      .mobile-drawer{display:block}
-      .mobile-drawer.hidden{display:none}
-      .marquee-wrap{padding:10px}
-      .tile{min-width:240px}
-    }
-    @media (max-width:560px){
-      .brand .title{font-size:1rem}
-      .logo{width:48px;height:48px;font-size:18px}
-      .hero h1{font-size:1.6rem}
-    }
-    /* Helpers */
-    .center{text-align:center}
-    .muted-sm{color:var(--muted);font-size:0.95rem}
-  </style>
+/* footer */
+footer{background:#06182b;color:#dff0ff;padding:36px 0;margin-top:40px;}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;max-width:1300px;margin:0 auto;padding:0 28px;}
+.footer-grid a{color:inherit;text-decoration:none}
+.copyright{text-align:center;margin-top:20px;font-size:.9rem;opacity:.8}
+</style>
 </head>
 <body>
-  <div class="bg-icons" aria-hidden="true">
-    <!-- Decorative animated icons -->
-    <svg class="bg-icon slow" style="left:6%;top:8%;width:76px;height:76px" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="32" cy="32" r="30" stroke="#0b3d91" stroke-width="2" fill="none"/>
-      <path d="M20 44c6-6 20-6 26 0" stroke="#0b3d91" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M27 22h10v8" stroke="#0b3d91" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
 
-    <svg class="bg-icon slower glide-left" style="left:90%;top:28%;width:100px;height:100px;opacity:0.06" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M44 12v10a8 8 0 0 1-8 8h0" stroke="#1e90ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="48" cy="44" r="6" stroke="#1e90ff" stroke-width="2"/>
-      <path d="M16 28c8-10 28-10 36 0" stroke="#1e90ff" stroke-width="1.6" stroke-linecap="round"/>
-    </svg>
+<div class="bg-icons">
+  <svg class="bg-icon" style="left:10%;top:15%" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" stroke="#0b3d91" stroke-width="2" fill="none"/></svg>
+  <svg class="bg-icon" style="left:80%;top:40%" viewBox="0 0 64 64"><rect x="10" y="10" width="44" height="44" rx="4" stroke="#1e90ff" stroke-width="2" fill="none"/></svg>
+</div>
 
-    <svg class="bg-icon glide-right" style="left:-10%;top:60%;width:80px;height:80px;opacity:0.07" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <rect x="8" y="10" width="36" height="44" rx="2" stroke="#0b3d91" stroke-width="2" fill="none"/>
-      <line x1="16" y1="16" x2="16" y2="50" stroke="#0b3d91" stroke-width="1.6"/>
-      <path d="M46 12h8v40h-8" stroke="#0b3d91" stroke-width="2" fill="none"/>
-    </svg>
-
-    <svg class="bg-icon slow" style="left:22%;top:76%;width:70px;height:70px;opacity:0.05" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <path d="M32 10a12 12 0 0 0-9 19c0 0-1 5 4 9 3 2 2 7 2 7h6s-1-5 2-7c5-4 4-9 4-9a12 12 0 0 0-9-19z" stroke="#1e90ff" stroke-width="1.6" fill="none"/>
-    </svg>
-
-    <svg class="bg-icon slow" style="left:78%;top:6%;width:60px;height:60px;opacity:0.06" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <rect x="12" y="8" width="40" height="48" rx="4" stroke="#0b3d91" stroke-width="1.6" fill="none"/>
-      <rect x="20" y="16" width="24" height="10" rx="2" fill="#0b3d91"/>
-      <g stroke="#0b3d91" stroke-width="1.4">
-        <rect x="20" y="30" width="6" height="6" rx="1" fill="none"/>
-        <rect x="28" y="30" width="6" height="6" rx="1" fill="none"/>
-        <rect x="36" y="30" width="6" height="6" rx="1" fill="none"/>
-        <rect x="20" y="38" width="6" height="6" rx="1" fill="none"/>
-        <rect x="28" y="38" width="6" height="6" rx="1" fill="none"/>
-        <rect x="36" y="38" width="6" height="6" rx="1" fill="none"/>
-      </g>
-    </svg>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#">
+      <div class="logo">E</div>
+      <div>
+        <div style="font-weight:800">Edutrip India</div>
+        <div style="font-size:.8rem;color:var(--muted)">Premium Student Travel</div>
+      </div>
+    </a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="#simplearn">SimpLearn</a></li>
+        <li><a href="#workshops">Workshops</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#contact" class="btn-primary" style="padding:8px 14px;border-radius:8px">Contact</a></li>
+      </ul>
+    </nav>
   </div>
+</header>
 
-  <header class="site-header" id="site-header" role="banner">
-    <div class="header-inner">
-      <a class="brand" href="#top" aria-label="Edutrip India home">
-        <div class="logo" aria-hidden="true">E</div>
-        <div>
-          <div class="title">Edutrip India</div>
-          <div class="tag">Curriculum‑Linked Student Travel</div>
-        </div>
-      </a>
-
-      <nav class="main-nav" role="navigation" aria-label="Main navigation">
-        <ul class="menu" role="menubar" id="menu-main">
-          <li><a href="#programs">Programs</a></li>
-          <li><a href="#trips">Trips</a></li>
-          <li><a href="#simplearn">SimpLearn</a></li>
-          <li><a href="#workshops">Workshops</a></li>
-          <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#testimonials">Testimonials</a></li>
-          <li><a href="#contact" class="cta">Get a Proposal</a></li>
-        </ul>
-
-        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-          <span class="bar" aria-hidden="true"></span>
-        </button>
-
-        <div class="mobile-drawer hidden" id="mobile-drawer" role="menu" aria-hidden="true">
-          <ul style="list-style:none;padding:6px;margin:0;display:flex;flex-direction:column;gap:8px">
-            <li><a href="#programs">Programs</a></li>
-            <li><a href="#trips">Trips</a></li>
-            <li><a href="#simplearn">SimpLearn</a></li>
-            <li><a href="#workshops">Workshops</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#testimonials">Testimonials</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div>
-      </nav>
-
-      <div class="header-tools" aria-hidden="false">
-        <a class="phone" href="tel:+918179288678">+91 81792 88678</a>
-        <a class="pill" href="mailto:founders@edutripindia.com">founders@edutripindia.com</a>
+<main class="wrap">
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <h1>Transform Classrooms into Real-World Adventures</h1>
+        <p class="lead">Curriculum-aligned educational trips, expert-led sessions, and immersive workshops that deepen learning.</p>
+        <a href="#contact" class="btn btn-primary">Request Proposal</a>
       </div>
+      <aside class="tile">
+        <h3>Mumbai Marine Biology Expedition</h3>
+        <p class="muted">Hands-on study of coastal ecosystems and guided lab sessions.</p>
+        <a href="#contact" class="btn btn-outline">Request Quote</a>
+      </aside>
     </div>
-  </header>
+  </section>
+</main>
 
-  <main id="top" style="position:relative;z-index:10">
-    <section class="hero wrap" aria-label="Hero">
-      <div class="hero-grid">
-        <div>
-          <h1>Transform Classrooms into Real‑World Adventures</h1>
-          <p class="lead">Curriculum‑aligned educational trips, expert‑led SimpLearn sessions, and immersive workshops that deepen learning and build life skills.</p>
-
-          <div class="hero-ctas">
-            <a class="btn btn-primary" href="#trips">Explore Trips</a>
-            <a class="btn btn-outline" href="#pricing">View Plans</a>
-            <a class="btn" style="background:rgba(8,36,84,0.06);font-weight:700;border-radius:12px" href="#contact">Request a Custom Proposal</a>
-          </div>
-
-          <ul class="hero-features">
-            <li><strong>Curriculum Integration:</strong> Learning outcomes mapped to state & national standards.</li>
-            <li><strong>Safety & Ease:</strong> Trained guides, risk management & parent consent templates.</li>
-            <li><strong>Impact Measurement:</strong> Pre/post assessments, teacher resources and StuCom tracking.</li>
-          </ul>
-
-          <div style="margin-top:18px">
-            <a class="pill" href="#pricing">Plans: Gold · Platinum · Diamond</a>
-          </div>
-        </div>
-
-        <aside class="hero-side" aria-hidden="false">
-          <div style="display:flex;justify-content:space-between;align-items:start">
-            <div>
-              <div class="muted-sm">Highlight Program</div>
-              <h3 style="margin:4px 0 6px">Mumbai Marine Biology Expedition</h3>
-              <div class="muted-sm">Grade 7–9 • 3 days • Lab + Fieldwork</div>
-            </div>
-            <div style="text-align:right">
-              <div class="badge-top" style="position:static;display:inline-block;padding:6px 10px;font-size:0.9rem">Popular</div>
-            </div>
-          </div>
-
-          <p class="muted-sm" style="margin-top:8px">Hands-on study of coastal ecosystems, guided lab sessions and curriculum-linked assessment pack for teachers.</p>
-
-          <div style="display:flex;gap:10px;margin-top:auto;flex-wrap:wrap">
-            <a class="btn btn-primary" href="#contact">Request Quote</a>
-            <button class="btn btn-outline open-modal" data-id="mumbai-marine">Program Details</button>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <section id="programs" class="wrap" aria-labelledby="programs-title">
-      <div class="section-head">
-        <h2 id="programs-title" class="section-title">Our Programs</h2>
-        <div class="muted">Tailored by grade, mapped to outcomes</div>
-      </div>
-
-      <div class="program-grid">
-        <div class="program-card">
-          <div class="program-icon">📚</div>
-          <h4>Curriculum‑Linked Trips</h4>
-          <div class="muted-sm">Teacher co-designed trips with rubrics and resources.</div>
-        </div>
-
-        <div class="program-card">
-          <div class="program-icon">👩‍🏫</div>
-          <h4>SimpLearn Sessions</h4>
-          <div class="muted-sm">Expert in-school sessions: 45–90 minutes, demo labs & Q&A.</div>
-        </div>
-
-        <div class="program-card">
-          <div class="program-icon">🛠️</div>
-          <h4>Workshops & Maker Labs</h4>
-          <div class="muted-sm">STEAM, design thinking & skills labs with assessment rubrics.</div>
-        </div>
-
-        <div class="program-card">
-          <div class="program-icon">📊</div>
-          <h4>StuCom & Impact</h4>
-          <div class="muted-sm">Student communication app access & post-trip impact reports.</div>
-        </div>
-
-        <div class="program-card">
-          <div class="program-icon">🌍</div>
-          <h4>Field Research & GIS</h4>
-          <div class="muted-sm">Applied geography and biodiversity surveys for senior grades.</div>
-        </div>
-
-        <div class="program-card">
-          <div class="program-icon">🎭</div>
-          <h4>Arts & Culture Residencies</h4>
-          <div class="muted-sm">Local artist-led modules tying heritage to the curriculum.</div>
-        </div>
-      </div>
-    </section>
-
-    <section id="trips" class="wrap" aria-labelledby="trips-title">
-      <div class="section-head">
-        <h2 id="trips-title" class="section-title">Featured Trips & Premium Experiences</h2>
-        <div class="muted">Click any tile to view details or request a quote</div>
-      </div>
-
-      <div class="marquee-wrap" id="marquee-wrap" aria-hidden="false">
-        <div class="marquee-track" id="marquee-track" role="list">
-          <div class="tile" role="listitem">
-            <h4>Mumbai Marine Biology</h4>
-            <div class="sub muted-sm">Grade 7–9 • 3 days</div>
-            <p class="muted-sm">Fieldwork, tide-pooling, lab sessions & assessment pack.</p>
-            <div style="margin-top:auto;display:flex;gap:8px">
-              <button class="btn btn-outline open-modal" data-id="mumbai-marine">Details</button>
-              <a class="btn btn-primary" href="#contact">Quote</a>
-            </div>
-          </div>
-
-          <div class="tile">
-            <h4>Ajanta Heritage Trail</h4>
-            <div class="sub muted-sm">History • Artifact analysis</div>
-            <p class="muted-sm">Source-based activities, guided tours & teacher materials.</p>
-            <div style="margin-top:auto;display:flex;gap:8px">
-              <button class="btn btn-outline open-modal" data-id="ajanta-heritage">Details</button>
-              <a class="btn btn-primary" href="#contact">Quote</a>
-            </div>
-           </div>
-
-          <div class="tile">
-            <h4>Ajanta Heritage Trail</h4>
-            <div class="sub muted-sm">History • Artifact analysis</div>
-            <p class="muted-sm">Source-based activities, guided tours & teacher materials.</p>
-            <div style="margin-top:auto;display:flex;gap:8px">
-              <button class="btn btn-outline open-modal" data-id="ajanta-heritage">Details</button>
-              <a class="btn btn-primary" href="#contact">Quote</a>
-            </div>
-          </div>
-
-          <div class="tile">
-            <h4>Western Ghats Immersion</h4>
-            <div class="sub muted-sm">Geography • Ecology</div>
-            <p class="muted-sm">Biodiversity surveys, GIS basics & conservation projects.</p>
-            <div style="margin-top:auto;display:flex;gap:8px">
-              <button class="btn btn-outline open-modal" data-id="ghats-geography">Details</button>
-              <a class="btn btn-primary" href="#contact">Quote</a>
-            </div>
-          </div>
-
-          <div class="tile">
-            <h4>Kala Arts Residency</h4>
-            <div class="sub muted-sm">Arts & Culture</div>
-            <p class="muted-sm">Workshops with local artists culminating in a student showcase.</p>
-            <div style="margin-top:auto;display:flex;gap:8px">
-              <button class="btn btn-outline open-modal" data-id="kala-sanskriti">Details</button>
-              <a class="btn btn-primary" href="#contact">Quote</a>
-            </div>
-          </div>
-
-          <div class="tile">
-            <h4>Robotics Bootcamp</h4>
-            <div class="sub muted-sm">STEM</div>
-            <p class="muted-sm">Hands-on robotics with sensor kits and challenge-driven outcomes.</p>
-            <div style="margin-top:auto;display:flex;gap:8px">
-              <button class="btn btn-outline open-modal" data-id="robotics">Details</button>
-              <a class="btn btn-primary" href="#contact">Quote</a>
-            </div>
-          </div>
-
-          <!-- Cloned tiles for continuous scroll will be duplicated by JS for seamless marquee -->
-        </div>
-      </div>
-
-      <div class="center" style="margin-top:14px">
-        <a class="btn btn-ghost" id="pause-marquee" href="#" role="button">Pause Scrolling</a>
-      </div>
-    </section>
-
-    <section id="simplearn" class="wrap" aria-labelledby="simplearn-title">
-      <div class="section-head">
-        <div>
-          <h2 id="simplearn-title" class="section-title">SimpLearn — Expert In‑School Sessions</h2>
-          <div class="muted">Short, high-impact sessions delivered by industry & academic experts</div>
-        </div>
-        <div class="muted-sm">Flexible duration • 45–90 minutes • Teacher prep kit included</div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px">
-        <div class="program-card">
-          <h4>Marine Biology Live Lab</h4>
-          <div class="sub muted-sm">Live specimen demo, guided observation & worksheet</div>
-          <p class="muted-sm">Aligns with Grade 7 science outcomes. Includes follow-up activities and evaluation checklist.</p>
-        </div>
-        <div class="program-card">
-          <h4>Coding Foundations</h4>
-          <div class="sub muted-sm">Interactive session with robotics & Scratch projects</div>
-          <p class="muted-sm">Hands-on, assessment rubric, teacher support & optional follow-ups.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="workshops" class="wrap" aria-labelledby="workshops-title">
-      <div class="section-head">
-        <h2 id="workshops-title" class="section-title">Workshops & Labs</h2>
-        <div class="muted">Maker labs, career skills, creative arts & more</div>
-      </div>
-
-      <div class="program-grid" style="margin-top:12px">
-        <div class="program-card">
-          <h4>Maker Lab: Sustainable Design</h4>
-          <div class="muted-sm">Prototyping with recycled materials, rubric & reflection pack</div>
-        </div>
-        <div class="program-card">
-          <h4>Creative Writing & Journalism</h4>
-          <div class="muted-sm">From narrative to publication — culminating in a student magazine</div>
-        </div>
-        <div class="program-card">
-          <h4>Robotics Bootcamp</h4>
-          <div class="muted-sm">Sensor-driven robots and challenge tasks</div>
-        </div>
-      </div>
-    </section>
-
-    <section id="pricing" class="wrap" aria-labelledby="pricing-title">
-      <div class="section-head">
-        <h2 id="pricing-title" class="section-title">Price & Plans</h2>
-        <div class="muted">Transparent pricing with volume discounts and custom quotes</div>
-      </div>
-
-      <div class="pricing-grid" aria-live="polite" style="margin-top:12px">
-        <div class="price-card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="price-tier">Gold</div>
-            <div class="price">₹3,799</div>
-          </div>
-          <div class="muted-sm">Per student • School package</div>
-          <ul class="features-list">
-            <li>3 educational trips</li>
-            <li>3 SimpLearn sessions</li>
-            <li>2 Workshops</li>
-            <li>Assessments and StuCom App access</li>
-          </ul>
-          <div style="margin-top:auto;display:flex;gap:10px">
-            <a class="btn btn-primary" href="#contact">Choose Gold</a>
-            <button class="btn btn-outline open-modal" data-id="plan-gold">Details</button>
-          </div>
-        </div>
-
-        <div class="price-card recommended">
-          <div class="badge-top">Most Popular</div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="price-tier">Platinum</div>
-            <div class="price">Custom</div>
-          </div>
-          <div class="muted-sm">Everything in Gold, plus:</div>
-          <ul class="features-list">
-            <li>Everything in Gold</li>
-            <li>+1 educational trip (total 4)</li>
-            <li>StuCom APP premium access</li>
-            <li>+1 SimpLearn session</li>
-            <li>Free participation in Edutrips Annual Smarti tests</li>
-            <li>Free participation in Sporteen Sports competitions annually</li>
-          </ul>
-          <div style="margin-top:auto;display:flex;gap:10px">
-            <a class="btn btn-primary" href="#contact">Enquire Platinum</a>
-            <button class="btn btn-outline open-modal" data-id="plan-platinum">Details</button>
-          </div>
-        </div>
-
-        <div class="price-card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="price-tier">Diamond</div>
-            <div class="price">Custom</div>
-          </div>
-          <div class="muted-sm">Everything in Platinum, plus:</div>
-          <ul class="features-list">
-            <li>Everything in Platinum</li>
-            <li>+1 trip (total 5)</li>
-            <li>+1 SimpLearn session</li>
-            <li>Access to Educational + Real-World Skill Courses</li>
-            <li>Certificates from top affiliations in India</li>
-            <li>Career guidance assistance & industry expert mentorship</li>
-          </ul>
-          <div style="margin-top:auto;display:flex;gap:10px">
-            <a class="btn btn-outline" href="#contact">Contact Sales</a>
-            <button class="btn btn-outline open-modal" data-id="plan-diamond">Details</button>
-          </div>
-        </div>
-      </div>
-
-      <p class="muted-sm" style="margin-top:10px">*Custom pricing available for multi-cohort programs, outstation travel & extended services.</p>
-    </section>
-
-    <section id="testimonials" class="wrap" aria-labelledby="testimonials-title">
-      <div class="section-head">
-        <h2 id="testimonials-title" class="section-title">What Teachers & Principals Say</h2>
-        <div class="muted">Impact we deliver in classrooms and beyond</div>
-      </div>
-
-      <div style="margin-top:12px;display:grid;gap:12px">
-        <blockquote style="background:#fff;padding:18px;border-radius:12px;box-shadow:var(--glass-shadow)">
-          "Edutrip made curriculum come alive. Students were engaged, assessment tools helped teachers measure outcomes easily."
-          <footer style="margin-top:8px;color:var(--muted)">— Ms. Anjali Sharma, Principal, St. Mary's High School</footer>
-        </blockquote>
-        <blockquote style="background:#fff;padding:18px;border-radius:12px;box-shadow:var(--glass-shadow)">
-          "SimpLearn on climate science was practical and inspiring. Our students carried the lessons into projects."
-          <footer style="margin-top:8px;color:var(--muted)">— Mr. Rohan Desai, Science Coordinator</footer>
-        </blockquote>
-      </div>
-    </section>
-
-    <section id="contact" class="wrap" aria-labelledby="contact-title">
-      <div class="section-head" style="align-items:flex-start">
-        <h2 id="contact-title" class="section-title">Contact Us</h2>
-        <div class="muted">Let's design a learning adventure for your students.</div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:12px">
-        <form id="contact-form" class="program-card" autocomplete="on" novalidate>
-          <label style="font-weight:700">School / Organization
-            <input name="organization" required placeholder="St. Xavier's" style="margin-top:6px;padding:10px;border-radius:8px;border:1px solid rgba(8,16,32,0.06);width:100%">
-          </label>
-          <label style="font-weight:700">Contact Person
-            <input name="name" required placeholder="Your name" style="margin-top:6px;padding:10px;border-radius:8px;border:1px solid rgba(8,16,32,0.06);width:100%">
-          </label>
-          <label style="font-weight:700">Email
-            <input name="email" type="email" required placeholder="you@school.edu" style="margin-top:6px;padding:10px;border-radius:8px;border:1px solid rgba(8,16,32,0.06);width:100%">
-          </label>
-          <label style="font-weight:700">Phone
-            <input name="phone" type="tel" placeholder="+91 9XXXXXXXXX" style="margin-top:6px;padding:10px;border-radius:8px;border:1px solid rgba(8,16,32,0.06);width:100%">
-          </label>
-          <label style="font-weight:700">Program of Interest
-            <select name="program" style="margin-top:6px;padding:10px;border-radius:8px;border:1px solid rgba(8,16,32,0.06);width:100%">
-              <option>Curriculum‑Linked Trip</option>
-              <option>SimpLearn Session</option>
-              <option>Workshop / Maker Lab</option>
-              <option>Pricing / Partnership</option>
-            </select>
-          </label>
-          <label style="font-weight:700">Message
-            <textarea name="message" rows="4" style="margin-top:6px;padding:10px;border-radius:8px;border:1px solid rgba(8,16,32,0.06);width:100%" placeholder="Tell us grade, tentative dates, chosen plan etc."></textarea>
-          </label>
-
-          <div style="display:flex;gap:10px;margin-top:8px">
-            <button class="btn btn-primary" type="submit">Send Enquiry</button>
-            <button id="mailto-fallback" type="button" class="btn btn-outline">Email Us</button>
-          </div>
-          <div style="margin-top:10px" class="muted-sm">We will respond within 24 hours on working days.</div>
-        </form>
-
-        <aside class="program-card" aria-labelledby="contact-info">
-          <h3 id="contact-info">Quick Contact</h3>
-          <p style="margin:6px 0"><strong>Phone:</strong> <a href="tel:+918179288678">+91 81792 88678</a></p>
-          <p style="margin:6px 0"><strong>Email:</strong> <a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></p>
-          <p style="margin:6px 0"><strong>Office:</strong> Mumbai, India</p>
-
-          <div style="margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:var(--glass-shadow)">
-            <h4 style="margin:0 0 6px">Partner with Us</h4>
-            <p class="muted-sm">Host workshops or become a local partner — we collaborate with schools and organizations across India.</p>
-            <a class="btn btn-outline" href="#contact" style="margin-top:8px;display:inline-block">Partner Inquiry</a>
-          </div>
-        </aside>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer" role="contentinfo">
-    <div class="wrap footer-grid">
-      <div>
-        <div class="brand-legal">Edutrip India Private Limited</div>
-        <div class="muted-sm" style="margin-top:6px">Curriculum-linked learning journeys that inspire.</div>
-      </div>
-
-      <div>
-        <h4 style="margin:0 0 6px">Programs</h4>
-        <ul style="list-style:none;padding:0;margin:0">
-          <li><a href="#trips">Trips</a></li>
-          <li><a href="#simplearn">SimpLearn</a></li>
-          <li><a href="#workshops">Workshops</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4 style="margin:0 0 6px">Company</h4>
-        <ul style="list-style:none;padding:0;margin:0">
-          <li><a href="#">About</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="#">Partners</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4 style="margin:0 0 6px">Contact</h4>
-        <p style="margin:6px 0"><a href="tel:+918179288678">+91 81792 88678</a></p>
-        <p style="margin:6px 0"><a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></p>
-      </div>
+<footer>
+  <div class="footer-grid">
+    <div>
+      <h4>Edutrip India Pvt. Ltd</h4>
+      <p>Curriculum-linked learning journeys that inspire.</p>
     </div>
-
-    <div class="wrap copyright">
-      © Edutrip India Private Limited. All rights reserved.
-    </div>
-  </footer>
-
-  <!-- Modal -->
-  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="modal-panel" role="document">
-      <button id="modal-close" class="btn" aria-label="Close" style="position:absolute;right:14px;top:14px">✕</button>
-      <div id="modal-content" style="padding-top:6px"></div>
+    <div>
+      <h4>Contact</h4>
+      <p><a href="tel:+918179288678">+91 81792 88678</a></p>
+      <p><a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></p>
     </div>
   </div>
+  <div class="copyright">© Edutrip India. All rights reserved.</div>
+</footer>
 
-  <script>
-    (function(){
-      // Year update
-      // Header hide on scroll
-      const header = document.getElementById('site-header');
-      let lastScroll = window.scrollY || 0, ticking=false;
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            const current = window.scrollY || 0;
-            if (current > lastScroll && current > 120) header.classList.add('hidden'); else header.classList.remove('hidden');
-            lastScroll = current <= 0 ? 0 : current;
-            ticking = false;
-          });
-          ticking = true;
-        }
-      });
-
-      // Mobile drawer
-      const hamburger = document.getElementById('hamburger');
-      const drawer = document.getElementById('mobile-drawer');
-      hamburger && hamburger.addEventListener('click', () => {
-        const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-        hamburger.setAttribute('aria-expanded', String(!expanded));
-        if (drawer.classList.contains('hidden')) { drawer.classList.remove('hidden'); drawer.setAttribute('aria-hidden','false'); }
-        else { drawer.classList.add('hidden'); drawer.setAttribute('aria-hidden','true'); }
-      });
-
-      // Marquee duplication and control
-      const marqueeTrack = document.getElementById('marquee-track');
-      if (marqueeTrack) {
-        const children = Array.from(marqueeTrack.children);
-        children.forEach(child => marqueeTrack.appendChild(child.cloneNode(true)));
-        const marqueeWrap = document.getElementById('marquee-wrap');
-        let paused = false;
-        const pauseBtn = document.getElementById('pause-marquee');
-        pauseBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          paused = !paused;
-          marqueeTrack.style.animationPlayState = paused ? 'paused' : 'running';
-          pauseBtn.textContent = paused ? 'Resume Scrolling' : 'Pause Scrolling';
-        });
-        marqueeWrap.addEventListener('mouseenter', ()=> marqueeTrack.style.animationPlayState = 'paused');
-        marqueeWrap.addEventListener('mouseleave', ()=> { if (!paused) marqueeTrack.style.animationPlayState = 'running'; });
-      }
-
-      // Sample program/trip data for modal
-      const trips = {
-        'mumbai-marine': { title:'Mumbai Marine Biology Expedition', blurb:'Fieldwork, lab sessions & curriculum-linked worksheets exploring coastal ecosystems.', details:`<p class="muted-sm">Field sampling, tide pool surveys, lab-based identification and teacher-led assessment activities mapped to standards.</p><ul class="muted-sm"><li>Grade: 7–9</li><li>Duration: 3 days</li><li>Includes: Teacher guide, assessment pack, StuCom reports</li></ul>` },
-        'ajanta-heritage': { title:'Ajanta Heritage & History Trail', blurb:'Explore ancient art, inscriptions, and historical continuity; source-based learning activities.', details:`<ul class="muted-sm"><li>Grade: 8–10</li><li>Duration: 2 days</li><li>Includes: Source worksheets & project prompts</li></ul>` },
-        'kala-sanskriti': { title:'Kala: Arts & Culture Residency', blurb:'Local artists lead workshops in folk arts, music & storytelling aligned to arts syllabus.', details:`<ul class="muted-sm"><li>Grades: 6–12</li><li>Duration: 1–2 days</li></ul>` },
-        'ghats-geography': { title:'Western Ghats: Geography Immersion', blurb:'Field mapping, biodiversity surveys and GIS basics for applied geography learning.', details:`<ul class="muted-sm"><li>Grades: 9–11</li><li>Duration: 4 days</li></ul>` },
-        'robotics': { title:'Robotics Bootcamp', blurb:'Introduction to sensor-driven robots with step-by-step kits.', details:`<ul class="muted-sm"><li>Grades: 9–11</li><li>Duration: 2 days</li></ul>` }
-      };
-
-      // Modal open/close
-      const modal = document.getElementById('modal');
-      const modalContent = document.getElementById('modal-content');
-      const modalClose = document.getElementById('modal-close');
-      function openModal(title, html) {
-        modalContent.innerHTML = `<h2 style="margin-top:0">${title}</h2>${html}`;
-        modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
-      }
-      function closeModal(){ modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
-      modalClose && modalClose.addEventListener('click', closeModal);
-      modal.addEventListener('click', (e)=>{ if (e.target===modal) closeModal(); });
-      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && modal.getAttribute('aria-hidden')==='false') closeModal(); });
-
-      // Delegate open-modal clicks
-      document.body.addEventListener('click', (e) => {
-        const btn = e.target.closest('.open-modal');
-        if (!btn) return;
-        const id = btn.dataset.id;
-        if (id && id.startsWith('plan-')) {
-          const plan = id.split('-')[1];
-          const title = plan.charAt(0).toUpperCase()+plan.slice(1)+' Plan';
-          let html = '';
-          if (plan === 'gold') html = `<p class="muted-sm">Gold Plan - ₹3,799 per student</p><ul class="muted-sm"><li>3 educational trips</li><li>3 SimpLearn sessions</li><li>2 Workshops</li><li>Assessments and StuCom App access</li></ul>`;
-          else if (plan === 'platinum') html = `<p class="muted-sm">Platinum - Everything in Gold + extras</p><ul class="muted-sm"><li>+1 educational trip</li><li>StuCom APP premium access</li><li>+1 SimpLearn session</li><li>Free participation in Smarti tests & Sporteen</li></ul>`;
-          else if (plan === 'diamond') html = `<p class="muted-sm">Diamond - Complete premium</p><ul class="muted-sm"><li>Everything in Platinum</li><li>+1 trip & +1 SimpLearn</li><li>Access to real-world skill courses & certificates</li><li>Career guidance & industry expert assistance</li></ul>`;
-          else html = `<p class="muted-sm">Plan details will be shared on request.</p>`;
-          openModal(title, html + `<div style="margin-top:12px"><a class="btn btn-primary" href="#contact">Request This Plan</a></div>`);
-          return;
-        }
-        if (!id) return;
-        const data = trips[id];
-        const title = (data && data.title) ? data.title : 'Program Details';
-        const html = (data && data.details) ? data.details : `<p class="muted-sm">${(data && data.blurb) ? data.blurb : 'Details will be provided on request.'}</p>`;
-        openModal(title, html + `<div style="margin-top:12px"><a class="btn btn-primary" href="#contact">Request Proposal</a> <a class="btn btn-outline" href="mailto:founders@edutripindia.com?subject=${encodeURIComponent(title)}">Email Us</a></div>`);
-      });
-
-      // Contact form handling (mailto fallback)
-      const form = document.getElementById('contact-form');
-      const mailtoBtn = document.getElementById('mailto-fallback');
-      function isValidEmail(e){ return /\S+@\S+\.\S+/.test(e); }
-      form && form.addEventListener('submit', (ev) => {
-        ev.preventDefault();
-        const fd = new FormData(form);
-        const obj = Object.fromEntries(fd.entries());
-        if (!obj.organization || !obj.name || !obj.email) { alert('Please fill Organization, Contact Person and Email.'); return; }
-        if (!isValidEmail(obj.email)) { alert('Enter a valid email.'); return; }
-        const subject = encodeURIComponent('Edutrip Enquiry: ' + (obj.organization || 'School'));
-        const body = encodeURIComponent(
-          `Organization: ${obj.organization}\nContact: ${obj.name}\nEmail: ${obj.email}\nPhone: ${obj.phone || ''}\nProgram: ${obj.program || ''}\n\nMessage:\n${obj.message || ''}`
-        );
-        window.location.href = `mailto:founders@edutripindia.com?subject=${subject}&body=${body}`;
-      });
-      mailtoBtn && mailtoBtn.addEventListener('click', (e)=>{ e.preventDefault(); window.location.href = 'mailto:founders@edutripindia.com'; });
-
-      // Smooth internal scrolling and close mobile drawer
-      document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', function(ev){
-          const href = this.getAttribute('href');
-          if (!href || href === '#') return;
-          const el = document.querySelector(href);
-          if (el) {
-            ev.preventDefault();
-            el.scrollIntoView({behavior:'smooth',block:'start'});
-            if (drawer && !drawer.classList.contains('hidden')) { drawer.classList.add('hidden'); drawer.setAttribute('aria-hidden','true'); hamburger.setAttribute('aria-expanded','false'); }
-          }
-        });
-      });
-
-      // Responsive marquee duration based on width
-      function adjustMarquee() {
-        const track = document.getElementById('marquee-track');
-        if (!track) return;
-        const totalWidth = Array.from(track.children).reduce((sum, ch) => sum + ch.getBoundingClientRect().width + 14, 0);
-        const base = Math.max(18, Math.min(60, Math.round(totalWidth / 40)));
-        track.style.animation = `scroll-left ${base}s linear infinite`;
-      }
-      window.addEventListener('load', adjustMarquee);
-      window.addEventListener('resize', () => { setTimeout(adjustMarquee,200); });
-
-      // Reduced motion respect
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-      if (prefersReduced.matches) {
-        document.querySelectorAll('.bg-icon').forEach(i => i.style.animation = 'none');
-        document.querySelectorAll('.marquee-track').forEach(t => t.style.animationPlayState = 'paused');
-      }
-
-      // Accessibility: focus trap trivial
-      let lastFocus;
-      modal.addEventListener('transitionstart', () => { lastFocus = document.activeElement; });
-      modal.addEventListener('transitionend', () => {
-        if (modal.getAttribute('aria-hidden') === 'false') {
-          const focusable = modal.querySelectorAll('a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])');
-          if (focusable.length) focusable[0].focus();
-        } else if (lastFocus) lastFocus.focus();
-      });
-
-      // Make tiles keyboard focusable
-      document.querySelectorAll('.tile').forEach(t => t.setAttribute('tabindex','0'));
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && document.activeElement && document.activeElement.classList.contains('tile')) {
-          const btn = document.activeElement.querySelector('.open-modal');
-          if (btn) btn.click();
-        }
-      });
-    })();
-  </script>
 </body>
 </html>
