@@ -3,7 +3,7 @@ const header = document.getElementById("site-header");
 const burger = document.querySelector(".burger");
 const navbar = document.querySelector(".navbar");
 
-// Header hide on scroll + close mobile menu
+// Header hide + close menu on scroll
 window.addEventListener("scroll", () => {
   const currentScroll = window.pageYOffset;
   if (currentScroll > lastScroll && currentScroll > 100)
