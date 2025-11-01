@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-  <!-- Styles -->
+  <!-- Local stylesheet -->
   <link rel="stylesheet" href="styles.css">
 
   <!-- App JS -->
@@ -17,13 +17,11 @@
 </head>
 <body>
 
-  <!-- ********** NO TOP HEADER (removed as requested) ********** -->
-
-  <!-- Floating Jeton-like Ribbon Navigation (always visible) -->
+  <!-- Floating ribbon (centered) -->
   <nav class="floating-ribbon" id="floatingRibbon" aria-label="Quick navigation">
     <a href="#top" class="ribbon-item" title="Home"><i class="fa-solid fa-house"></i></a>
 
-    <div class="ribbon-dropdown" data-dropdown>
+    <div class="ribbon-dropdown">
       <button class="ribbon-item">Programs <i class="fa fa-caret-down"></i></button>
       <div class="ribbon-menu">
         <a href="#programs">Trips</a>
@@ -32,7 +30,7 @@
       </div>
     </div>
 
-    <div class="ribbon-dropdown" data-dropdown>
+    <div class="ribbon-dropdown">
       <button class="ribbon-item">Company <i class="fa fa-caret-down"></i></button>
       <div class="ribbon-menu">
         <a href="#about">About Us</a>
@@ -44,19 +42,21 @@
   </nav>
 
   <main id="top">
-    <!-- Large centered watermark (non-mirrored) -->
-    <div class="watermark"><img src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip watermark"></div>
+    <!-- Watermark (center-right) - using your postimg URL -->
+    <div class="watermark" aria-hidden="true">
+      <img src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip watermark">
+    </div>
 
     <!-- HERO -->
-    <section class="hero" aria-label="Hero">
-      <div class="hero-inner container">
+    <section class="hero">
+      <div class="container">
         <h1 class="hero-title">Transform Classrooms into Real-World Adventures</h1>
         <p class="hero-sub">Curriculum-aligned educational trips, expert-led SimpLearn sessions, and immersive workshops that bring learning to life.</p>
         <a class="btn cta" href="#contact">Get Proposal</a>
       </div>
     </section>
 
-    <!-- BIG sequence banners (Add -> Send style): these reveal on scroll in sequence -->
+    <!-- Sequence banners (reveal on scroll) -->
     <section class="big-rail">
       <div class="big-banner banner-add reveal-item">
         <div class="big-inner container">
@@ -89,7 +89,7 @@
           <article class="program-tile" tabindex="0">
             <div class="tile-inner">
               <h3 class="tile-title">Curriculum-Linked Trips</h3>
-              <p class="tile-desc">Co-designed educational travel connecting classrooms with the real world through exploration.</p>
+              <p class="tile-desc">Co-designed educational travel connecting classroom learning to real-world experiences.</p>
             </div>
           </article>
 
@@ -103,44 +103,44 @@
           <article class="program-tile" tabindex="0">
             <div class="tile-inner">
               <h3 class="tile-title">Workshops & Maker Labs</h3>
-              <p class="tile-desc">Creative workshops encouraging design thinking, prototyping and teamwork.</p>
+              <p class="tile-desc">Hands-on creative and STEM labs fostering innovation.</p>
             </div>
           </article>
 
           <article class="program-tile" tabindex="0">
             <div class="tile-inner">
               <h3 class="tile-title">Impact & StuCom</h3>
-              <p class="tile-desc">Student communication and progress-tracking systems with measurable impact reports.</p>
+              <p class="tile-desc">Student communication app with progress tracking and impact reports.</p>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- Workshops with sequential reveal (cards appear in order as you scroll) -->
+    <!-- Workshops -->
     <section id="workshops" class="section workshops">
       <div class="container">
         <h2 class="section-title">Workshops & Maker Labs</h2>
         <div class="workshop-rail">
           <article class="workshop-card reveal-step">
             <h3>Maker Lab: Sustainable Design</h3>
-            <p>Prototyping with recycled materials, design thinking & evaluation rubrics.</p>
+            <p>Prototyping with recycled materials & design thinking.</p>
           </article>
 
           <article class="workshop-card reveal-step">
             <h3>Creative Writing & Journalism</h3>
-            <p>From idea to publication — culminating in a student magazine & authentic assessment.</p>
+            <p>Idea to publication — culminating in a student magazine.</p>
           </article>
 
           <article class="workshop-card reveal-step">
             <h3>Robotics Bootcamp</h3>
-            <p>Hands-on sensor robots, coding challenges and STEAM circuits for collaboration.</p>
+            <p>Sensor-driven robots, challenges & STEAM activities.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- Plans (kept as earlier, platinum highlighted) -->
+    <!-- Plans -->
     <section id="plans" class="section plans">
       <div class="container">
         <h2 class="section-title">Plans</h2>
@@ -163,7 +163,7 @@
               <h3 class="plan-title">Platinum Plan</h3>
               <ul class="plan-features">
                 <li>Everything in Gold</li>
-                <li>+ 1 Educational Trip</li>
+                <li>+1 Educational Trip</li>
                 <li>Exclusive Annual Smart Fest</li>
               </ul>
               <button class="btn outline">Request Pricing</button>
@@ -190,8 +190,8 @@
       <div class="container">
         <h2 class="section-title">About Us</h2>
         <div class="about-body">
-          <p><strong>Edutrip</strong> is a Hyderabad-based experiential learning organization redefining education through real-world experiences. We design curriculum-aligned journeys that nurture curiosity, creativity and collaboration among students.</p>
-          <p>Our experiences are curated by educators and industry mentors — transforming “learning by reading” into “learning by doing.”</p>
+          <p><strong>Edutrip</strong> is a Hyderabad-based experiential learning organization redefining education through real-world experiences. We design curriculum-aligned journeys that nurture curiosity, creativity, and collaboration among students.</p>
+          <p>From field-based science explorations to innovation bootcamps and heritage trails, every Edutrip experience is guided by educators and mentors.</p>
         </div>
       </div>
     </section>
@@ -238,7 +238,7 @@
                 <input name="email" placeholder="Email" type="email" required />
               </div>
               <div class="form-row">
-                <textarea name="message" placeholder="Your Message" rows="5"></textarea>
+                <textarea name="message" placeholder="Tell us what you need..." rows="5"></textarea>
               </div>
               <div class="form-row">
                 <button type="submit" class="btn cta full">Send Message</button>
@@ -252,7 +252,7 @@
     <footer class="site-footer">
       <div class="container footer-inner">
         <div class="brand-small">
-          <img src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="logo" />
+          <img src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="logo" width="64" />
           <div>
             <strong>Edutrip</strong>
             <div class="small muted">Don't just learn it, know it.</div>
