@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Edutrip — Experiential Learning</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://kit.fontawesome.com/a2d9b6d4e2.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -23,355 +23,492 @@ body{
 /* Floating Navigation */
 .nav-container{
   position:fixed;top:0;left:0;right:0;z-index:1000;
-  padding:20px 40px;pointer-events:none;
+  padding:24px 60px;pointer-events:none;
 }
 .nav-float{
-  max-width:1400px;margin:0 auto;display:flex;
+  max-width:1600px;margin:0 auto;display:flex;
   justify-content:space-between;align-items:center;
-  background:rgba(20,24,36,.7);backdrop-filter:blur(30px);
-  border-radius:60px;padding:12px 24px;
+  background:rgba(20,24,36,.85);backdrop-filter:blur(30px);
+  border-radius:100px;padding:16px 32px;
   border:1px solid rgba(255,255,255,.08);
-  box-shadow:0 10px 40px rgba(0,0,0,.3);
-  pointer-events:auto;transform:translateY(-120px);
-  transition:all .6s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 10px 40px rgba(0,0,0,.4),0 0 0 1px rgba(255,107,53,.1);
+  pointer-events:auto;transform:translateY(-150px);
+  transition:all .8s cubic-bezier(.4,0,.2,1);
 }
 .nav-float.visible{transform:translateY(0)}
+.nav-float.scrolled{
+  background:rgba(20,24,36,.95);
+  box-shadow:0 10px 50px rgba(0,0,0,.6),0 0 0 1px rgba(255,107,53,.2);
+}
 .logo-link{display:flex;align-items:center;text-decoration:none}
-.logo-link img{height:42px;filter:drop-shadow(0 4px 12px rgba(255,107,53,.4))}
+.logo-link img{height:48px;filter:drop-shadow(0 4px 12px rgba(255,107,53,.5))}
 .nav-menu{display:flex;gap:8px;align-items:center}
 .nav-item{
-  padding:10px 20px;color:#f8fafc;text-decoration:none;
-  border-radius:40px;font-size:15px;font-weight:500;
+  padding:12px 24px;color:#f8fafc;text-decoration:none;
+  border-radius:50px;font-size:15px;font-weight:500;
   transition:.3s;position:relative;
 }
-.nav-item:hover{background:rgba(255,107,53,.1);color:var(--primary)}
+.nav-item:hover{background:rgba(255,107,53,.12);color:var(--primary)}
 .nav-cta{
   background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  color:#fff;padding:12px 28px;border-radius:40px;
-  font-weight:600;box-shadow:0 4px 20px rgba(255,107,53,.3);
-  transition:.3s;
+  color:#fff;padding:14px 32px;border-radius:50px;
+  font-weight:600;box-shadow:0 6px 24px rgba(255,107,53,.35);
+  transition:.3s;border:none;cursor:pointer;font-size:15px;
 }
-.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,107,53,.5)}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 35px rgba(255,107,53,.5)}
 
-/* Hero with 3D Coins */
+/* Hero */
 .hero{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;padding:100px 20px 60px;
+  position:relative;overflow:hidden;padding:140px 60px 80px;
 }
-.hero-content{max-width:900px;text-align:center;position:relative;z-index:2}
+.hero-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at 30% 40%,rgba(255,107,53,.15),transparent 60%),
+    radial-gradient(circle at 70% 60%,rgba(0,212,255,.1),transparent 60%);
+}
+.coins-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.coin{
+  position:absolute;width:100px;height:100px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,107,53,.15),rgba(232,90,42,.05));
+  border:2px solid rgba(255,107,53,.2);
+  backdrop-filter:blur(2px);
+}
+.hero-content{max-width:1100px;text-align:center;position:relative;z-index:2}
+.hero-label{
+  display:inline-block;padding:10px 24px;
+  background:rgba(255,107,53,.12);color:var(--primary);
+  border-radius:30px;font-size:14px;font-weight:600;
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:32px;border:1px solid rgba(255,107,53,.2);
+  opacity:0;transform:translateY(30px);
+}
 .hero-title{
   font-family:"Playfair Display",serif;font-weight:900;
-  font-size:clamp(48px,7vw,92px);line-height:1.1;
-  margin-bottom:28px;opacity:0;transform:translateY(60px);
+  font-size:clamp(52px,7vw,96px);line-height:1.1;
+  margin-bottom:32px;opacity:0;transform:translateY(60px);
 }
-.hero-title span{
+.hero-title .gradient-text{
   background:linear-gradient(135deg,#fff 0%,var(--primary) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;display:block;
 }
 .hero-subtitle{
-  font-size:clamp(18px,2.5vw,24px);color:var(--muted);
-  line-height:1.6;margin-bottom:40px;max-width:700px;margin-inline:auto;
-  opacity:0;transform:translateY(40px);
+  font-size:clamp(19px,2.5vw,24px);color:var(--muted);
+  line-height:1.7;margin-bottom:48px;max-width:800px;margin-inline:auto;
+  opacity:0;transform:translateY(40px);font-weight:400;
 }
-.hero-cta{
+.hero-buttons{
+  display:flex;gap:20px;justify-content:center;align-items:center;
+  opacity:0;transform:translateY(30px);flex-wrap:wrap;
+}
+.btn-primary{
   display:inline-flex;align-items:center;gap:12px;
-  padding:18px 42px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  color:#fff;text-decoration:none;border-radius:50px;
-  font-weight:700;font-size:18px;
-  box-shadow:0 10px 40px rgba(255,107,53,.4);
-  transition:.4s;opacity:0;transform:translateY(30px);
+  padding:20px 48px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  color:#fff;text-decoration:none;border-radius:60px;
+  font-weight:700;font-size:17px;
+  box-shadow:0 12px 40px rgba(255,107,53,.4);
+  transition:.4s;border:none;cursor:pointer;
 }
-.hero-cta:hover{transform:translateY(-4px);box-shadow:0 16px 60px rgba(255,107,53,.6)}
-.hero-cta i{transition:.3s}
-.hero-cta:hover i{transform:translateX(4px)}
+.btn-primary:hover{transform:translateY(-4px);box-shadow:0 18px 60px rgba(255,107,53,.6)}
+.btn-primary i{transition:.3s}
+.btn-primary:hover i{transform:translateX(5px)}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:20px 48px;background:transparent;
+  color:#fff;text-decoration:none;border-radius:60px;
+  font-weight:600;font-size:17px;
+  border:2px solid rgba(255,255,255,.15);
+  transition:.4s;cursor:pointer;
+}
+.btn-secondary:hover{
+  background:rgba(255,255,255,.05);
+  border-color:rgba(255,255,255,.3);
+}
 
-/* 3D Coin Background */
-.coins-bg{
-  position:absolute;inset:0;overflow:hidden;pointer-events:none;
+/* Stats Section */
+.stats-section{
+  padding:100px 60px;max-width:1600px;margin:0 auto;
 }
-.coin{
-  position:absolute;width:80px;height:80px;border-radius:50%;
-  background:linear-gradient(135deg,rgba(255,107,53,.2),rgba(232,90,42,.1));
-  border:2px solid rgba(255,107,53,.3);
-  backdrop-filter:blur(10px);animation:float 20s infinite ease-in-out;
+.stats-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:40px;
 }
-@keyframes float{
-  0%,100%{transform:translateY(0) rotate(0deg)}
-  25%{transform:translateY(-30px) rotate(90deg)}
-  50%{transform:translateY(0) rotate(180deg)}
-  75%{transform:translateY(-20px) rotate(270deg)}
+.stat-card{
+  text-align:center;padding:40px;
+  background:rgba(20,24,36,.4);backdrop-filter:blur(20px);
+  border-radius:24px;border:1px solid rgba(255,255,255,.06);
+  transition:.4s;
+}
+.stat-card:hover{
+  background:rgba(20,24,36,.6);
+  border-color:rgba(255,107,53,.3);
+  transform:translateY(-8px);
+}
+.stat-number{
+  font-size:56px;font-weight:900;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;font-family:"Playfair Display",serif;
+}
+.stat-label{
+  font-size:16px;color:var(--muted);font-weight:500;
+  margin-top:8px;
 }
 
 /* Section Base */
 .section{
-  padding:140px 20px;max-width:1400px;margin:0 auto;
+  padding:120px 60px;max-width:1600px;margin:0 auto;
   position:relative;
 }
 .section-header{
-  text-align:center;margin-bottom:80px;
-  opacity:0;transform:translateY(50px);
+  text-align:center;margin-bottom:100px;
 }
 .section-label{
-  display:inline-block;padding:8px 20px;
-  background:rgba(255,107,53,.1);color:var(--primary);
+  display:inline-block;padding:10px 24px;
+  background:rgba(255,107,53,.12);color:var(--primary);
   border-radius:30px;font-size:14px;font-weight:600;
-  text-transform:uppercase;letter-spacing:1px;
-  margin-bottom:20px;
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:24px;border:1px solid rgba(255,107,53,.2);
 }
 .section-title{
   font-family:"Playfair Display",serif;font-weight:800;
-  font-size:clamp(40px,5.5vw,68px);
+  font-size:clamp(42px,5.5vw,72px);
   background:linear-gradient(135deg,#fff 0%,var(--muted) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;margin-bottom:16px;
+  background-clip:text;margin-bottom:24px;line-height:1.2;
 }
 .section-desc{
-  font-size:clamp(16px,2vw,20px);color:var(--muted);
-  max-width:600px;margin:0 auto;line-height:1.7;
+  font-size:clamp(17px,2vw,21px);color:var(--muted);
+  max-width:700px;margin:0 auto;line-height:1.8;font-weight:400;
 }
 
-/* Programs - Stacked Cards */
-.programs-stack{
-  position:relative;min-height:600px;
+/* Programs - Better Stacked Cards */
+.programs-wrapper{
+  max-width:1200px;margin:0 auto;
+  padding:0 40px 150vh 40px;
 }
 .program-card{
-  position:sticky;top:120px;
-  background:rgba(20,24,36,.8);backdrop-filter:blur(30px);
-  border-radius:32px;padding:60px;margin-bottom:40px;
-  border:1px solid rgba(255,255,255,.06);
-  transition:all .5s cubic-bezier(.4,0,.2,1);
-  transform-origin:center top;
+  position:sticky;top:140px;
+  background:rgba(20,24,36,.85);backdrop-filter:blur(30px);
+  border-radius:32px;padding:64px;margin-bottom:32px;
+  border:1px solid rgba(255,255,255,.08);
+  transition:all .4s cubic-bezier(.4,0,.2,1);
+  min-height:480px;display:flex;flex-direction:column;justify-content:center;
 }
 .program-card:hover{
-  border-color:rgba(255,107,53,.3);
-  box-shadow:0 30px 80px rgba(255,107,53,.2);
+  border-color:rgba(255,107,53,.4);
+  box-shadow:0 32px 80px rgba(255,107,53,.25);
+}
+.program-header{
+  display:flex;align-items:flex-start;gap:32px;margin-bottom:32px;
 }
 .program-number{
-  font-size:120px;font-weight:900;
-  background:linear-gradient(135deg,rgba(255,107,53,.2),transparent);
+  font-size:140px;font-weight:900;
+  background:linear-gradient(135deg,rgba(255,107,53,.25),rgba(255,107,53,.05));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;line-height:1;margin-bottom:20px;
-  font-family:"Playfair Display",serif;
+  background-clip:text;line-height:1;
+  font-family:"Playfair Display",serif;flex-shrink:0;
+}
+.program-icon-wrapper{
+  flex-shrink:0;
 }
 .program-icon{
-  width:80px;height:80px;border-radius:20px;
+  width:90px;height:90px;border-radius:22px;
   background:linear-gradient(135deg,var(--primary),var(--primary-dark));
   display:flex;align-items:center;justify-content:center;
-  font-size:36px;margin-bottom:28px;
-  box-shadow:0 8px 30px rgba(255,107,53,.3);
+  font-size:42px;
+  box-shadow:0 12px 40px rgba(255,107,53,.35);
 }
+.program-content{flex:1}
 .program-title{
-  font-family:"Playfair Display",serif;font-size:36px;
-  font-weight:800;color:#fff;margin-bottom:16px;
+  font-family:"Playfair Display",serif;font-size:42px;
+  font-weight:800;color:#fff;margin-bottom:20px;line-height:1.3;
 }
 .program-desc{
-  font-size:18px;color:var(--muted);line-height:1.8;
+  font-size:19px;color:var(--muted);line-height:1.8;
+  max-width:800px;font-weight:400;
 }
 
 /* Horizontal Scroll Section */
 .scroll-section{
-  overflow:hidden;padding:140px 0;
-  background:linear-gradient(180deg,transparent,rgba(255,107,53,.03),transparent);
+  padding:140px 0;position:relative;
+  background:linear-gradient(180deg,transparent,rgba(255,107,53,.04),transparent);
+}
+.scroll-wrapper{
+  overflow:hidden;
 }
 .scroll-track{
-  display:flex;gap:40px;padding:0 40px;
+  display:flex;gap:32px;padding:0 60px;
   will-change:transform;
 }
 .scroll-card{
-  min-width:420px;background:rgba(20,24,36,.8);
-  backdrop-filter:blur(30px);padding:48px;
-  border-radius:28px;border:1px solid rgba(255,255,255,.06);
+  min-width:440px;background:rgba(20,24,36,.85);
+  backdrop-filter:blur(30px);padding:52px;
+  border-radius:28px;border:1px solid rgba(255,255,255,.08);
   position:relative;overflow:hidden;transition:.4s;
+  flex-shrink:0;
 }
 .scroll-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:4px;
   background:linear-gradient(90deg,var(--primary),var(--accent));
-  transform:scaleX(0);transform-origin:left;transition:.4s;
+  transform:scaleX(0);transform-origin:left;transition:.5s;
 }
 .scroll-card:hover::before{transform:scaleX(1)}
 .scroll-card:hover{
-  border-color:rgba(255,107,53,.3);
-  transform:translateY(-8px);
-  box-shadow:0 24px 60px rgba(255,107,53,.2);
+  border-color:rgba(255,107,53,.4);
+  transform:translateY(-10px);
+  box-shadow:0 28px 70px rgba(255,107,53,.25);
+}
+.scroll-icon{
+  width:72px;height:72px;border-radius:18px;
+  background:linear-gradient(135deg,rgba(255,107,53,.2),rgba(255,107,53,.05));
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;color:var(--primary);margin-bottom:28px;
 }
 .scroll-card h3{
-  font-size:28px;color:#fff;margin-bottom:16px;
+  font-size:28px;color:#fff;margin-bottom:18px;
+  font-family:"Playfair Display",serif;font-weight:700;line-height:1.3;
+}
+.scroll-card p{color:var(--muted);font-size:17px;line-height:1.8}
+
+/* About Section */
+.about-wrapper{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:60px;align-items:center;
+}
+.about-content h3{
+  font-size:48px;color:#fff;margin-bottom:28px;
+  font-family:"Playfair Display",serif;font-weight:800;
+  line-height:1.2;
+}
+.about-content p{
+  font-size:19px;color:var(--muted);line-height:1.9;
+  margin-bottom:24px;font-weight:400;
+}
+.about-content strong{color:#fff;font-weight:600}
+.about-image{
+  height:600px;border-radius:32px;
+  background:linear-gradient(135deg,rgba(255,107,53,.25),rgba(0,212,255,.15));
+  position:relative;overflow:hidden;
+}
+
+/* Founders */
+.founders-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));
+  gap:48px;max-width:1000px;margin:0 auto;
+}
+.founder-card{
+  background:rgba(20,24,36,.85);backdrop-filter:blur(30px);
+  padding:48px;border-radius:28px;
+  border:1px solid rgba(255,255,255,.08);
+  text-align:center;transition:.5s;
+  position:relative;overflow:hidden;
+}
+.founder-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at center,rgba(255,107,53,.1),transparent 70%);
+  opacity:0;transition:.5s;
+}
+.founder-card:hover::before{opacity:1}
+.founder-card:hover{
+  transform:translateY(-12px);
+  border-color:rgba(255,107,53,.4);
+  box-shadow:0 32px 80px rgba(255,107,53,.3);
+}
+.founder-photo{
+  height:200px;width:200px;margin:0 auto 28px;
+  border-radius:50%;border:4px solid rgba(255,107,53,.3);
+  background:linear-gradient(135deg,rgba(255,107,53,.2),rgba(0,212,255,.1));
+  position:relative;transition:.4s;
+}
+.founder-card:hover .founder-photo{
+  border-color:rgba(255,107,53,.6);
+  transform:scale(1.05);
+}
+.founder-card h4{
+  color:#fff;margin-bottom:12px;font-size:28px;
   font-family:"Playfair Display",serif;font-weight:700;
 }
-.scroll-card p{color:var(--muted);font-size:17px;line-height:1.7}
+.founder-card .role{
+  color:var(--primary);font-size:16px;font-weight:600;
+  text-transform:uppercase;letter-spacing:1px;
+}
+.founder-card p{
+  color:var(--muted);font-size:15px;margin-top:16px;
+  line-height:1.7;
+}
 
-/* Parallax Image Cards */
-.parallax-grid{
-  display:grid;grid-template-columns:repeat(2,1fr);
-  gap:40px;padding:0 40px;
-}
-.parallax-card{
-  position:relative;height:500px;border-radius:28px;
-  overflow:hidden;cursor:pointer;
-}
-.parallax-img{
-  width:100%;height:100%;
-  background:linear-gradient(135deg,rgba(255,107,53,.2),rgba(0,212,255,.2));
-  transition:.6s cubic-bezier(.4,0,.2,1);
-}
-.parallax-card:hover .parallax-img{transform:scale(1.1)}
-.parallax-content{
-  position:absolute;bottom:0;left:0;right:0;
-  padding:40px;background:linear-gradient(to top,rgba(10,14,31,.95),transparent);
-  transform:translateY(20px);opacity:0;
-  transition:.4s;
-}
-.parallax-card:hover .parallax-content{transform:translateY(0);opacity:1}
-.parallax-content h3{
-  font-size:32px;color:#fff;margin-bottom:12px;
-  font-family:"Playfair Display",serif;
-}
-.parallax-content p{color:var(--muted);font-size:16px}
-
-/* Magnetic Buttons */
+/* Plans */
 .plans-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-  gap:32px;padding:0 20px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
+  gap:40px;max-width:1400px;margin:0 auto;
 }
 .plan-card{
-  background:rgba(20,24,36,.6);backdrop-filter:blur(30px);
-  border-radius:32px;padding:48px;
-  border:1px solid rgba(255,255,255,.06);
+  background:rgba(20,24,36,.7);backdrop-filter:blur(30px);
+  border-radius:32px;padding:52px;
+  border:1px solid rgba(255,255,255,.08);
   position:relative;transition:.5s cubic-bezier(.4,0,.2,1);
   cursor:pointer;
 }
 .plan-card:hover{
-  transform:translateY(-12px) scale(1.02);
-  border-color:rgba(255,107,53,.4);
-  box-shadow:0 32px 80px rgba(255,107,53,.3);
+  transform:translateY(-16px);
+  border-color:rgba(255,107,53,.5);
+  box-shadow:0 36px 90px rgba(255,107,53,.35);
+  background:rgba(20,24,36,.9);
+}
+.plan-featured{
+  border:2px solid rgba(255,107,53,.4);
+  background:rgba(20,24,36,.85);
+  transform:scale(1.05);
 }
 .plan-badge{
-  position:absolute;top:-16px;left:50%;transform:translateX(-50%);
+  position:absolute;top:-18px;left:50%;transform:translateX(-50%);
   background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  color:#fff;padding:8px 24px;border-radius:30px;
+  color:#fff;padding:10px 28px;border-radius:30px;
   font-weight:700;font-size:13px;text-transform:uppercase;
-  box-shadow:0 4px 20px rgba(255,107,53,.4);
+  box-shadow:0 6px 24px rgba(255,107,53,.5);letter-spacing:1px;
 }
 .plan-name{
-  font-size:32px;color:#fff;margin-bottom:12px;
+  font-size:36px;color:#fff;margin-bottom:12px;
   font-family:"Playfair Display",serif;font-weight:800;
 }
 .plan-price{
-  font-size:20px;color:var(--muted);margin-bottom:32px;
+  font-size:18px;color:var(--muted);margin-bottom:36px;
+  font-weight:500;
 }
 .plan-features{
-  list-style:none;margin-bottom:36px;
+  list-style:none;margin-bottom:40px;
 }
 .plan-features li{
-  padding:14px 0;color:var(--muted);
-  border-bottom:1px solid rgba(255,255,255,.05);
-  display:flex;align-items:center;gap:12px;
+  padding:16px 0;color:var(--muted);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;gap:14px;
+  font-size:16px;font-weight:400;
 }
 .plan-features i{
-  color:var(--primary);font-size:18px;
+  color:var(--primary);font-size:18px;flex-shrink:0;
 }
 .plan-btn{
-  width:100%;padding:16px;background:transparent;
+  width:100%;padding:18px;background:transparent;
   border:2px solid rgba(255,107,53,.4);color:var(--primary);
-  border-radius:50px;font-weight:700;font-size:16px;
+  border-radius:60px;font-weight:700;font-size:16px;
   cursor:pointer;transition:.3s;
 }
 .plan-btn:hover{
   background:linear-gradient(135deg,var(--primary),var(--primary-dark));
   color:#fff;border-color:transparent;
-  box-shadow:0 8px 30px rgba(255,107,53,.4);
+  box-shadow:0 10px 35px rgba(255,107,53,.45);
 }
 
-/* Contact with 3D Tilt */
+/* Contact */
 .contact-wrapper{
-  display:grid;grid-template-columns:1fr 1.2fr;
-  gap:48px;padding:0 40px;
+  display:grid;grid-template-columns:1fr 1.3fr;
+  gap:60px;max-width:1400px;margin:0 auto;
 }
 .contact-info{
-  background:linear-gradient(135deg,rgba(255,107,53,.15),rgba(0,212,255,.1));
-  backdrop-filter:blur(30px);padding:60px;border-radius:32px;
-  border:1px solid rgba(255,255,255,.1);
+  background:linear-gradient(135deg,rgba(255,107,53,.18),rgba(0,212,255,.12));
+  backdrop-filter:blur(30px);padding:64px;border-radius:32px;
+  border:1px solid rgba(255,255,255,.12);
 }
 .contact-info h3{
-  font-size:36px;color:#fff;margin-bottom:32px;
-  font-family:"Playfair Display",serif;
+  font-size:42px;color:#fff;margin-bottom:36px;
+  font-family:"Playfair Display",serif;font-weight:800;
 }
 .contact-list{list-style:none}
 .contact-list li{
-  display:flex;gap:20px;margin-bottom:28px;align-items:flex-start;
+  display:flex;gap:24px;margin-bottom:32px;align-items:flex-start;
 }
 .contact-icon{
-  width:52px;height:52px;border-radius:14px;
-  background:rgba(255,107,53,.2);
+  width:60px;height:60px;border-radius:16px;
+  background:rgba(255,107,53,.25);
   display:flex;align-items:center;justify-content:center;
-  font-size:22px;color:var(--primary);flex-shrink:0;
+  font-size:24px;color:var(--primary);flex-shrink:0;
 }
-.contact-details strong{display:block;color:#fff;margin-bottom:4px}
-.contact-details span{color:var(--muted);font-size:15px}
+.contact-details strong{
+  display:block;color:#fff;margin-bottom:6px;
+  font-size:16px;font-weight:600;
+}
+.contact-details span{
+  color:var(--muted);font-size:16px;font-weight:400;
+}
 .contact-form{
-  background:rgba(20,24,36,.6);backdrop-filter:blur(30px);
-  padding:60px;border-radius:32px;
-  border:1px solid rgba(255,255,255,.06);
+  background:rgba(20,24,36,.85);backdrop-filter:blur(30px);
+  padding:64px;border-radius:32px;
+  border:1px solid rgba(255,255,255,.08);
 }
 .contact-form h3{
-  font-size:36px;color:#fff;margin-bottom:32px;
-  font-family:"Playfair Display",serif;
+  font-size:42px;color:#fff;margin-bottom:36px;
+  font-family:"Playfair Display",serif;font-weight:800;
 }
-.form-group{margin-bottom:24px}
+.form-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:20px;margin-bottom:20px;
+}
+.form-group{margin-bottom:20px}
 .form-input{
-  width:100%;padding:18px 24px;
-  background:rgba(10,14,31,.6);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:14px;color:#fff;
+  width:100%;padding:20px 26px;
+  background:rgba(10,14,31,.7);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:16px;color:#fff;
   font-family:inherit;font-size:16px;
-  transition:.3s;
+  transition:.3s;font-weight:400;
 }
 .form-input:focus{
   outline:none;border-color:var(--primary);
-  box-shadow:0 0 0 3px rgba(255,107,53,.1);
+  box-shadow:0 0 0 4px rgba(255,107,53,.12);
+  background:rgba(10,14,31,.9);
 }
 .form-textarea{
-  width:100%;padding:18px 24px;
-  background:rgba(10,14,31,.6);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:14px;color:#fff;
+  width:100%;padding:20px 26px;
+  background:rgba(10,14,31,.7);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:16px;color:#fff;
   font-family:inherit;font-size:16px;
-  resize:vertical;min-height:140px;
-  transition:.3s;
+  resize:vertical;min-height:160px;
+  transition:.3s;font-weight:400;
 }
 .form-textarea:focus{
   outline:none;border-color:var(--primary);
-  box-shadow:0 0 0 3px rgba(255,107,53,.1);
+  box-shadow:0 0 0 4px rgba(255,107,53,.12);
+  background:rgba(10,14,31,.9);
 }
 .form-submit{
-  width:100%;padding:18px;
+  width:100%;padding:20px;
   background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  border:none;color:#fff;border-radius:50px;
+  border:none;color:#fff;border-radius:60px;
   font-weight:700;font-size:17px;cursor:pointer;
-  box-shadow:0 8px 30px rgba(255,107,53,.3);
+  box-shadow:0 10px 35px rgba(255,107,53,.35);
   transition:.3s;
 }
 .form-submit:hover{
   transform:translateY(-3px);
-  box-shadow:0 12px 40px rgba(255,107,53,.5);
+  box-shadow:0 14px 45px rgba(255,107,53,.5);
 }
 
 /* Footer */
 .footer{
-  background:rgba(10,14,31,.95);
+  background:rgba(10,14,31,.98);
   border-top:1px solid rgba(255,255,255,.06);
-  padding:60px 40px 40px;text-align:center;
+  padding:80px 60px 48px;
 }
 .footer-content{
-  max-width:1400px;margin:0 auto;
+  max-width:1600px;margin:0 auto;
 }
-.footer-logo{margin-bottom:24px}
-.footer-logo img{height:48px;opacity:.8}
-.footer-text{color:var(--muted);font-size:15px;margin-bottom:32px}
+.footer-main{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:60px;margin-bottom:60px;
+}
+.footer-brand h3{
+  font-size:28px;color:#fff;margin-bottom:16px;
+  font-family:"Playfair Display",serif;
+}
+.footer-brand p{
+  color:var(--muted);font-size:15px;line-height:1.8;
+  margin-bottom:24px;
+}
 .footer-social{
-  display:flex;gap:16px;justify-content:center;
-  margin-bottom:32px;
+  display:flex;gap:12px;
 }
 .social-link{
   width:48px;height:48px;border-radius:50%;
@@ -384,52 +521,51 @@ body{
   background:var(--primary);color:#fff;
   transform:translateY(-4px);
 }
-.footer-copy{
-  color:var(--muted);font-size:14px;
-  padding-top:32px;border-top:1px solid rgba(255,255,255,.06);
+.footer-links h4{
+  color:#fff;font-size:16px;margin-bottom:20px;
+  font-weight:600;
+}
+.footer-links a{
+  display:block;color:var(--muted);
+  text-decoration:none;margin-bottom:12px;
+  font-size:15px;transition:.3s;
+}
+.footer-links a:hover{color:var(--primary)}
+.footer-bottom{
+  padding-top:40px;border-top:1px solid rgba(255,255,255,.06);
+  text-align:center;color:var(--muted);font-size:14px;
 }
 
 /* Scroll Progress */
 .scroll-progress{
-  position:fixed;top:0;left:0;height:3px;width:0;
+  position:fixed;top:0;left:0;height:4px;width:0;
   background:linear-gradient(90deg,var(--primary),var(--accent));
-  z-index:2000;transition:width .1s;
+  z-index:2000;transition:width .1s;box-shadow:0 0 10px var(--primary);
 }
 
-/* Cursor Follower */
-.cursor-dot{
-  width:8px;height:8px;background:var(--primary);
-  border-radius:50%;position:fixed;
-  pointer-events:none;z-index:9999;
-  transition:transform .15s;
-}
-.cursor-outline{
-  width:32px;height:32px;
-  border:2px solid rgba(255,107,53,.5);
-  border-radius:50%;position:fixed;
-  pointer-events:none;z-index:9998;
-  transition:all .2s;
-}
-
-@media(max-width:1024px){
-  .parallax-grid{grid-template-columns:1fr}
-  .contact-wrapper{grid-template-columns:1fr}
+@media(max-width:1200px){
   .nav-menu{display:none}
+  .programs-wrapper{padding-bottom:100vh}
+  .about-wrapper,.contact-wrapper{grid-template-columns:1fr}
+  .footer-main{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
 }
 @media(max-width:768px){
-  .nav-container{padding:16px 20px}
-  .hero{padding:120px 20px 40px}
-  .section{padding:80px 20px}
-  .program-card{padding:40px 28px}
-  .contact-info,.contact-form{padding:36px 24px}
+  .nav-container{padding:20px 24px}
+  .hero,.section{padding-left:24px;padding-right:24px}
+  .program-card{padding:40px 32px}
+  .program-header{flex-direction:column;align-items:flex-start}
+  .program-number{font-size:80px}
+  .plans-grid,.founders-grid{grid-template-columns:1fr}
+  .contact-info,.contact-form{padding:40px 32px}
+  .footer{padding:60px 24px 36px}
+  .footer-main{grid-template-columns:1fr;gap:40px}
 }
 </style>
 </head>
 <body>
 
 <div class="scroll-progress"></div>
-<div class="cursor-dot"></div>
-<div class="cursor-outline"></div>
 
 <nav class="nav-container">
   <div class="nav-float">
@@ -440,25 +576,54 @@ body{
       <a href="#programs" class="nav-item">Programs</a>
       <a href="#workshops" class="nav-item">Workshops</a>
       <a href="#about" class="nav-item">About</a>
+      <a href="#founders" class="nav-item">Team</a>
       <a href="#plans" class="nav-item">Plans</a>
-      <a href="#contact" class="nav-cta">Get Started</a>
+      <button class="nav-cta" onclick="location.href='#contact'">Get Started</button>
     </div>
   </div>
 </nav>
 
 <section class="hero">
-  <div class="coins-bg"></div>
+  <div class="hero-bg"></div>
+  <div class="coins-bg" id="coinsBg"></div>
   <div class="hero-content">
+    <span class="hero-label">Experiential Learning Platform</span>
     <h1 class="hero-title">
-      <span>Transform Classrooms</span>
-      <span>into Real-World Adventures</span>
+      <span class="gradient-text">Transform Classrooms</span>
+      <span class="gradient-text">into Real-World Adventures</span>
     </h1>
     <p class="hero-subtitle">
-      Curriculum-aligned educational trips, expert-led SimpLearn sessions, and immersive workshops that bring learning to life for the next generation.
+      Curriculum-aligned educational trips, expert-led SimpLearn sessions, and immersive workshops that bring learning to life for the next generation of innovators and leaders.
     </p>
-    <a href="#contact" class="hero-cta">
-      Get Your Proposal <i class="fa-solid fa-arrow-right"></i>
-    </a>
+    <div class="hero-buttons">
+      <a href="#contact" class="btn-primary">
+        Get Your Proposal <i class="fa-solid fa-arrow-right"></i>
+      </a>
+      <a href="#programs" class="btn-secondary">
+        Explore Programs <i class="fa-solid fa-circle-play"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number">500+</div>
+      <div class="stat-label">Schools Transformed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">50K+</div>
+      <div class="stat-label">Students Impacted</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">200+</div>
+      <div class="stat-label">Expert Mentors</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">95%</div>
+      <div class="stat-label">Satisfaction Rate</div>
+    </div>
   </div>
 </section>
 
@@ -469,33 +634,57 @@ body{
     <p class="section-desc">Transformative experiences designed to connect classroom learning with real-world discovery</p>
   </div>
   
-  <div class="programs-stack">
+  <div class="programs-wrapper">
     <div class="program-card">
-      <div class="program-number">01</div>
-      <div class="program-icon"><i class="fa-solid fa-map-location-dot"></i></div>
-      <h3 class="program-title">Curriculum-Linked Trips</h3>
-      <p class="program-desc">Co-designed experiential trips connecting classroom topics to real-world places. Students explore museums, historical sites, science centers, and natural environments while learning alongside expert guides.</p>
+      <div class="program-header">
+        <div class="program-number">01</div>
+        <div class="program-icon-wrapper">
+          <div class="program-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+        </div>
+      </div>
+      <div class="program-content">
+        <h3 class="program-title">Curriculum-Linked Trips</h3>
+        <p class="program-desc">Co-designed experiential trips connecting classroom topics to real-world places. Students explore museums, historical sites, science centers, and natural environments while learning alongside expert guides who bring subjects to life through immersive experiences.</p>
+      </div>
     </div>
     
     <div class="program-card">
-      <div class="program-number">02</div>
-      <div class="program-icon"><i class="fa-solid fa-lightbulb"></i></div>
-      <h3 class="program-title">SimpLearn Sessions</h3>
-      <p class="program-desc">Interactive sessions led by experts focusing on STEM and design thinking. Hands-on learning experiences that simplify complex concepts through engaging demonstrations and activities.</p>
+      <div class="program-header">
+        <div class="program-number">02</div>
+        <div class="program-icon-wrapper">
+          <div class="program-icon"><i class="fa-solid fa-lightbulb"></i></div>
+        </div>
+      </div>
+      <div class="program-content">
+        <h3 class="program-title">SimpLearn Sessions</h3>
+        <p class="program-desc">Interactive sessions led by industry experts focusing on STEM and design thinking. Hands-on learning experiences that simplify complex concepts through engaging demonstrations, activities, and real-world problem-solving challenges that inspire curiosity.</p>
+      </div>
     </div>
     
     <div class="program-card">
-      <div class="program-number">03</div>
-      <div class="program-icon"><i class="fa-solid fa-flask"></i></div>
-      <h3 class="program-title">Workshops & Maker Labs</h3>
-      <p class="program-desc">Hands-on maker labs developing design and prototyping skills. Students work with tools, materials, and technologies to create innovative solutions to real-world problems.</p>
+      <div class="program-header">
+        <div class="program-number">03</div>
+        <div class="program-icon-wrapper">
+          <div class="program-icon"><i class="fa-solid fa-flask"></i></div>
+        </div>
+      </div>
+      <div class="program-content">
+        <h3 class="program-title">Workshops & Maker Labs</h3>
+        <p class="program-desc">Hands-on maker labs developing design and prototyping skills. Students work with professional tools, materials, and technologies to create innovative solutions to real-world problems while learning collaboration and creative thinking.</p>
+      </div>
     </div>
     
     <div class="program-card">
-      <div class="program-number">04</div>
-      <div class="program-icon"><i class="fa-solid fa-chart-line"></i></div>
-      <h3 class="program-title">Impact & StuCom</h3>
-      <p class="program-desc">Student communication and progress-tracking systems with measurable impact. Comprehensive reporting helps schools understand and showcase the learning outcomes achieved.</p>
+      <div class="program-header">
+        <div class="program-number">04</div>
+        <div class="program-icon-wrapper">
+          <div class="program-icon"><i class="fa-solid fa-chart-line"></i></div>
+        </div>
+      </div>
+      <div class="program-content">
+        <h3 class="program-title">Impact & StuCom</h3>
+        <p class="program-desc">Student communication and progress-tracking systems with measurable impact. Comprehensive reporting and analytics help schools understand and showcase the learning outcomes achieved through our experiential programs.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -507,26 +696,38 @@ body{
     <p class="section-desc">Engaging hands-on experiences that spark creativity and innovation</p>
   </div>
   
-  <div class="scroll-track">
-    <div class="scroll-card">
-      <h3>Maker Lab: Sustainable Design</h3>
-      <p>Prototyping with recycled materials and design thinking. Students learn to create innovative solutions while understanding environmental responsibility and circular economy principles.</p>
-    </div>
-    <div class="scroll-card">
-      <h3>Creative Writing & Journalism</h3>
-      <p>Storytelling, interviews, and publishing in student magazines. Develop communication skills through real-world writing projects and collaborative editorial work.</p>
-    </div>
-    <div class="scroll-card">
-      <h3>Robotics Bootcamp</h3>
-      <p>Building robots, sensors, and computational challenges. Hands-on experience with programming, electronics, and mechanical engineering in fun, project-based learning.</p>
-    </div>
-    <div class="scroll-card">
-      <h3>Innovation Challenge</h3>
-      <p>Design thinking workshops where students identify community problems and develop creative solutions through rapid prototyping and collaborative teamwork.</p>
-    </div>
-    <div class="scroll-card">
-      <h3>Digital Media Production</h3>
-      <p>Video editing, photography, and content creation skills. Students learn professional-grade tools while developing their creative voice and digital literacy.</p>
+  <div class="scroll-wrapper">
+    <div class="scroll-track" id="scrollTrack">
+      <div class="scroll-card">
+        <div class="scroll-icon"><i class="fa-solid fa-recycle"></i></div>
+        <h3>Maker Lab: Sustainable Design</h3>
+        <p>Prototyping with recycled materials and design thinking. Students learn to create innovative solutions while understanding environmental responsibility and circular economy principles.</p>
+      </div>
+      <div class="scroll-card">
+        <div class="scroll-icon"><i class="fa-solid fa-pen-nib"></i></div>
+        <h3>Creative Writing & Journalism</h3>
+        <p>Storytelling, interviews, and publishing in student magazines. Develop communication skills through real-world writing projects and collaborative editorial work.</p>
+      </div>
+      <div class="scroll-card">
+        <div class="scroll-icon"><i class="fa-solid fa-robot"></i></div>
+        <h3>Robotics Bootcamp</h3>
+        <p>Building robots, sensors, and computational challenges. Hands-on experience with programming, electronics, and mechanical engineering in fun, project-based learning.</p>
+      </div>
+      <div class="scroll-card">
+        <div class="scroll-icon"><i class="fa-solid fa-lightbulb"></i></div>
+        <h3>Innovation Challenge</h3>
+        <p>Design thinking workshops where students identify community problems and develop creative solutions through rapid prototyping and collaborative teamwork.</p>
+      </div>
+      <div class="scroll-card">
+        <div class="scroll-icon"><i class="fa-solid fa-video"></i></div>
+        <h3>Digital Media Production</h3>
+        <p>Video editing, photography, and content creation skills. Students learn professional-grade tools while developing their creative voice and digital literacy.</p>
+      </div>
+      <div class="scroll-card">
+        <div class="scroll-icon"><i class="fa-solid fa-code"></i></div>
+        <h3>Coding & Game Design</h3>
+        <p>Learn programming fundamentals through game development. Create interactive experiences while mastering logic, algorithms, and creative problem-solving.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -535,29 +736,17 @@ body{
   <div class="section-header">
     <span class="section-label">Who We Are</span>
     <h2 class="section-title">About Edutrip</h2>
+    <p class="section-desc">Redefining education through real-world experiences</p>
   </div>
   
-  <div class="parallax-grid">
-    <div class="parallax-card">
-      <div class="parallax-img"></div>
-      <div class="parallax-content">
-        <h3>Our Mission</h3>
-        <p>Redefining education through real-world experiences that inspire curiosity and foster lifelong learning.</p>
-      </div>
+  <div class="about-wrapper">
+    <div class="about-content">
+      <h3>Transforming Education Since 2015</h3>
+      <p><strong>Edutrip</strong> is a Hyderabad-based experiential learning organization redefining education through real-world experiences. We bridge the gap between classroom theory and practical application.</p>
+      <p>From field explorations to innovation bootcamps and heritage residencies, every Edutrip experience is guided by experienced educators and industry mentors passionate about transforming education.</p>
+      <p>Our mission is to inspire curiosity, foster creativity, and develop critical thinking skills in students through immersive, hands-on learning experiences that prepare them for the challenges of tomorrow.</p>
     </div>
-    <div class="parallax-card">
-      <div class="parallax-img"></div>
-      <div class="parallax-content">
-        <h3>Our Approach</h3>
-        <p>Guided by experienced educators and mentors, every journey is carefully designed to maximize learning impact.</p>
-      </div>
-    </div>
-  </div>
-  
-  <div style="text-align:center;margin-top:60px;max-width:800px;margin-inline:auto">
-    <p style="font-size:20px;color:var(--muted);line-height:1.8">
-      <strong style="color:#fff">Edutrip</strong> is a Hyderabad-based experiential learning organization redefining education through real-world experiences. From field explorations to innovation bootcamps and heritage residencies, every Edutrip experience is guided by educators and mentors passionate about transforming education.
-    </p>
+    <div class="about-image"></div>
   </div>
 </section>
 
@@ -565,22 +754,21 @@ body{
   <div class="section-header">
     <span class="section-label">Leadership</span>
     <h2 class="section-title">Meet Our Founders</h2>
+    <p class="section-desc">Visionaries committed to transforming education</p>
   </div>
   
-  <div class="parallax-grid" style="max-width:900px;margin:0 auto">
-    <div class="parallax-card" style="height:400px">
-      <div class="parallax-img"></div>
-      <div class="parallax-content">
-        <h3>Raghavendra Prasad</h3>
-        <p>Founder & CEO</p>
-      </div>
+  <div class="founders-grid">
+    <div class="founder-card">
+      <div class="founder-photo"></div>
+      <h4>Raghavendra Prasad</h4>
+      <p class="role">Founder & CEO</p>
+      <p>Passionate educator with 15+ years of experience in experiential learning and curriculum design.</p>
     </div>
-    <div class="parallax-card" style="height:400px">
-      <div class="parallax-img"></div>
-      <div class="parallax-content">
-        <h3>Koteswara Rao</h3>
-        <p>Co-Founder & COO</p>
-      </div>
+    <div class="founder-card">
+      <div class="founder-photo"></div>
+      <h4>Koteswara Rao</h4>
+      <p class="role">Co-Founder & COO</p>
+      <p>Operations expert dedicated to scaling impactful educational experiences across India.</p>
     </div>
   </div>
 </section>
@@ -601,18 +789,530 @@ body{
         <li><i class="fa-solid fa-check"></i> 3 SimpLearn Sessions</li>
         <li><i class="fa-solid fa-check"></i> 2 Workshops</li>
         <li><i class="fa-solid fa-check"></i> Basic Progress Reports</li>
+        <li><i class="fa-solid fa-check"></i> Email Support</li>
       </ul>
-      <button class="plan-btn">Request Pricing</button>
+      <button class="plan-btn" onclick="location.href='#contact'">Request Pricing</button>
     </div>
     
-    <div class="plan-card">
-      <span class="plan-badge">Recommended</span>
+    <div class="plan-card plan-featured">
+      <span class="plan-badge">Most Popular</span>
       <h3 class="plan-name">Platinum Plan</h3>
-      <p class="plan-price">Most Popular</p>
+      <p class="plan-price">Recommended Choice</p>
       <ul class="plan-features">
         <li><i class="fa-solid fa-check"></i> Everything in Gold</li>
         <li><i class="fa-solid fa-check"></i> +1 Educational Trip</li>
         <li><i class="fa-solid fa-check"></i> Annual Smart Fest</li>
         <li><i class="fa-solid fa-check"></i> Enhanced Analytics</li>
+        <li><i class="fa-solid fa-check"></i> Priority Support</li>
       </ul>
-      <button class="plan-btn">
+      <button class="plan-btn" onclick="location.href='#contact'">Request Pricing</button>
+    </div>
+    
+    <div class="plan-card">
+      <h3 class="plan-name">Diamond Plan</h3>
+      <p class="plan-price">Premium Package</p>
+      <ul class="plan-features">
+        <li><i class="fa-solid fa-check"></i> Everything in Platinum</li>
+        <li><i class="fa-solid fa-check"></i> Real-World Skill Courses</li>
+        <li><i class="fa-solid fa-check"></i> Career Guidance Sessions</li>
+        <li><i class="fa-solid fa-check"></i> Custom Curriculum Design</li>
+        <li><i class="fa-solid fa-check"></i> Dedicated Account Manager</li>
+      </ul>
+      <button class="plan-btn" onclick="location.href='#contact'">Request Pricing</button>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="section">
+  <div class="section-header">
+    <span class="section-label">Get In Touch</span>
+    <h2 class="section-title">Contact Us</h2>
+    <p class="section-desc">Ready to transform your school's learning experience?</p>
+  </div>
+  
+  <div class="contact-wrapper">
+    <div class="contact-info">
+      <h3>Let's Connect</h3>
+      <ul class="contact-list">
+        <li>
+          <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="contact-details">
+            <strong>Our Location</strong>
+            <span>Hyderabad, Telangana, India</span>
+          </div>
+        </li>
+        <li>
+          <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+          <div class="contact-details">
+            <strong>Call Us</strong>
+            <span>+91 81792 88678</span>
+          </div>
+        </li>
+        <li>
+          <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+          <div class="contact-details">
+            <strong>Email Us</strong>
+            <span>founders@edutripindia.com</span>
+          </div>
+        </li>
+        <li>
+          <div class="contact-icon"><i class="fa-solid fa-clock"></i></div>
+          <div class="contact-details">
+            <strong>Working Hours</strong>
+            <span>Mon - Sat: 9:00 AM - 6:00 PM</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    
+    <form class="contact-form" id="contactForm">
+      <h3>Send Message</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <input type="text" class="form-input" placeholder="Your Name" required>
+        </div>
+        <div class="form-group">
+          <input type="email" class="form-input" placeholder="Your Email" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <input type="text" class="form-input" placeholder="School Name" required>
+        </div>
+        <div class="form-group">
+          <input type="tel" class="form-input" placeholder="Phone Number">
+        </div>
+      </div>
+      <div class="form-group">
+        <textarea class="form-textarea" placeholder="Tell us about your requirements..." required></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send Message</button>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <h3>Edutrip</h3>
+        <p>Transforming education through experiential learning experiences. Empowering the next generation of innovators and leaders.</p>
+        <div class="footer-social">
+          <a href="#" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fa-brands fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Programs</h4>
+        <a href="#programs">Educational Trips</a>
+        <a href="#programs">SimpLearn Sessions</a>
+        <a href="#workshops">Workshops</a>
+        <a href="#programs">Impact Tracking</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="#about">About Us</a>
+        <a href="#founders">Our Team</a>
+        <a href="#plans">Pricing</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-links">
+        <h4>Resources</h4>
+        <a href="#">Blog</a>
+        <a href="#">Case Studies</a>
+        <a href="#">FAQs</a>
+        <a href="#">Support</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Edutrip Private Limited. All rights reserved. | Privacy Policy | Terms of Service</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+document.addEventListener('DOMContentLoaded',()=>{
+  
+  // Floating Navigation with better visibility
+  const navFloat=document.querySelector('.nav-float');
+  setTimeout(()=>{navFloat.classList.add('visible')},400);
+  
+  let lastScroll=0;
+  window.addEventListener('scroll',()=>{
+    const currentScroll=window.pageYOffset;
+    
+    if(currentScroll>150){
+      navFloat.classList.add('scrolled');
+      if(currentScroll>lastScroll&&currentScroll>300){
+        navFloat.style.transform='translateY(-150px)';
+      }else{
+        navFloat.style.transform='translateY(0)';
+      }
+    }else{
+      navFloat.classList.remove('scrolled');
+    }
+    lastScroll=currentScroll;
+  });
+  
+  // Scroll Progress Bar
+  const progressBar=document.querySelector('.scroll-progress');
+  window.addEventListener('scroll',()=>{
+    const h=document.documentElement.scrollHeight-window.innerHeight;
+    const s=window.pageYOffset;
+    progressBar.style.width=(s/h*100)+'%';
+  });
+  
+  // Generate Floating Coins
+  const coinsBg=document.getElementById('coinsBg');
+  for(let i=0;i<25;i++){
+    const coin=document.createElement('div');
+    coin.className='coin';
+    coin.style.left=Math.random()*100+'%';
+    coin.style.top=Math.random()*100+'%';
+    coin.style.width=(70+Math.random()*50)+'px';
+    coin.style.height=coin.style.width;
+    coin.style.animationDelay=Math.random()*5+'s';
+    coinsBg.appendChild(coin);
+    
+    gsap.to(coin,{
+      y:'random(-100,100)',
+      x:'random(-100,100)',
+      rotation:360,
+      duration:'random(15,25)',
+      repeat:-1,
+      yoyo:true,
+      ease:'sine.inOut'
+    });
+  }
+  
+  // Hero Animations with stagger
+  gsap.to('.hero-label',{
+    opacity:1,y:0,duration:0.8,delay:0.6,ease:'power3.out'
+  });
+  gsap.to('.hero-title',{
+    opacity:1,y:0,duration:1.2,delay:0.9,ease:'power3.out'
+  });
+  gsap.to('.hero-subtitle',{
+    opacity:1,y:0,duration:1,delay:1.2,ease:'power3.out'
+  });
+  gsap.to('.hero-buttons',{
+    opacity:1,y:0,duration:1,delay:1.5,ease:'power3.out'
+  });
+  
+  // Stats counter animation
+  gsap.utils.toArray('.stat-card').forEach((card,i)=>{
+    const number=card.querySelector('.stat-number');
+    const targetText=number.textContent;
+    const targetNumber=parseInt(targetText.replace(/\D/g,''));
+    const suffix=targetText.replace(/[0-9]/g,'');
+    
+    ScrollTrigger.create({
+      trigger:card,
+      start:'top 80%',
+      onEnter:()=>{
+        gsap.from(card,{
+          opacity:0,y:50,duration:0.8,delay:i*0.1,ease:'power3.out'
+        });
+        gsap.from(number,{
+          textContent:0,
+          duration:2,
+          delay:i*0.1,
+          ease:'power1.out',
+          snap:{textContent:1},
+          onUpdate:function(){
+            number.textContent=Math.ceil(this.targets()[0].textContent)+suffix;
+          }
+        });
+      }
+    });
+  });
+  
+  // Section Headers Animation
+  gsap.utils.toArray('.section-header').forEach(header=>{
+    gsap.from(header.children,{
+      opacity:0,
+      y:60,
+      duration:1,
+      stagger:0.2,
+      scrollTrigger:{
+        trigger:header,
+        start:'top 75%'
+      }
+    });
+  });
+  
+  // Improved Stacked Cards with better spacing
+  const programCards=gsap.utils.toArray('.program-card');
+  programCards.forEach((card,i)=>{
+    ScrollTrigger.create({
+      trigger:card,
+      start:'top 160px',
+      end:'bottom 160px',
+      scrub:1,
+      onUpdate:self=>{
+        const progress=self.progress;
+        gsap.to(card,{
+          scale:1-progress*0.08,
+          opacity:1-progress*0.4,
+          y:progress*-40,
+          filter:`blur(${progress*3}px)`,
+          duration:0
+        });
+      }
+    });
+    
+    // Initial entrance animation
+    gsap.from(card,{
+      opacity:0,
+      y:100,
+      scale:0.9,
+      duration:1,
+      delay:i*0.15,
+      scrollTrigger:{
+        trigger:card,
+        start:'top 90%'
+      }
+    });
+  });
+  
+  // Horizontal Scroll Animation
+  const scrollTrack=document.getElementById('scrollTrack');
+  const cards=scrollTrack.querySelectorAll('.scroll-card');
+  
+  gsap.to(scrollTrack,{
+    x:()=>-(scrollTrack.scrollWidth-window.innerWidth+120),
+    ease:'none',
+    scrollTrigger:{
+      trigger:'.scroll-section',
+      start:'top top',
+      end:'+=3000',
+      scrub:1,
+      pin:true,
+      anticipatePin:1
+    }
+  });
+  
+  // Individual card animations during horizontal scroll
+  cards.forEach((card,i)=>{
+    gsap.from(card,{
+      opacity:0.4,
+      scale:0.85,
+      scrollTrigger:{
+        trigger:card,
+        start:'left 90%',
+        end:'left 10%',
+        horizontal:true,
+        containerAnimation:gsap.to(scrollTrack,{x:0}),
+        scrub:true
+      }
+    });
+  });
+  
+  // About Section Animation
+  gsap.from('.about-content',{
+    x:-100,
+    opacity:0,
+    duration:1.2,
+    scrollTrigger:{
+      trigger:'.about-wrapper',
+      start:'top 70%'
+    }
+  });
+  
+  gsap.from('.about-image',{
+    x:100,
+    opacity:0,
+    duration:1.2,
+    scrollTrigger:{
+      trigger:'.about-wrapper',
+      start:'top 70%'
+    }
+  });
+  
+  // Founders Cards Animation
+  gsap.utils.toArray('.founder-card').forEach((card,i)=>{
+    gsap.from(card,{
+      opacity:0,
+      y:80,
+      scale:0.9,
+      duration:1,
+      delay:i*0.2,
+      scrollTrigger:{
+        trigger:card,
+        start:'top 80%'
+      }
+    });
+  });
+  
+  // Plans Cards with magnetic effect
+  const planCards=document.querySelectorAll('.plan-card');
+  
+  planCards.forEach((card,i)=>{
+    gsap.from(card,{
+      opacity:0,
+      y:80,
+      duration:1,
+      delay:i*0.15,
+      scrollTrigger:{
+        trigger:card,
+        start:'top 80%'
+      }
+    });
+    
+    // Magnetic effect
+    card.addEventListener('mousemove',e=>{
+      const rect=card.getBoundingClientRect();
+      const x=(e.clientX-rect.left-rect.width/2)/rect.width;
+      const y=(e.clientY-rect.top-rect.height/2)/rect.height;
+      
+      gsap.to(card,{
+        x:x*15,
+        y:y*15,
+        rotateX:y*5,
+        rotateY:x*5,
+        duration:0.4,
+        ease:'power2.out',
+        transformPerspective:1000
+      });
+    });
+    
+    card.addEventListener('mouseleave',()=>{
+      gsap.to(card,{
+        x:0,y:0,
+        rotateX:0,rotateY:0,
+        duration:0.6,
+        ease:'elastic.out(1,0.5)'
+      });
+    });
+  });
+  
+  // Contact Section with 3D tilt
+  gsap.from('.contact-info',{
+    x:-120,
+    opacity:0,
+    duration:1.2,
+    scrollTrigger:{
+      trigger:'.contact-wrapper',
+      start:'top 70%'
+    }
+  });
+  
+  gsap.from('.contact-form',{
+    x:120,
+    opacity:0,
+    duration:1.2,
+    scrollTrigger:{
+      trigger:'.contact-wrapper',
+      start:'top 70%'
+    }
+  });
+  
+  // 3D tilt effect on contact cards
+  const tiltElements=['.contact-info','.contact-form'];
+  tiltElements.forEach(selector=>{
+    const el=document.querySelector(selector);
+    el.addEventListener('mousemove',e=>{
+      const rect=el.getBoundingClientRect();
+      const x=(e.clientX-rect.left)/rect.width-0.5;
+      const y=(e.clientY-rect.top)/rect.height-0.5;
+      
+      gsap.to(el,{
+        rotateX:y*8,
+        rotateY:x*8,
+        duration:0.4,
+        ease:'power2.out',
+        transformPerspective:1000
+      });
+    });
+    
+    el.addEventListener('mouseleave',()=>{
+      gsap.to(el,{
+        rotateX:0,
+        rotateY:0,
+        duration:0.6,
+        ease:'elastic.out(1,0.4)'
+      });
+    });
+  });
+  
+  // Footer Animation
+  gsap.from('.footer-main > *',{
+    y:50,
+    opacity:0,
+    duration:0.8,
+    stagger:0.15,
+    scrollTrigger:{
+      trigger:'.footer',
+      start:'top 85%'
+    }
+  });
+  
+  // Form Submission
+  const form=document.getElementById('contactForm');
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const btn=form.querySelector('.form-submit');
+    const originalText=btn.textContent;
+    
+    btn.textContent='Sending...';
+    btn.style.pointerEvents='none';
+    btn.style.opacity='0.7';
+    
+    setTimeout(()=>{
+      btn.textContent='Message Sent! ✓';
+      btn.style.background='linear-gradient(135deg,#10b981,#059669)';
+      btn.style.opacity='1';
+      
+      setTimeout(()=>{
+        btn.textContent=originalText;
+        btn.style.background='';
+        btn.style.pointerEvents='';
+        form.reset();
+      },2500);
+    },1500);
+  });
+  
+  // Smooth Scroll
+  document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+    anchor.addEventListener('click',function(e){
+      e.preventDefault();
+      const target=document.querySelector(this.getAttribute('href'));
+      if(target){
+        const offset=120;
+        const targetPosition=target.offsetTop-offset;
+        window.scrollTo({
+          top:targetPosition,
+          behavior:'smooth'
+        });
+      }
+    });
+  });
+  
+  // Parallax Effect on Hero
+  gsap.to('.hero-content',{
+    y:250,
+    opacity:0.2,
+    scale:0.95,
+    ease:'none',
+    scrollTrigger:{
+      trigger:'.hero',
+      start:'top top',
+      end:'bottom top',
+      scrub:true
+    }
+  });
+  
+  // Pulse animation on CTA
+  gsap.to('.btn-primary',{
+    boxShadow:'0 18px 60px rgba(255,107,53,.7)',
+    duration:1.5,
+    repeat:-1,
+    yoyo:true,
+    ease:'sine.inOut'
+  });
+  
+});
