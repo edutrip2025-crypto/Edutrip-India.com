@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
   const header = document.getElementById("site-header");
-  const nav = document.getElementById("main-nav");
   const programCards = document.querySelectorAll(".flip");
   const form = document.getElementById("contact-form");
   let lastScroll = 0;
@@ -13,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     lastScroll = current;
   });
 
-  // Flip card logic (hover for desktop, click for mobile)
+  // Flip cards on click (mobile) and hover (desktop)
   programCards.forEach((card) => {
     card.addEventListener("click", () => {
       card.classList.toggle("flipped");
@@ -26,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Smooth scroll
+  // Smooth scroll for in-page links
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener("click", function (e) {
       const t = document.querySelector(this.getAttribute("href"));
@@ -37,14 +36,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Contact form → mailto
+  // Simple mailto integration for contact form
   if (form) {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const d = Object.fromEntries(new FormData(form).entries());
+      const data = Object.fromEntries(new FormData(form).entries());
       const subject = encodeURIComponent("Edutrip Enquiry");
       const body = encodeURIComponent(
-        `Organization: ${d.organization}\nName: ${d.name}\nEmail: ${d.email}\nPhone: ${d.phone}\n\nMessage:\n${d.message}`
+        `Organization: ${data.organization}\nName: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\n\nMessage:\n${data.message}`
       );
       window.location.href = `mailto:founders@edutripindia.com?subject=${subject}&body=${body}`;
     });
