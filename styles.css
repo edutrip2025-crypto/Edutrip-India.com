@@ -1,67 +1,185 @@
-/* ABOUT SECTION */
-.about-section {
-  text-align: center;
+/* ===============================
+   Global Styles
+   =============================== */
+:root {
+  --accent: #0066cc;
+  --accent-2: #008cff;
+  --bg: #f5f8ff;
+  --text: #1a1a1a;
+  --shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 
-.about-container {
-  max-width: 900px;
-  margin: 0 auto;
-  line-height: 1.7;
-  color: #333;
-  font-size: 1.05rem;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* FORM ENHANCEMENT */
-.enhanced-form {
-  background: #fff;
-  padding: 24px;
-  border-radius: 16px;
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ===============================
+   Header
+   =============================== */
+.site-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
   box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+.site-header.hidden {
+  transform: translateY(-100%);
 }
 
-.form-row {
+.header-inner {
   display: flex;
-  gap: 14px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 6%;
 }
 
-.field {
-  flex: 1;
+.brand {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+}
+.brand-logo {
+  width: 64px;
+  height: auto;
+}
+.title {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+.tag {
+  font-size: 0.8rem;
+  color: #444;
 }
 
-.field label {
+nav.main {
+  display: flex;
+  gap: 24px;
+}
+nav.main a {
+  text-decoration: none;
+  color: var(--text);
   font-weight: 600;
-  margin-bottom: 6px;
+  transition: color 0.2s;
+}
+nav.main a:hover {
   color: var(--accent);
 }
 
-.field input,
-.field textarea {
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid rgba(8, 16, 32, 0.08);
-  font-size: 1rem;
-  transition: border-color 0.2s;
+/* ===============================
+   Hero Section
+   =============================== */
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 6% 80px;
 }
 
-.field input:focus,
-.field textarea:focus {
-  outline: none;
-  border-color: var(--accent-2);
+.hero {
+  text-align: center;
+  background: linear-gradient(180deg, #ffffff 0%, #f0f7ff 100%);
+  padding-top: 160px;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  color: #0c1b3d;
+}
+.hero .lead {
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+}
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+}
+.btn-primary {
+  background: linear-gradient(90deg, #0046b7, #00aaff);
+  color: #fff;
+  border: none;
+}
+.btn-outline {
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  background: transparent;
+  transition: all 0.2s ease;
+}
+.btn-outline:hover {
+  background: var(--accent);
+  color: #fff;
+}
+.btn.large {
+  font-size: 1.1rem;
 }
 
-/* PROGRAM FLIP CARDS */
+/* ===============================
+   Section Titles
+   =============================== */
+.section-title {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #0c1b3d;
+}
+
+/* ===============================
+   Programs
+   =============================== */
+.program-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+.program-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.25s;
+}
+.program-card:hover {
+  transform: translateY(-4px);
+}
+.program-card h4 {
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.program-card p {
+  color: #444;
+  font-size: 0.95rem;
+}
+
+/* Flip Card Animation */
 .flip {
   perspective: 1000px;
   cursor: pointer;
   position: relative;
-  height: 160px;
+  height: 180px;
 }
-
 .flip .card-front,
 .flip .card-back {
   backface-visibility: hidden;
@@ -77,36 +195,227 @@
   justify-content: center;
   text-align: center;
 }
-
 .flip .card-back {
   transform: rotateY(180deg);
-  font-size: 0.95rem;
-  line-height: 1.5;
 }
-
 .flip.flipped .card-front {
   transform: rotateY(180deg);
 }
-
 .flip.flipped .card-back {
-  transform: rotateY(0);
+  transform: rotateY(0deg);
 }
 
-/* BADGE FIX */
+/* ===============================
+   About
+   =============================== */
+.about-section {
+  text-align: center;
+}
+.about-container {
+  max-width: 900px;
+  margin: 0 auto;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #333;
+}
+
+/* ===============================
+   Plans / Pricing
+   =============================== */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+.price-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  position: relative;
+}
+.price-card h3 {
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.features-list {
+  list-style: none;
+  margin-bottom: 1.2rem;
+}
+.features-list li {
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
 .badge-top {
-  font-size: 0.75rem;
   position: absolute;
   top: 10px;
   right: 12px;
+  background: var(--accent);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
 }
 
-/* RESPONSIVE */
+/* ===============================
+   Contact Section
+   =============================== */
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+.enhanced-form {
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.form-row {
+  display: flex;
+  gap: 14px;
+}
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.field label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--accent);
+}
+.field input,
+.field textarea {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(8, 16, 32, 0.08);
+  font-size: 1rem;
+}
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--accent-2);
+}
+
+/* ===============================
+   Contact Info Box (UX Improved)
+   =============================== */
+.contact-info-box {
+  padding: 22px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.contact-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fbff;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: all 0.25s ease;
+}
+.contact-chip:hover {
+  background: #eef5ff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(33,150,243,0.1);
+}
+.chip-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: linear-gradient(135deg, #0046b7, #008cff);
+  color: #fff;
+}
+.chip-content {
+  display: flex;
+  flex-direction: column;
+}
+.chip-label {
+  font-size: 0.85rem;
+  color: #445066;
+}
+.chip-link,
+.chip-text {
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+}
+.chip-link:hover {
+  color: var(--accent-2);
+}
+
+/* ===============================
+   Footer
+   =============================== */
+.site-footer {
+  background: #0a1b3a;
+  color: #fff;
+  padding: 50px 6% 20px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+  margin-bottom: 20px;
+}
+.footer-grid h4 {
+  margin-bottom: 10px;
+  color: #fff;
+}
+.footer-grid ul {
+  list-style: none;
+}
+.footer-grid a {
+  color: #a9c9ff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-grid a:hover {
+  color: #fff;
+}
+.footer-legal {
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* ===============================
+   Watermark
+   =============================== */
+.watermark {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  opacity: 0.1;
+  z-index: 0;
+}
+.watermark img {
+  width: 200px;
+  height: auto;
+}
+
+/* ===============================
+   Responsive
+   =============================== */
 @media (max-width: 900px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
   .form-row {
     flex-direction: column;
-  }
-
-  .flip {
-    height: auto;
   }
 }
