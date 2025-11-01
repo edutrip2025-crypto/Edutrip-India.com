@@ -7,12 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Hide header on scroll down
   window.addEventListener("scroll", () => {
     const current = window.scrollY;
-    if (current > lastScroll && current > 5) header.classList.add("hidden");
+    if (current > lastScroll && current > 50) header.classList.add("hidden");
     else header.classList.remove("hidden");
     lastScroll = current;
   });
 
-  // Flip cards on click (mobile) and hover (desktop)
+  // Flip animation
   programCards.forEach((card) => {
     card.addEventListener("click", () => {
       card.classList.toggle("flipped");
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Smooth scroll for in-page links
+  // Smooth scrolling
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener("click", function (e) {
       const t = document.querySelector(this.getAttribute("href"));
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Simple mailto integration for contact form
+  // Contact form redirect to email
   if (form) {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
