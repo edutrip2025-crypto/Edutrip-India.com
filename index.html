@@ -11,7 +11,10 @@
 </head>
 
 <body>
-<div class="watermark"><img src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip watermark"></div>
+<!-- Large Watermark -->
+<div class="watermark">
+  <img src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip watermark">
+</div>
 
 <!-- HEADER -->
 <header id="site-header" class="site-header">
@@ -45,20 +48,43 @@
   <h2 class="section-title">Our Programs</h2>
   <div class="program-grid">
     <div class="program-card flip">
-      <div class="card-front"><h4>Curriculum-Linked Trips</h4></div>
-      <div class="card-back"><p>Co-designed with educators, mapped to standards, and built to align academic learning with real-world environments. Includes field guides and post-trip assessments.</p></div>
+      <div class="card-front">
+        <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" alt="Trips icon">
+        <h4>Curriculum-Linked Trips</h4>
+      </div>
+      <div class="card-back">
+        <p>Co-designed with educators, aligned to standards, and connecting classroom learning with real-world applications through experiential journeys.</p>
+      </div>
     </div>
+
     <div class="program-card flip">
-      <div class="card-front"><h4>SimpLearn Sessions</h4></div>
-      <div class="card-back"><p>Expert-led interactive sessions inside schools — 45–90 minutes of deep dives, demos, and Q&A designed to strengthen subject mastery and applied understanding.</p></div>
+      <div class="card-front">
+        <img src="https://cdn-icons-png.flaticon.com/512/6165/6165856.png" alt="SimpLearn icon">
+        <h4>SimpLearn Sessions</h4>
+      </div>
+      <div class="card-back">
+        <p>Interactive expert-led in-school sessions blending theory with practical insights, designed to make learning engaging and fun.</p>
+      </div>
     </div>
+
     <div class="program-card flip">
-      <div class="card-front"><h4>Workshops & Maker Labs</h4></div>
-      <div class="card-back"><p>Hands-on STEAM sessions encouraging innovation, design thinking, and creative problem solving through project-based learning experiences.</p></div>
+      <div class="card-front">
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712100.png" alt="Workshops icon">
+        <h4>Workshops & Maker Labs</h4>
+      </div>
+      <div class="card-back">
+        <p>Hands-on innovation and STEAM-based workshops focusing on design thinking, creativity, and teamwork through real projects.</p>
+      </div>
     </div>
+
     <div class="program-card flip">
-      <div class="card-front"><h4>Impact & StuCom</h4></div>
-      <div class="card-back"><p>Digital student tracking, assessment dashboards, and communication tools for teachers to monitor progress and engagement seamlessly.</p></div>
+      <div class="card-front">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135706.png" alt="Impact icon">
+        <h4>Impact & StuCom</h4>
+      </div>
+      <div class="card-back">
+        <p>Analytics and communication tools that help schools monitor student growth, engagement, and impact through digital dashboards.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -67,15 +93,9 @@
 <section id="about" class="wrap about-section">
   <h2 class="section-title">About Us</h2>
   <div class="about-container">
-    <p>
-      <strong>Edutrip</strong> is a Hyderabad-based organization redefining how students learn by connecting classrooms to real-world experiences. We create curriculum-aligned educational journeys that blend discovery, exploration, and skill development.
-    </p>
-    <p>
-      From marine biology expeditions to innovation bootcamps and heritage trails, every Edutrip experience is crafted by educators and industry experts. Our programs nurture curiosity, teamwork, and critical thinking — the building blocks of tomorrow’s problem solvers.
-    </p>
-    <p>
-      Trusted by leading schools, we ensure every trip and workshop meets global standards of safety, learning outcomes, and impact measurement. Edutrip transforms “learning by reading” into “learning by doing.”
-    </p>
+    <p><strong>Edutrip</strong> is a Hyderabad-based organization redefining how students learn by connecting classrooms to real-world experiences. We design curriculum-aligned learning adventures that merge discovery, exploration, and life skills.</p>
+    <p>Our programs include heritage trails, scientific expeditions, innovation bootcamps, and environmental explorations — all crafted in collaboration with educators and industry experts. We believe learning happens best when curiosity meets experience.</p>
+    <p>From safety to measurable outcomes, every Edutrip experience is built with care and precision. We transform “learning by reading” into “learning by doing,” preparing students to think critically, collaborate effectively, and lead confidently.</p>
   </div>
 </section>
 
@@ -83,9 +103,9 @@
 <section id="workshops" class="wrap">
   <h2 class="section-title">Workshops & Labs</h2>
   <div class="program-grid">
-    <div class="program-card"><h4>Maker Lab: Sustainable Design</h4><p>Prototyping with recycled materials and applying design thinking to real-world problems.</p></div>
-    <div class="program-card"><h4>Creative Writing & Journalism</h4><p>From concept to publication — students learn storytelling, editing, and media literacy.</p></div>
-    <div class="program-card"><h4>Robotics Bootcamp</h4><p>Sensor-driven robotics and automation challenges for hands-on STEM learning.</p></div>
+    <div class="program-card"><h4>Maker Lab: Sustainable Design</h4><p>Prototyping with recycled materials and applying design thinking to solve real challenges.</p></div>
+    <div class="program-card"><h4>Creative Writing & Journalism</h4><p>From idea to publication — developing voice, creativity, and communication through storytelling.</p></div>
+    <div class="program-card"><h4>Robotics Bootcamp</h4><p>Hands-on robotics workshops introducing coding, sensors, and automation for young innovators.</p></div>
   </div>
 </section>
 
@@ -142,7 +162,10 @@
         <div class="field"><label>Email</label><input name="email" type="email" required></div>
         <div class="field"><label>Phone</label><input name="phone" type="tel"></div>
       </div>
-      <div class="field"><label>Message</label><textarea name="message" rows="4" placeholder="Tell us grade, tentative dates, chosen plan etc."></textarea></div>
+      <div class="field">
+        <label>Message</label>
+        <textarea name="message" rows="4" placeholder="Tell us what you need..."></textarea>
+      </div>
       <button class="btn btn-primary" type="submit">Send Enquiry</button>
     </form>
 
@@ -151,7 +174,6 @@
       <div class="contact-chip"><div class="chip-icon">📞</div><div class="chip-content"><span class="chip-label">Call Us</span><a href="tel:+918179288678" class="chip-link">+91 81792 88678</a></div></div>
       <div class="contact-chip"><div class="chip-icon">✉️</div><div class="chip-content"><span class="chip-label">Email</span><a href="mailto:founders@edutripindia.com" class="chip-link">founders@edutripindia.com</a></div></div>
       <div class="contact-chip"><div class="chip-icon">📍</div><div class="chip-content"><span class="chip-label">Office</span><span class="chip-text">Hyderabad, India</span></div></div>
-      <div class="contact-note"><p>We respond within 24 hours on working days. For urgent queries, please call or email us directly.</p></div>
     </aside>
   </div>
 </section>
