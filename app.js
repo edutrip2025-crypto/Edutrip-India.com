@@ -1,51 +1,50 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.getElementById("burger");
+  const navbar = document.getElementById("navbar");
   const header = document.getElementById("site-header");
-  const programCards = document.querySelectorAll(".flip");
-  const form = document.getElementById("contact-form");
+  const revealEls = document.querySelectorAll(".reveal");
   let lastScroll = 0;
+
+  // Burger menu (mobile only)
+  burger.addEventListener("click", () => {
+    navbar.classList.toggle("active");
+    burger.classList.toggle("open");
+  });
+
+  document.querySelectorAll(".navbar a").forEach(link => {
+    link.addEventListener("click", () => {
+      navbar.classList.remove("active");
+      burger.classList.remove("open");
+    });
+  });
 
   // Hide header on scroll down
   window.addEventListener("scroll", () => {
     const current = window.scrollY;
-    if (current > lastScroll && current > 50) header.classList.add("hidden");
+    if (current > lastScroll && current > 60) header.classList.add("hidden");
     else header.classList.remove("hidden");
     lastScroll = current;
   });
 
-  // Flip animation
-  programCards.forEach((card) => {
-    card.addEventListener("click", () => {
-      card.classList.toggle("flipped");
+  // Fade-in & reveal animation on scroll
+  const revealOnScroll = () => {
+    revealEls.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 100) el.classList.add("visible");
     });
-    card.addEventListener("mouseenter", () => {
-      if (window.innerWidth > 900) card.classList.add("flipped");
-    });
-    card.addEventListener("mouseleave", () => {
-      if (window.innerWidth > 900) card.classList.remove("flipped");
-    });
-  });
+  };
+  revealOnScroll();
+  window.addEventListener("scroll", revealOnScroll);
 
-  // Smooth scrolling
-  document.querySelectorAll('a[href^="#"]').forEach((a) => {
-    a.addEventListener("click", function (e) {
-      const t = document.querySelector(this.getAttribute("href"));
-      if (t) {
-        e.preventDefault();
-        window.scrollTo({ top: t.offsetTop - 90, behavior: "smooth" });
-      }
-    });
+  // Contact form mailto
+  const form = document.getElementById("contact-form");
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+    const subject = encodeURIComponent("Edutrip Enquiry");
+    const body = encodeURIComponent(
+      `Organization: ${data.organization}\nName: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\n\nMessage:\n${data.message}`
+    );
+    window.location.href = `mailto:founders@edutripindia.com?subject=${subject}&body=${body}`;
   });
-
-  // Contact form redirect to email
-  if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(form).entries());
-      const subject = encodeURIComponent("Edutrip Enquiry");
-      const body = encodeURIComponent(
-        `Organization: ${data.organization}\nName: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\n\nMessage:\n${data.message}`
-      );
-      window.location.href = `mailto:founders@edutripindia.com?subject=${subject}&body=${body}`;
-    });
-  }
 });
