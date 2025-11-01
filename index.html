@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Edutrip India — Transform classrooms into real-world adventures with curriculum-linked trips and immersive workshops." />
   <title>Edutrip India</title>
+  <meta name="description" content="Edutrip India — Transform classrooms into real-world adventures with curriculum-linked trips, SimpLearn sessions, and immersive workshops." />
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-sV2vDLb4Cdd4u7SzJtT24sv0B6LTIJHNe6RxVb5LzJfUzEJGko7d9YhnzZGG+rfaDLcShtr3lL5bLPP5xjC5tw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Styles -->
   <link rel="stylesheet" href="./styles.css" />
@@ -15,8 +18,8 @@
   <!-- JS -->
   <script defer src="./app.js"></script>
 </head>
-
 <body>
+
   <!-- Watermark -->
   <div class="watermark">
     <img src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip watermark">
@@ -63,27 +66,24 @@
     <h2>Our Programs</h2>
     <div class="program-grid">
       <div class="program-card reveal">
-        <img src="https://cdn-icons-png.flaticon.com/512/906/906175.png" alt="Curriculum Trips" />
+        <i class="fa-solid fa-graduation-cap program-icon"></i>
         <h4>Curriculum-Linked Trips</h4>
-        <p>Hands-on educational travel connecting classroom lessons to real-world exploration.</p>
+        <p>Co-designed educational travel connecting classroom learning to real-world experiences.</p>
       </div>
-
       <div class="program-card reveal">
-        <img src="https://cdn-icons-png.flaticon.com/512/3100/3100647.png" alt="SimpLearn" />
+        <i class="fa-solid fa-chalkboard-user program-icon"></i>
         <h4>SimpLearn Sessions</h4>
-        <p>Interactive in-school sessions led by industry experts focusing on STEM and innovation.</p>
+        <p>Interactive sessions led by industry experts focusing on innovation, STEM, and life skills.</p>
       </div>
-
       <div class="program-card reveal">
-        <img src="https://cdn-icons-png.flaticon.com/512/5278/5278614.png" alt="Workshops" />
+        <i class="fa-solid fa-flask program-icon"></i>
         <h4>Workshops & Maker Labs</h4>
-        <p>Creative labs encouraging problem-solving and design thinking for all grades.</p>
+        <p>Creative workshops encouraging design thinking, experimentation, and teamwork.</p>
       </div>
-
       <div class="program-card reveal">
-        <img src="https://cdn-icons-png.flaticon.com/512/4319/4319191.png" alt="StuCom" />
+        <i class="fa-solid fa-chart-line program-icon"></i>
         <h4>Impact & StuCom</h4>
-        <p>Tracking measurable student outcomes and enhancing communication across schools.</p>
+        <p>Student communication and progress-tracking systems with measurable impact reports.</p>
       </div>
     </div>
   </section>
@@ -91,8 +91,12 @@
   <!-- About -->
   <section class="about" id="about">
     <h2>About Us</h2>
-    <p><strong>Edutrip</strong> is a Hyderabad-based organization redefining experiential learning by connecting classrooms to real-world environments. We design curriculum-aligned programs that spark curiosity, creativity, and collaboration among students.</p>
-    <p>From field-based science explorations to heritage residencies and innovation bootcamps, Edutrip ensures every learning journey is guided by educators, mentors, and industry experts. We transform <em>“learning by reading”</em> into <em>“learning by doing.”</em></p>
+    <p>
+      <strong>Edutrip</strong> is a Hyderabad-based organization redefining how students learn by connecting classrooms to real-world environments. We design curriculum-aligned journeys that nurture curiosity, creativity, and collaboration among students.
+    </p>
+    <p>
+      From field-based science explorations to heritage residencies and innovation bootcamps, every Edutrip experience is guided by educators and mentors. We transform <em>“learning by reading”</em> into <em>“learning by doing.”</em>
+    </p>
   </section>
 
   <!-- Plans -->
@@ -101,19 +105,29 @@
     <div class="plan-grid">
       <div class="plan-card reveal">
         <h3>Gold Plan</h3>
-        <p>Ideal for schools starting their Edutrip journey with essential experiential programs.</p>
+        <ul>
+          <li>3 Educational Trips</li>
+          <li>3 SimpLearn Sessions</li>
+          <li>2 Workshops & Assessments</li>
+        </ul>
         <a href="#contact" class="plan-btn">Request Pricing</a>
       </div>
-
       <div class="plan-card reveal">
         <h3>Platinum Plan</h3>
-        <p>Extended trips and advanced SimpLearn modules designed for long-term school engagement.</p>
+        <ul>
+          <li>Everything in Gold</li>
+          <li>+1 Educational Trip</li>
+          <li>Exclusive Annual Smart Fest</li>
+        </ul>
         <a href="#contact" class="plan-btn">Request Pricing</a>
       </div>
-
       <div class="plan-card reveal">
         <h3>Diamond Plan</h3>
-        <p>Comprehensive year-long experiences for schools including workshops and field modules.</p>
+        <ul>
+          <li>Everything in Platinum</li>
+          <li>Access to Real-World Skill Courses</li>
+          <li>Certificates & Career Guidance</li>
+        </ul>
         <a href="#contact" class="plan-btn">Request Pricing</a>
       </div>
     </div>
@@ -133,10 +147,10 @@
 
     <div class="contact-details">
       <h3>Let's Connect</h3>
-      <p><strong>📞</strong> +91 81792 88678</p>
-      <p><strong>📧</strong> founders@edutripindia.com</p>
-      <p><strong>📍</strong> Hyderabad, India</p>
-      <p>We respond within 24 hours on working days.</p>
+      <p><i class="fa-solid fa-phone"></i> +91 81792 88678</p>
+      <p><i class="fa-solid fa-envelope"></i> founders@edutripindia.com</p>
+      <p><i class="fa-solid fa-location-dot"></i> Hyderabad, India</p>
+      <p>We typically respond within 24 hours on working days.</p>
     </div>
   </section>
 
@@ -151,7 +165,7 @@
         <h4>Programs</h4>
         <ul>
           <li><a href="#programs">Trips</a></li>
-          <li><a href="#programs">SimplLearn Sessions</a></li>
+          <li><a href="#programs">SimpLearn Sessions</a></li>
           <li><a href="#programs">Workshops</a></li>
         </ul>
       </div>
@@ -165,5 +179,6 @@
     </div>
     <p class="footer-note">© Edutrip Private Limited | Hyderabad, India</p>
   </footer>
+
 </body>
 </html>
