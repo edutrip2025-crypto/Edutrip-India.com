@@ -14,7 +14,7 @@ body {
   color: var(--accent);
 }
 
-/* Watermark */
+/* ===================== WATERMARK ===================== */
 .watermark {
   position: fixed;
   inset: 0;
@@ -32,7 +32,7 @@ body {
   filter: grayscale(10%) brightness(120%);
 }
 
-/* Header */
+/* ===================== HEADER ===================== */
 .site-header {
   position: fixed;
   top: 0;
@@ -84,7 +84,7 @@ nav.main a:hover { color: var(--accent-2); }
   display: block; margin: 5px 0;
 }
 
-/* Hero */
+/* ===================== HERO ===================== */
 .hero {
   text-align: center;
   padding: 160px 20px 120px;
@@ -102,7 +102,7 @@ nav.main a:hover { color: var(--accent-2); }
   text-shadow: 0 1px 3px rgba(255,255,255,0.7);
 }
 
-/* Buttons */
+/* ===================== BUTTONS ===================== */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -113,7 +113,7 @@ nav.main a:hover { color: var(--accent-2); }
   cursor: pointer;
   text-decoration: none;
   border: none;
-  transition: transform 0.2s ease;
+  transition: all 0.25s ease;
 }
 .btn:hover { transform: translateY(-2px); }
 .btn-primary {
@@ -132,11 +132,21 @@ nav.main a:hover { color: var(--accent-2); }
 }
 .large { font-size: 1.1rem; }
 
-/* Sections */
-.wrap { max-width: 1200px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 2; }
-.section-title { font-size: 1.6rem; margin-bottom: 20px; }
+/* ===================== SECTION WRAPS ===================== */
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  position: relative;
+  z-index: 2;
+}
+.section-title {
+  font-size: 1.7rem;
+  margin-bottom: 24px;
+  font-family: "Playfair Display", serif;
+}
 
-/* Program Cards */
+/* ===================== PROGRAMS ===================== */
 .program-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
@@ -152,7 +162,50 @@ nav.main a:hover { color: var(--accent-2); }
 }
 .program-card:hover { transform: scale(1.05); }
 
-/* Pricing */
+/* ===================== ABOUT ===================== */
+.about-text {
+  font-size: 1.05rem;
+  color: #334;
+  line-height: 1.7;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* ===================== FOUNDERS ===================== */
+.founder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  text-align: center;
+}
+.founder-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  transition: transform 0.3s ease;
+}
+.founder-card:hover {
+  transform: translateY(-8px);
+}
+.founder-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+.founder-card h4 {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  color: var(--accent);
+}
+.founder-role {
+  font-weight: 600;
+  color: var(--accent-2);
+  margin-bottom: 10px;
+}
+
+/* ===================== PLANS ===================== */
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
@@ -177,7 +230,7 @@ nav.main a:hover { color: var(--accent-2); }
   margin-bottom: 8px;
 }
 
-/* Contact */
+/* ===================== CONTACT ===================== */
 .contact-layout {
   display: grid;
   grid-template-columns: 1fr 360px;
@@ -228,7 +281,7 @@ nav.main a:hover { color: var(--accent-2); }
   line-height: 1.4;
 }
 
-/* Footer */
+/* ===================== FOOTER ===================== */
 .site-footer {
   background: var(--accent);
   color: #fff;
@@ -259,7 +312,7 @@ nav.main a:hover { color: var(--accent-2); }
   color: rgba(255,255,255,0.8);
 }
 
-/* Responsive */
+/* ===================== RESPONSIVE ===================== */
 @media (max-width: 900px) {
   nav.main { display: none; }
   .hamburger { display: block; }
