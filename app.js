@@ -1,33 +1,32 @@
-// small helper
-const $ = sel => document.querySelector(sel);
-const $$ = sel => Array.from(document.querySelectorAll(sel));
+// minimal helpers
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
 
-// Floating ribbon: on small screens make dropdowns click -> toggle; hide on scroll down
-const ribbon = document.getElementById('floatingRibbon');
+// Ribbon: hide when scrolling down on small screens
+const ribbon = $('#floatingRibbon');
 let lastScroll = window.scrollY;
 window.addEventListener('scroll', () => {
   const cur = window.scrollY;
   if (cur > lastScroll && window.innerWidth < 900) {
-    ribbon.style.opacity = '0'; ribbon.style.pointerEvents = 'none';
+    ribbon.style.opacity = '0';
+    ribbon.style.pointerEvents = 'none';
   } else {
-    ribbon.style.opacity = '1'; ribbon.style.pointerEvents = 'auto';
+    ribbon.style.opacity = '1';
+    ribbon.style.pointerEvents = 'auto';
   }
   lastScroll = cur;
 });
 
-// Dropdowns click behavior for mobile
+// Ribbon dropdown show on hover (desktop) - already CSS handles :hover. For mobile, toggle on click
 document.querySelectorAll('.ribbon-dropdown').forEach(dd => {
   const btn = dd.querySelector('.ribbon-item');
   const menu = dd.querySelector('.ribbon-menu');
   btn.addEventListener('click', (e) => {
     if (window.innerWidth < 900) {
       e.preventDefault();
-      if (menu.style.display === 'block') menu.style.display = 'none';
-      else menu.style.display = 'block';
+      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
     }
   });
-
-  // close on outside click
   document.addEventListener('click', (ev) => {
     if (window.innerWidth < 900 && !dd.contains(ev.target)) {
       menu.style.display = 'none';
@@ -35,61 +34,49 @@ document.querySelectorAll('.ribbon-dropdown').forEach(dd => {
   });
 });
 
-// Programs tile: keep title visible; description reveals on hover; enable keyboard toggles
+// Program tiles: toggle active on mobile click; keyboard accessible
 $$('.program-tile').forEach(tile => {
-  tile.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') tile.classList.toggle('active');
-  });
   tile.addEventListener('click', () => {
     if (window.innerWidth < 900) tile.classList.toggle('active');
   });
+  tile.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') tile.classList.toggle('active');
+  });
 });
 
-// IntersectionObserver for big banners (Add -> Send -> Learn) to reveal in sequence
-const bigItems = $$('.big-banner');
-const ioBig = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
+// Intersection observer: big banners reveal
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      en.target.classList.add('visible');
     }
   });
-}, {threshold: 0.35});
-bigItems.forEach(b => ioBig.observe(b));
+}, {threshold:0.35});
+$$('.big-banner').forEach(el => io.observe(el));
 
-// Reveal items helper for workshops and other sections: staggered reveal
-const revealObserver = new IntersectionObserver((entries, obs) => {
+// reveal-step / workshop cards observer (stagger)
+const revealObs = new IntersectionObserver((entries, obs) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
-      // if card has reveal-step, add incremental delay
-      if (entry.target.classList.contains('reveal-step')) {
-        const siblings = Array.from(entry.target.parentElement.children);
-        const idx = siblings.indexOf(entry.target);
-        entry.target.style.transitionDelay = `${idx * 140}ms`;
-      }
       obs.unobserve(entry.target);
     }
   });
-}, {threshold: 0.25});
+}, {threshold:0.25});
 
-// Observe workshop cards and any reveal-item
-$$('.reveal-step').forEach(el => revealObserver.observe(el));
-$$('.workshop-card').forEach(el => revealObserver.observe(el));
-$$('.reveal-item').forEach(el => revealObserver.observe(el));
+$$('.reveal-step, .workshop-card, .reveal-item').forEach(el => revealObs.observe(el));
 
-// Contact form demo submit
+// Demo form handling
 const form = $('#enquiryForm');
 if (form) {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    alert('Thank you — demo submission received. Wire the form to your backend as needed.');
+    alert('Demo: message sent (client-side). Configure a real endpoint to receive enquiries.');
     form.reset();
   });
 }
 
-// Accessibility: close all ribbon menus on escape
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    document.querySelectorAll('.ribbon-menu').forEach(m => m.style.display = 'none');
-  }
+// Close ribbon menus on ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.ribbon-menu').forEach(m => m.style.display = 'none');
 });
