@@ -1,509 +1,158 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Edutrip India • Curriculum-Linked Student Travel & Learning</title>
-  <meta name="description" content="Edutrip India — curriculum-aligned educational trips, SimpLearn expert sessions, workshops & premium plans." />
-  <meta name="theme-color" content="#082454">
-
-  <!-- Fonts & preconnect -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-
-  <!-- PWA manifest -->
-  <link rel="manifest" href="manifest.json">
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="styles.css">
-
-  <!-- Fallback icon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width='100' height='100' rx='18' fill='%23082754'/><text x='50' y='60' font-size='50' fill='white' text-anchor='middle' font-family='Playfair Display'>E</text></svg>">
-
-  <!-- SEO -->
-  <meta name="robots" content="index,follow">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Edutrip India • Curriculum-Linked Student Travel & Learning</title>
+<meta name="description" content="Edutrip India — curriculum-aligned educational trips, SimpLearn expert sessions, workshops & premium plans." />
+<link rel="icon" href="https://i.postimg.cc/RJJFxfGs/logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<meta name="theme-color" content="#0B2149">
 </head>
 <body>
-  <!-- Floating SVG icon background (dark icons, animated) -->
-  <div class="bg-icons" aria-hidden="true">
-    <!-- Each svg is styled & animated in CSS -->
-    <svg class="bg-icon icon-1" viewBox="0 0 64 64" aria-hidden="true">
-      <g stroke="#0b2448" stroke-width="1.6" fill="none">
-        <rect x="6" y="10" width="52" height="44" rx="4"></rect>
-        <path d="M18 18h28" stroke-linecap="round"></path>
-        <path d="M18 26h10" stroke-linecap="round"></path>
-        <path d="M18 34h6" stroke-linecap="round"></path>
-      </g>
-    </svg>
 
-    <svg class="bg-icon icon-2" viewBox="0 0 64 64" aria-hidden="true">
-      <g stroke="#0b2448" stroke-width="1.6" fill="none">
-        <circle cx="32" cy="22" r="8"></circle>
-        <path d="M16 44c6-6 20-6 26 0" stroke-linecap="round"></path>
-        <path d="M26 30h12v6" stroke-linecap="round" stroke-linejoin="round"></path>
-      </g>
-    </svg>
+<!-- Floating subject icons (dark, slowly moving) -->
+<div class="bg-icons" aria-hidden="true">
+  <svg class="bg-icon" style="left:6%;top:10%;animation:floatA 12s ease-in-out infinite;" viewBox="0 0 64 64"><g stroke="#0B2149" stroke-width="1.6" fill="none"><rect x="6" y="10" width="52" height="44" rx="4"/><path d="M18 20h28" stroke-linecap="round"/><path d="M18 30h10" stroke-linecap="round"/><path d="M18 38h6" stroke-linecap="round"/></g></svg>
+  <svg class="bg-icon" style="left:78%;top:20%;animation:floatB 14s ease-in-out infinite;" viewBox="0 0 64 64"><g stroke="#0B2149" stroke-width="1.6" fill="none"><circle cx="32" cy="22" r="8"/><path d="M16 44c6-6 20-6 26 0" stroke-linecap="round"/><path d="M26 30h12v6" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+  <svg class="bg-icon" style="left:42%;top:74%;animation:floatA 11s ease-in-out infinite;" viewBox="0 0 64 64"><g stroke="#0B2149" stroke-width="1.6" fill="none"><path d="M8 52l16-32 16 8 16-8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="48" r="6"/><circle cx="48" cy="48" r="6"/></g></svg>
+  <svg class="bg-icon" style="left:20%;top:60%;animation:floatB 15s ease-in-out infinite;" viewBox="0 0 64 64"><g stroke="#0B2149" stroke-width="1.6" fill="none"><path d="M16 26l20 12 12-8" stroke-linecap="round" stroke-linejoin="round"/><rect x="8" y="10" width="48" height="44" rx="6"/></g></svg>
+  <svg class="bg-icon" style="left:82%;top:64%;animation:floatA 13s ease-in-out infinite;" viewBox="0 0 64 64"><g stroke="#0B2149" stroke-width="1.6" fill="none"><rect x="12" y="8" width="40" height="48" rx="4"/><rect x="20" y="16" width="24" height="10" rx="2" fill="#0B2149"/><rect x="20" y="30" width="6" height="6" rx="1"/><rect x="28" y="30" width="6" height="6" rx="1"/></g></svg>
+</div>
 
-    <svg class="bg-icon icon-3" viewBox="0 0 64 64" aria-hidden="true">
-      <g stroke="#0b2448" stroke-width="1.6" fill="none">
-        <path d="M8 52l16-32 16 8 16-8" stroke-linecap="round" stroke-linejoin="round"></path>
-        <circle cx="16" cy="48" r="6"></circle>
-        <circle cx="48" cy="48" r="6"></circle>
-      </g>
-    </svg>
-
-    <svg class="bg-icon icon-4" viewBox="0 0 64 64" aria-hidden="true">
-      <g stroke="#0b2448" stroke-width="1.6" fill="none">
-        <path d="M14 50c6-10 30-10 36 0" stroke-linecap="round"></path>
-        <rect x="10" y="12" width="44" height="28" rx="4"></rect>
-        <circle cx="20" cy="34" r="2"></circle>
-      </g>
-    </svg>
-
-    <svg class="bg-icon icon-5" viewBox="0 0 64 64" aria-hidden="true">
-      <g stroke="#0b2448" stroke-width="1.6" fill="none">
-        <path d="M16 26l20 12 12-8" stroke-linecap="round" stroke-linejoin="round"></path>
-        <rect x="8" y="10" width="48" height="44" rx="6"></rect>
-      </g>
-    </svg>
-  </div>
-
-  <!-- Header -->
-  <header class="site-header" id="site-header" role="banner">
-    <div class="header-inner">
-      <a class="brand" href="#top" aria-label="Edutrip India home">
-        <div class="logo" aria-hidden="true">E</div>
-        <div class="brand-texts">
-          <div class="title">Edutrip India</div>
-          <div class="tag">Curriculum-Linked Student Travel</div>
-        </div>
-      </a>
-
-      <nav class="main-nav" role="navigation" aria-label="Main navigation">
-        <ul class="menu" role="menubar" id="menu-main">
-          <li><a href="#programs">Programs</a></li>
-          <li><a href="#trips">Trips</a></li>
-          <li><a href="#simplearn">SimpLearn</a></li>
-          <li><a href="#workshops">Workshops</a></li>
-          <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#testimonials">Testimonials</a></li>
-        </ul>
-      </nav>
-
-      <div class="header-tools" role="group" aria-label="Contact">
-        <a class="phone" href="tel:+918179288678">+91 81792 88678</a>
-        <a class="pill" href="mailto:founders@edutripindia.com">founders@edutripindia.com</a>
-        <button class="btn btn-primary" id="getProposal">Get a Proposal</button>
-        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-
-      <!-- Mobile drawer -->
-      <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
-        <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
-        <nav class="drawer-nav" aria-label="Mobile navigation">
-          <ul>
-            <li><a href="#programs">Programs</a></li>
-            <li><a href="#trips">Trips</a></li>
-            <li><a href="#simplearn">SimpLearn</a></li>
-            <li><a href="#workshops">Workshops</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#testimonials">Testimonials</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <main id="main" tabindex="-1">
-    <!-- Hero -->
-    <section class="hero" id="top" aria-label="Hero">
-      <div class="wrap hero-grid">
-        <div class="hero-left">
-          <h1>Transform Classrooms into Real-World Adventures</h1>
-          <p class="lead">Curriculum-aligned educational trips, expert-led SimpLearn sessions, and immersive workshops that deepen learning and build life skills.</p>
-
-          <div class="hero-ctas">
-            <a class="btn btn-primary" href="#trips">Explore Trips</a>
-            <a class="btn btn-outline" href="#pricing">View Plans</a>
-            <button class="btn btn-ghost" id="bookTop">Request a Custom Proposal</button>
-          </div>
-
-          <ul class="hero-features">
-            <li><strong>Curriculum Integration:</strong> Learning outcomes mapped to state & national standards.</li>
-            <li><strong>Safety & Ease:</strong> Trained guides, risk management & parent consent templates.</li>
-            <li><strong>Impact Measurement:</strong> Pre/post assessments, teacher resources and StuCom tracking.</li>
-          </ul>
-        </div>
-
-        <aside class="hero-side" aria-hidden="false">
-          <div class="highlight">
-            <div class="muted-sm">Highlight Program</div>
-            <h3>Mumbai Marine Biology Expedition</h3>
-            <div class="muted-sm">Grade 7–9 • 3 days • Lab + Fieldwork</div>
-
-            <p class="muted-sm">Hands-on study of coastal ecosystems, guided lab sessions and curriculum-linked assessment pack for teachers.</p>
-
-            <div class="highlight-ctas">
-              <button class="btn btn-primary" id="quoteBtn">Request Quote</button>
-              <button class="btn btn-outline open-modal" data-id="mumbai-marine">Program Details</button>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <!-- Programs -->
-    <section id="programs" class="section wrap" aria-labelledby="programs-title">
-      <div class="section-head">
-        <h2 id="programs-title">Our Programs</h2>
-        <p class="muted">Tailored by grade, mapped to outcomes</p>
-      </div>
-
-      <div class="program-grid">
-        <div class="program-card">
-          <div class="program-icon">📚</div>
-          <h4>Curriculum-Linked Trips</h4>
-          <div class="muted-sm">Teacher co-designed trips with rubrics and resources.</div>
-        </div>
-
-        <div class="program-card">
-          <div class="program-icon">👩‍🏫</div>
-          <h4>SimpLearn Sessions</h4>
-          <div class="muted-sm">Expert in-school sessions: 45–90 minutes, demo labs & Q&A.</div>
-        </div>
-
-        <div class="program-card">
-          <div class="program-icon">🛠️</div>
-          <h4>Workshops & Maker Labs</h4>
-          <div class="muted-sm">STEAM, design thinking & skills labs with assessment rubrics.</div>
-        </div>
-
-        <div class="program-card">
-          <div class="program-icon">📊</div>
-          <h4>StuCom & Impact</h4>
-          <div class="muted-sm">Student communication app access & post-trip impact reports.</div>
-        </div>
-
-        <div class="program-card">
-          <div class="program-icon">🌍</div>
-          <h4>Field Research & GIS</h4>
-          <div class="muted-sm">Applied geography and biodiversity surveys for senior grades.</div>
-        </div>
-
-        <div class="program-card">
-          <div class="program-icon">🎭</div>
-          <h4>Arts & Culture Residencies</h4>
-          <div class="muted-sm">Local artist-led modules tying heritage to the curriculum.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Featured trips / marquee -->
-    <section id="trips" class="wrap section" aria-labelledby="trips-title">
-      <div class="section-head">
-        <h2 id="trips-title">Featured Trips & Premium Experiences</h2>
-        <p class="muted">Click any tile to view details or request a quote</p>
-      </div>
-
-      <div class="marquee-wrap" id="marquee-wrap" aria-hidden="false">
-        <div class="marquee-track" id="marquee-track" role="list">
-          <article class="tile" role="listitem">
-            <h4>Mumbai Marine Biology</h4>
-            <div class="sub muted-sm">Grade 7–9 • 3 days</div>
-            <p class="muted-sm">Fieldwork, tide-pooling, lab sessions & assessment pack.</p>
-            <div class="tile-actions">
-              <button class="btn btn-outline open-modal" data-id="mumbai-marine">Details</button>
-              <a class="btn btn-primary" href="#contact">Quote</a>
-            </div>
-          </article>
-
-          <article class="tile" role="listitem">
-            <h4>Ajanta Heritage Trail</h4>
-            <div class="sub muted-sm">History • Artifact analysis</div>
-            <p class="muted-sm">Source-based activities and guided tours with teacher materials.</p>
-            <div class="tile-actions">
-              <button class="btn btn-outline open-modal" data-id="ajanta-heritage">Details</button>
-              <a class="btn btn-primary" href="#contact">Quote</a>
-            </div>
-          </article>
-
-          <article class="tile" role="listitem">
-            <h4>Western Ghats Immersion</h4>
-            <div class="sub muted-sm">Geography • Ecology</div>
-            <p class="muted-sm">Biodiversity surveys, GIS basics & conservation projects.</p>
-            <div class="tile-actions">
-              <button class="btn btn-outline open-modal" data-id="ghats-geography">Details</button>
-              <a class="btn btn-primary" href="#contact">Quote</a>
-            </div>
-          </article>
-
-          <article class="tile" role="listitem">
-            <h4>Kala Arts Residency</h4>
-            <div class="sub muted-sm">Arts & Culture</div>
-            <p class="muted-sm">Workshops with local artists culminating in a showcase.</p>
-            <div class="tile-actions">
-              <button class="btn btn-outline open-modal" data-id="kala-sanskriti">Details</button>
-              <a class="btn btn-primary" href="#contact">Quote</a>
-            </div>
-          </article>
-
-          <article class="tile" role="listitem">
-            <h4>Robotics Bootcamp</h4>
-            <div class="sub muted-sm">STEM</div>
-            <p class="muted-sm">Hands-on robotics with challenge-driven outcomes.</p>
-            <div class="tile-actions">
-              <button class="btn btn-outline open-modal" data-id="robotics">Details</button>
-              <a class="btn btn-primary" href="#contact">Quote</a>
-            </div>
-          </article>
-
-          <!-- more tiles may be added here -->
-        </div>
-      </div>
-
-      <div class="center">
-        <a class="btn btn-ghost" id="pause-marquee" href="#" role="button">Pause Scrolling</a>
-      </div>
-    </section>
-
-    <!-- SimpLearn -->
-    <section id="simplearn" class="wrap section" aria-labelledby="simplearn-title">
-      <div class="section-head">
-        <h2 id="simplearn-title">SimpLearn — Expert In-School Sessions</h2>
-        <p class="muted">Short, high-impact sessions delivered by industry & academic experts</p>
-      </div>
-
-      <div class="two-grid">
-        <div class="program-card">
-          <h4>Marine Biology Live Lab</h4>
-          <div class="sub muted-sm">Live specimen demo & guided observation</div>
-          <p class="muted-sm">Aligns with Grade 7 science outcomes; includes evaluation checklist.</p>
-        </div>
-        <div class="program-card">
-          <h4>Coding Foundations</h4>
-          <div class="sub muted-sm">Robotics & Scratch projects</div>
-          <p class="muted-sm">Hands-on with an assessment rubric & support materials.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Workshops -->
-    <section id="workshops" class="wrap section" aria-labelledby="workshops-title">
-      <div class="section-head">
-        <h2 id="workshops-title">Workshops & Labs</h2>
-        <p class="muted">Maker labs, career skills, creative arts & more</p>
-      </div>
-
-      <div class="program-grid">
-        <div class="program-card">
-          <h4>Maker Lab: Sustainable Design</h4>
-          <div class="muted-sm">Prototyping with recycled materials</div>
-        </div>
-        <div class="program-card">
-          <h4>Creative Writing & Journalism</h4>
-          <div class="muted-sm">From narrative to publication</div>
-        </div>
-        <div class="program-card">
-          <h4>Robotics Bootcamp</h4>
-          <div class="muted-sm">Sensor-driven robots and challenge tasks</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Pricing -->
-    <section id="pricing" class="wrap section" aria-labelledby="pricing-title">
-      <div class="section-head">
-        <h2 id="pricing-title">Price & Plans</h2>
-        <p class="muted">Transparent pricing with volume discounts and custom quotes</p>
-      </div>
-
-      <div class="pricing-grid" aria-live="polite">
-        <div class="price-card">
-          <div class="price-tier">Gold</div>
-          <div class="price">₹3,799</div>
-          <div class="muted-sm">Per student • School package</div>
-          <ul class="features-list">
-            <li>3 educational trips</li>
-            <li>3 SimpLearn sessions</li>
-            <li>2 Workshops</li>
-            <li>Assessments & StuCom App access</li>
-          </ul>
-          <div class="card-ctas">
-            <a class="btn btn-primary" href="#contact">Choose Gold</a>
-            <button class="btn btn-outline open-modal" data-id="plan-gold">Details</button>
-          </div>
-        </div>
-
-        <div class="price-card recommended">
-          <div class="badge-top">Most Popular</div>
-          <div class="price-tier">Platinum</div>
-          <div class="price">Custom</div>
-          <div class="muted-sm">Everything in Gold, plus:</div>
-          <ul class="features-list">
-            <li>+1 educational trip (4 total)</li>
-            <li>StuCom APP premium access</li>
-            <li>+1 SimpLearn session</li>
-            <li>Participation in Smarti & Sporteen programs</li>
-          </ul>
-          <div class="card-ctas">
-            <a class="btn btn-primary" href="#contact">Enquire Platinum</a>
-            <button class="btn btn-outline open-modal" data-id="plan-platinum">Details</button>
-          </div>
-        </div>
-
-        <div class="price-card">
-          <div class="price-tier">Diamond</div>
-          <div class="price">Custom</div>
-          <div class="muted-sm">Everything in Platinum, plus:</div>
-          <ul class="features-list">
-            <li>+1 trip (5 total)</li>
-            <li>+1 SimpLearn session</li>
-            <li>Certificates & industry mentorship</li>
-          </ul>
-          <div class="card-ctas">
-            <a class="btn btn-outline" href="#contact">Contact Sales</a>
-            <button class="btn btn-outline open-modal" data-id="plan-diamond">Details</button>
-          </div>
-        </div>
-      </div>
-
-      <p class="muted-sm">*Custom pricing available for multi-cohort programs, outstation travel & extended services.</p>
-    </section>
-
-    <!-- Testimonials -->
-    <section id="testimonials" class="wrap section" aria-labelledby="testimonials-title">
-      <div class="section-head">
-        <h2 id="testimonials-title">What Teachers & Principals Say</h2>
-        <p class="muted">Impact we deliver in classrooms and beyond</p>
-      </div>
-
-      <div class="testimonials">
-        <button class="carousel-btn prev" aria-label="Previous testimonial" id="prevTest">‹</button>
-        <div class="test-wrap" id="testWrap" role="region" aria-live="polite">
-          <blockquote class="testimonial active" data-index="0">
-            <p>“Edutrip made curriculum come alive. Students were engaged, assessment tools helped teachers measure outcomes easily.”</p>
-            <cite>— Ms. Anjali Sharma, Principal</cite>
-          </blockquote>
-
-          <blockquote class="testimonial" data-index="1">
-            <p>“SimpLearn on climate science was practical and inspiring. Our students carried the lessons into projects.”</p>
-            <cite>— Mr. Rohan Desai, Science Coordinator</cite>
-          </blockquote>
-
-          <blockquote class="testimonial" data-index="2">
-            <p>“Booking and payments were simple. The local guides were knowledgeable and safety protocols were great.”</p>
-            <cite>— Priya M., Trip Coordinator</cite>
-          </blockquote>
-        </div>
-        <button class="carousel-btn next" aria-label="Next testimonial" id="nextTest">›</button>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="wrap section" aria-labelledby="contact-title">
-      <div class="section-head">
-        <h2 id="contact-title">Contact Us</h2>
-        <p class="muted">Let's design a learning adventure for your students.</p>
-      </div>
-
-      <div class="contact-grid">
-        <form id="contact-form" class="contact-card" autocomplete="on" novalidate>
-          <label>School / Organization
-            <input name="organization" required placeholder="St. Xavier's">
-          </label>
-          <label>Contact Person
-            <input name="name" required placeholder="Your name">
-          </label>
-          <label>Email
-            <input name="email" type="email" required placeholder="you@school.edu">
-          </label>
-          <label>Phone
-            <input name="phone" type="tel" placeholder="+91 9XXXXXXXXX">
-          </label>
-          <label>Program of Interest
-            <select name="program">
-              <option>Curriculum-Linked Trip</option>
-              <option>SimpLearn Session</option>
-              <option>Workshop / Maker Lab</option>
-              <option>Pricing / Partnership</option>
-            </select>
-          </label>
-          <label>Message
-            <textarea name="message" rows="4" placeholder="Tell us grade, tentative dates, chosen plan etc."></textarea>
-          </label>
-
-          <div class="form-actions">
-            <button class="btn btn-primary" type="submit">Send Enquiry</button>
-            <button id="mailto-fallback" type="button" class="btn btn-outline">Email Us</button>
-          </div>
-
-          <div class="muted-sm">We will respond within 24 hours on working days.</div>
-          <p id="contactStatus" class="form-status" aria-live="polite"></p>
-        </form>
-
-        <aside class="contact-card aside-info" aria-labelledby="contact-info">
-          <h3 id="contact-info">Quick Contact</h3>
-          <p><strong>Phone:</strong> <a href="tel:+918179288678">+91 81792 88678</a></p>
-          <p><strong>Email:</strong> <a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></p>
-          <p><strong>Office:</strong> Mumbai, India</p>
-
-          <div class="partner-box">
-            <h4>Partner with Us</h4>
-            <p class="muted-sm">Host workshops or become a local partner — we collaborate with organizations across India.</p>
-            <a class="btn btn-outline" href="#contact">Partner Inquiry</a>
-          </div>
-        </aside>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer" role="contentinfo">
-    <div class="wrap footer-grid">
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#top" aria-label="Edutrip India home">
+      <img class="brand-logo" src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip India logo">
       <div>
-        <div class="brand-legal">Edutrip India Private Limited</div>
-        <div class="muted-sm">Curriculum-linked learning journeys that inspire.</div>
+        <div class="title">Edutrip India</div>
+        <div class="tag">Curriculum-Linked Student Travel</div>
       </div>
-
-      <div>
-        <h4>Programs</h4>
-        <ul class="footer-links">
-          <li><a href="#trips">Trips</a></li>
-          <li><a href="#simplearn">SimpLearn</a></li>
-          <li><a href="#workshops">Workshops</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4>Company</h4>
-        <ul class="footer-links">
-          <li><a href="#">About</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="#">Partners</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4>Contact</h4>
-        <p><a href="tel:+918179288678">+91 81792 88678</a></p>
-        <p><a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></p>
-      </div>
-    </div>
-
-    <div class="wrap copyright">© Edutrip India Private Limited. All rights reserved.</div>
-  </footer>
-
-  <!-- Booking / Details Modal -->
-  <div class="modal" id="modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="modal-panel" role="document">
-      <button id="modal-close" class="btn modal-close" aria-label="Close">✕</button>
-      <div id="modal-content"></div>
+    </a>
+    <nav class="main">
+      <a href="#programs">Programs</a>
+      <a href="#simplearn">SimpLearn</a>
+      <a href="#workshops">Workshops</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact" class="btn-primary">Get Proposal</a>
+    </nav>
+    <div class="header-tools">
+      <a href="tel:+918179288678">+91 81792 88678</a>
+      <a href="mailto:founders@edutripindia.com" class="pill">founders@edutripindia.com</a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span></button>
     </div>
   </div>
+</header>
 
-  <!-- Scripts -->
-  <script src="app.js" defer></script>
+<!-- HERO -->
+<main id="main">
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <h1>Transform Classrooms into Real-World Adventures</h1>
+        <p class="lead">Curriculum-aligned educational trips, expert-led SimpLearn sessions and immersive workshops that deepen learning and build life skills.</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="#contact">Request Proposal</a>
+          <a class="btn btn-outline" href="#pricing">View Plans</a>
+        </div>
+      </div>
+      <aside class="card-why">
+        <h3>Why Edutrip?</h3>
+        <p class="muted-sm">We blend curriculum goals with hands-on experiences — safely run and measured for real learning outcomes.</p>
+        <ul class="features-list muted-sm">
+          <li>Mapped to academic outcomes</li>
+          <li>Teacher resources & assessment rubrics</li>
+          <li>Risk management & parent consent templates</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section id="programs" class="wrap">
+    <div class="section-head">
+      <h2 class="section-title">Our Programs</h2>
+      <div class="muted">Tailored by grade, mapped to outcomes</div>
+    </div>
+    <div class="program-grid">
+      <div class="program-card"><div class="program-icon">📚</div><h4>Curriculum-Linked Trips</h4><p class="muted-sm">Teacher co-designed trips with rubrics & resources.</p></div>
+      <div class="program-card"><div class="program-icon">👩‍🏫</div><h4>SimpLearn Sessions</h4><p class="muted-sm">Expert in-school sessions: 45–90 minutes with teacher packs.</p></div>
+      <div class="program-card"><div class="program-icon">🛠️</div><h4>Workshops & Maker Labs</h4><p class="muted-sm">STEAM, design thinking & skills labs with rubrics.</p></div>
+      <div class="program-card"><div class="program-icon">📊</div><h4>StuCom & Impact</h4><p class="muted-sm">Student communication app access & post-program reports.</p></div>
+    </div>
+  </section>
+
+  <section id="simplearn" class="wrap">
+    <div class="section-head">
+      <h2 class="section-title">SimpLearn — Expert In-School Sessions</h2>
+      <div class="muted">Short, high-impact sessions delivered by industry & academic experts</div>
+    </div>
+    <div class="program-grid">
+      <div class="program-card"><h4>Marine Science Live Lab</h4><p class="muted-sm">Specimen demos, guided observation & worksheets that align to Grade 7 science outcomes.</p></div>
+      <div class="program-card"><h4>Coding Foundations</h4><p class="muted-sm">Hands-on robotics & basic programming modules with assessment rubrics.</p></div>
+    </div>
+  </section>
+
+  <section id="workshops" class="wrap">
+    <div class="section-head">
+      <h2 class="section-title">Workshops & Labs</h2>
+      <div class="muted">Maker labs, creative arts, career skills & more</div>
+    </div>
+    <div class="program-grid">
+      <div class="program-card"><h4>Maker Lab: Sustainable Design</h4><p class="muted-sm">Prototyping with recycled materials, rubric & student reflection pack.</p></div>
+      <div class="program-card"><h4>Creative Writing & Journalism</h4><p class="muted-sm">From idea to publication — culminating in a student magazine.</p></div>
+      <div class="program-card"><h4>Robotics Bootcamp</h4><p class="muted-sm">Sensor-driven robots, challenges & rubrics.</p></div>
+    </div>
+  </section>
+
+  <section id="pricing" class="wrap">
+    <div class="section-head">
+      <h2 class="section-title">Price & Plans</h2>
+      <div class="muted">Transparent pricing with volume discounts and custom quotes</div>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card"><div class="price-tier">Gold</div><div class="price">₹3,799</div><ul class="features-list"><li>3 educational trips</li><li>3 SimpLearn sessions</li><li>2 Workshops</li><li>Assessments & StuCom access</li></ul><a class="btn btn-primary" href="#contact">Choose Gold</a></div>
+      <div class="price-card recommended"><div class="badge-top">Most Popular</div><div class="price-tier">Platinum</div><div class="price">Custom</div><ul class="features-list"><li>+1 trip (4 total)</li><li>StuCom APP premium</li><li>+1 SimpLearn session</li><li>Smarti & Sporteen events</li></ul><a class="btn btn-primary" href="#contact">Enquire Platinum</a></div>
+      <div class="price-card"><div class="price-tier">Diamond</div><div class="price">Custom</div><ul class="features-list"><li>Everything in Platinum</li><li>+1 trip (5 total)</li><li>Skill Courses & Certificates</li><li>Career guidance & mentorship</li></ul><a class="btn btn-outline" href="#contact">Contact Sales</a></div>
+    </div>
+  </section>
+
+  <section id="contact" class="wrap">
+    <div class="section-head" style="align-items:flex-start">
+      <h2 class="section-title">Contact Us</h2>
+      <div class="muted">Let's design a learning adventure for your students.</div>
+    </div>
+    <div class="contact-layout">
+      <form id="contact-form" class="program-card" autocomplete="on" novalidate>
+        <label>School / Organization<input name="organization" required placeholder="St. Xavier's"></label>
+        <label>Contact Person<input name="name" required placeholder="Your name"></label>
+        <label>Email<input name="email" type="email" required placeholder="you@school.edu"></label>
+        <label>Phone<input name="phone" type="tel" placeholder="+91 9XXXXXXXXX"></label>
+        <label>Message<textarea name="message" rows="4" placeholder="Tell us grade, tentative dates, chosen plan etc."></textarea></label>
+        <button class="btn btn-primary" type="submit">Send Enquiry</button>
+        <p id="contactStatus" class="form-status"></p>
+      </form>
+      <aside class="program-card">
+        <h3>Quick Contact</h3>
+        <p><strong>Phone:</strong> <a href="tel:+918179288678">+91 81792 88678</a></p>
+        <p><strong>Email:</strong> <a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></p>
+        <p><strong>Office:</strong> Hyderabad, India</p>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div><strong>Edutrip India Private Limited</strong><p class="muted-sm">Curriculum-linked learning journeys that inspire.</p></div>
+    <div><h4>Programs</h4><ul><li><a href="#programs">Programs</a></li><li><a href="#simplearn">SimpLearn</a></li><li><a href="#workshops">Workshops</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Careers</a></li><li><a href="#">Partners</a></li></ul></div>
+    <div><h4>Contact</h4><p><a href="tel:+918179288678">+91 81792 88678</a></p><p><a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></p></div>
+  </div>
+  <p class="footer-legal">© Edutrip India Private Limited | Hyderabad, India</p>
+</footer>
+
+<script src="app.js"></script>
 </body>
 </html>
