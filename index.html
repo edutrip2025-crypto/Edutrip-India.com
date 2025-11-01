@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Edutrip India • Curriculum-Linked Student Travel & Learning</title>
-<meta name="description" content="Edutrip India — curriculum-aligned educational trips, SimpLearn expert sessions, workshops & premium plans." />
+<title>Edutrip • Curriculum-Linked Student Travel & Learning</title>
+<meta name="description" content="Edutrip — curriculum-aligned educational trips, SimpLearn expert sessions, workshops & premium plans." />
 <link rel="icon" href="https://i.postimg.cc/RJJFxfGs/logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css" />
@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<!-- Floating subject icons (dark, slowly moving) -->
+<!-- Background Icons -->
 <div class="bg-icons" aria-hidden="true">
   <svg class="bg-icon" style="left:6%;top:10%;animation:floatA 12s ease-in-out infinite;" viewBox="0 0 64 64"><g stroke="#0B2149" stroke-width="1.6" fill="none"><rect x="6" y="10" width="52" height="44" rx="4"/><path d="M18 20h28" stroke-linecap="round"/><path d="M18 30h10" stroke-linecap="round"/><path d="M18 38h6" stroke-linecap="round"/></g></svg>
   <svg class="bg-icon" style="left:78%;top:20%;animation:floatB 14s ease-in-out infinite;" viewBox="0 0 64 64"><g stroke="#0B2149" stroke-width="1.6" fill="none"><circle cx="32" cy="22" r="8"/><path d="M16 44c6-6 20-6 26 0" stroke-linecap="round"/><path d="M26 30h12v6" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
@@ -24,11 +24,11 @@
 <!-- HEADER -->
 <header class="site-header">
   <div class="header-inner">
-    <a class="brand" href="#top" aria-label="Edutrip India home">
-      <img class="brand-logo" src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip India logo">
+    <a class="brand" href="#top" aria-label="Edutrip home">
+      <img class="brand-logo" src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip logo">
       <div>
-        <div class="title">Edutrip India</div>
-        <div class="tag">Curriculum-Linked Student Travel</div>
+        <div class="title">Edutrip</div>
+        <div class="tag">Don’t just learn it, know it.</div>
       </div>
     </a>
     <nav class="main">
@@ -39,20 +39,19 @@
       <a href="#contact" class="btn-primary">Get Proposal</a>
     </nav>
     <div class="header-tools">
-      <a href="tel:+918179288678">+91 81792 88678</a>
-      <a href="mailto:founders@edutripindia.com" class="pill">founders@edutripindia.com</a>
-      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span></button>
+      <a href="tel:+918179288678" class="pill">+91 81792 88678</a>
     </div>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span></button>
   </div>
 </header>
 
 <!-- HERO -->
 <main id="main">
-  <section class="hero">
+  <section class="hero wrap">
     <div class="hero-grid">
       <div>
         <h1>Transform Classrooms into Real-World Adventures</h1>
-        <p class="lead">Curriculum-aligned educational trips, expert-led SimpLearn sessions and immersive workshops that deepen learning and build life skills.</p>
+        <p class="lead">Curriculum-aligned educational trips, expert-led SimpLearn sessions, and immersive workshops that deepen learning and build life skills.</p>
         <div class="ctas">
           <a class="btn btn-primary" href="#contact">Request Proposal</a>
           <a class="btn btn-outline" href="#pricing">View Plans</a>
@@ -89,7 +88,7 @@
       <div class="muted">Short, high-impact sessions delivered by industry & academic experts</div>
     </div>
     <div class="program-grid">
-      <div class="program-card"><h4>Marine Science Live Lab</h4><p class="muted-sm">Specimen demos, guided observation & worksheets that align to Grade 7 science outcomes.</p></div>
+      <div class="program-card"><h4>Marine Science Live Lab</h4><p class="muted-sm">Specimen demos, guided observation & worksheets aligned to Grade 7 science outcomes.</p></div>
       <div class="program-card"><h4>Coding Foundations</h4><p class="muted-sm">Hands-on robotics & basic programming modules with assessment rubrics.</p></div>
     </div>
   </section>
@@ -100,7 +99,7 @@
       <div class="muted">Maker labs, creative arts, career skills & more</div>
     </div>
     <div class="program-grid">
-      <div class="program-card"><h4>Maker Lab: Sustainable Design</h4><p class="muted-sm">Prototyping with recycled materials, rubric & student reflection pack.</p></div>
+      <div class="program-card"><h4>Maker Lab: Sustainable Design</h4><p class="muted-sm">Prototyping with recycled materials, rubric & reflection pack.</p></div>
       <div class="program-card"><h4>Creative Writing & Journalism</h4><p class="muted-sm">From idea to publication — culminating in a student magazine.</p></div>
       <div class="program-card"><h4>Robotics Bootcamp</h4><p class="muted-sm">Sensor-driven robots, challenges & rubrics.</p></div>
     </div>
@@ -133,11 +132,12 @@
         <button class="btn btn-primary" type="submit">Send Enquiry</button>
         <p id="contactStatus" class="form-status"></p>
       </form>
-      <aside class="program-card">
-        <h3>Quick Contact</h3>
-        <p><strong>Phone:</strong> <a href="tel:+918179288678">+91 81792 88678</a></p>
-        <p><strong>Email:</strong> <a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></p>
-        <p><strong>Office:</strong> Hyderabad, India</p>
+
+      <aside class="contact-info-box">
+        <h3>Let’s Connect</h3>
+        <div class="contact-row"><div class="contact-icon">📞</div><div><strong>Phone:</strong> <a href="tel:+918179288678">+91 81792 88678</a></div></div>
+        <div class="contact-row"><div class="contact-icon">✉️</div><div><strong>Email:</strong> <a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></div></div>
+        <div class="contact-row"><div class="contact-icon">📍</div><div><strong>Office:</strong> Hyderabad, India</div></div>
       </aside>
     </div>
   </section>
@@ -145,12 +145,11 @@
 
 <footer class="site-footer">
   <div class="footer-grid">
-    <div><strong>Edutrip India Private Limited</strong><p class="muted-sm">Curriculum-linked learning journeys that inspire.</p></div>
+    <div><strong>Edutrip</strong><p class="muted-sm">Don’t just learn it, know it.</p></div>
     <div><h4>Programs</h4><ul><li><a href="#programs">Programs</a></li><li><a href="#simplearn">SimpLearn</a></li><li><a href="#workshops">Workshops</a></li></ul></div>
     <div><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Careers</a></li><li><a href="#">Partners</a></li></ul></div>
-    <div><h4>Contact</h4><p><a href="tel:+918179288678">+91 81792 88678</a></p><p><a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></p></div>
   </div>
-  <p class="footer-legal">© Edutrip India Private Limited | Hyderabad, India</p>
+  <p class="footer-legal">© Edutrip Private Limited | Hyderabad, India</p>
 </footer>
 
 <script src="app.js"></script>
