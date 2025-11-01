@@ -4,99 +4,394 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Edutrip — Experiential Learning</title>
-
-<!-- Google Fonts & Font Awesome -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <script src="https://kit.fontawesome.com/a2d9b6d4e2.js" crossorigin="anonymous"></script>
-
 <style>
-/* --- Embedded CSS --- */
 :root{
-  --bg:#f6fbff;--card:#fff;--accent:#0a66b2;--accent-2:#0078d4;
-  --dark:#08122a;--muted:#63707a;
+  --bg:#0a0e27;--card:#1a1f3a;--accent:#3b82f6;--accent-2:#60a5fa;
+  --dark:#0f172a;--light:#f8fafc;--muted:#94a3b8;
+  --gradient-1:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+  --gradient-2:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);
+  --gradient-3:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);
 }
 *{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
 body{
-  font-family:"Inter",sans-serif;background:linear-gradient(180deg,#fbfdff,#f3f7fb);
-  color:var(--dark);-webkit-font-smoothing:antialiased;
+  font-family:"Inter",sans-serif;
+  background:#0a0e27;
+  color:var(--light);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
 }
-#logo{position:fixed;top:14px;left:18px;z-index:1200}
-#logo img{width:84px;filter:drop-shadow(0 6px 12px rgba(0,0,0,.05)) rotate(-8deg)}
-.ribbon{position:fixed;right:28px;top:18px;z-index:1300}
-.ribbon-inner{background:rgba(255,255,255,.96);border-radius:28px;box-shadow:0 10px 30px rgba(18,43,73,.08);
-  display:flex;align-items:center;gap:8px;padding:10px 14px;font-weight:600}
-.ribbon .r-item{padding:8px 12px;color:var(--dark);text-decoration:none;border-radius:18px;cursor:pointer;font-size:16px}
-.ribbon .r-item:hover{background:rgba(6,35,69,.05)}
+body::before{
+  content:'';position:fixed;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(circle at 20% 50%,rgba(59,130,246,0.15) 0%,transparent 50%),
+    radial-gradient(circle at 80% 80%,rgba(139,92,246,0.15) 0%,transparent 50%);
+  pointer-events:none;z-index:0;
+}
+
+/* Navigation */
+#logo{position:fixed;top:20px;left:30px;z-index:1000;opacity:0;transform:translateY(-20px)}
+#logo img{width:90px;filter:drop-shadow(0 8px 16px rgba(59,130,246,.3));transition:.4s}
+#logo:hover img{transform:rotate(-5deg) scale(1.05)}
+
+.ribbon{position:fixed;right:30px;top:20px;z-index:1000;opacity:0;transform:translateY(-20px)}
+.ribbon-inner{
+  background:rgba(26,31,58,.95);backdrop-filter:blur(20px);
+  border-radius:50px;border:1px solid rgba(59,130,246,.2);
+  box-shadow:0 8px 32px rgba(0,0,0,.3);
+  display:flex;align-items:center;gap:4px;padding:8px;
+}
+.ribbon .r-item{
+  padding:10px 18px;color:var(--light);text-decoration:none;
+  border-radius:30px;cursor:pointer;font-size:15px;font-weight:500;
+  transition:.3s;position:relative;overflow:hidden;
+}
+.ribbon .r-item::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(139,92,246,.2));
+  opacity:0;transition:.3s;border-radius:30px;
+}
+.ribbon .r-item:hover::before{opacity:1}
+.ribbon .r-item:hover{color:#fff;transform:translateY(-2px)}
 .r-dropdown{position:relative}
-.r-menu{position:absolute;top:calc(100% + 8px);right:0;background:#fff;border-radius:12px;box-shadow:0 8px 20px rgba(6,35,69,.08);
-  padding:8px;display:none;min-width:200px}
-.r-menu a{display:block;padding:8px 10px;color:var(--dark);text-decoration:none;border-radius:8px}
-.r-menu a:hover{background:rgba(6,35,69,.05)}
-.r-home{border:0;background:none;font-size:18px;color:var(--accent);cursor:pointer}
+.r-menu{
+  position:absolute;top:calc(100% + 12px);right:0;
+  background:rgba(26,31,58,.98);backdrop-filter:blur(20px);
+  border-radius:16px;border:1px solid rgba(59,130,246,.2);
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+  padding:8px;display:none;min-width:200px;
+  animation:slideDown .3s ease;
+}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.r-menu a{
+  display:block;padding:10px 14px;color:var(--light);
+  text-decoration:none;border-radius:10px;transition:.2s;
+}
+.r-menu a:hover{background:rgba(59,130,246,.15);color:#fff;transform:translateX(4px)}
+.r-home{
+  border:0;background:none;font-size:18px;
+  color:var(--accent);cursor:pointer;padding:10px 14px;
+  transition:.3s;border-radius:30px;
+}
+.r-home:hover{background:rgba(59,130,246,.15);transform:scale(1.1)}
 
-/* hero */
-.hero{min-height:420px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
-  padding:110px 20px 80px;text-align:center}
-.hero-inner{max-width:920px}
-.hero h1{font-family:"Playfair Display",serif;font-weight:800;font-size:48px;margin:0;color:var(--dark)}
-.hero p{margin-top:18px;color:var(--muted);font-size:18px;line-height:1.6}
-.btn{display:inline-block;padding:14px 28px;border-radius:40px;font-weight:700;text-decoration:none}
-.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;box-shadow:0 8px 20px rgba(6,110,200,.18)}
-.watermark{position:absolute;right:-5%;top:30%;width:420px;opacity:.12;transform:rotate(-14deg)}
-.watermark img{width:100%}
+/* Hero Section */
+.hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;padding:0 20px;
+}
+.hero-bg{
+  position:absolute;inset:0;overflow:hidden;
+}
+.hero-bg::before{
+  content:'';position:absolute;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(59,130,246,0.3),transparent 70%);
+  top:10%;left:10%;animation:float 20s ease-in-out infinite;
+}
+.hero-bg::after{
+  content:'';position:absolute;width:500px;height:500px;
+  background:radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%);
+  bottom:10%;right:10%;animation:float 25s ease-in-out infinite reverse;
+}
+@keyframes float{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(30px,-30px) scale(1.1)}
+  66%{transform:translate(-30px,30px) scale(0.9)}
+}
+.hero-inner{max-width:900px;text-align:center;position:relative;z-index:1;opacity:0}
+.hero h1{
+  font-family:"Playfair Display",serif;font-weight:900;
+  font-size:clamp(40px,6vw,72px);margin:0;
+  background:linear-gradient(135deg,#fff 0%,#94a3b8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;line-height:1.2;
+}
+.hero p{
+  margin-top:24px;color:var(--muted);font-size:clamp(16px,2vw,20px);
+  line-height:1.6;opacity:0;
+}
+.btn{
+  display:inline-block;padding:16px 40px;border-radius:50px;
+  font-weight:700;text-decoration:none;transition:.4s;
+  position:relative;overflow:hidden;border:none;cursor:pointer;
+  font-size:16px;
+}
+.btn-primary{
+  background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+  color:#fff;box-shadow:0 8px 32px rgba(59,130,246,.4);
+  opacity:0;margin-top:30px;
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,#60a5fa,#a78bfa);
+  opacity:0;transition:.4s;
+}
+.btn-primary:hover::before{opacity:1}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 48px rgba(59,130,246,.6)}
+.btn-primary span{position:relative;z-index:1}
 
-/* sections */
-.section{padding:64px 20px;max-width:1200px;margin:0 auto}
-.section-title{font-family:"Playfair Display",serif;font-weight:700;font-size:40px;text-align:center;margin:10px 0 36px;color:var(--dark)}
+.particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.particle{
+  position:absolute;width:4px;height:4px;
+  background:rgba(59,130,246,.6);border-radius:50%;
+  animation:particle-float 15s linear infinite;
+}
+@keyframes particle-float{
+  0%{transform:translateY(100vh) translateX(0) scale(0)}
+  50%{transform:translateY(50vh) translateX(100px) scale(1)}
+  100%{transform:translateY(-10vh) translateX(0) scale(0)}
+}
 
-/* programs */
-.programs-stage{display:flex;flex-direction:column;gap:28px;align-items:center;padding-bottom:40vh}
-.program-panel{width:min(980px,92%);background:var(--card);border-radius:18px;box-shadow:0 10px 30px rgba(12,32,64,.06);
-  padding:36px;transition:.45s cubic-bezier(.2,.9,.2,1);min-height:220px;overflow:hidden}
-.program-panel.minimized{height:64px;padding:10px 22px}
-.panel-title{font-family:"Playfair Display",serif;color:var(--accent);font-weight:700;font-size:20px;margin-bottom:10px}
-.panel-content{color:var(--muted);font-size:16px;line-height:1.7}
+/* Section Base */
+.section{padding:120px 20px;max-width:1400px;margin:0 auto;position:relative}
+.section-title{
+  font-family:"Playfair Display",serif;font-weight:800;
+  font-size:clamp(36px,5vw,56px);text-align:center;
+  margin:0 0 80px;background:linear-gradient(135deg,#fff 0%,#94a3b8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;opacity:0;
+}
 
-/* workshops */
-.workshop-list{display:flex;gap:28px;justify-content:center;flex-wrap:nowrap}
-.workshop{min-width:300px;width:320px;background:var(--card);padding:28px;border-radius:16px;box-shadow:0 10px 30px rgba(12,32,64,.06);
-  opacity:0;transform:translateY(60px)}
+/* Programs - Card Grid */
+.programs-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:30px;padding:0 20px;
+}
+.program-card{
+  background:rgba(26,31,58,.6);backdrop-filter:blur(20px);
+  border-radius:24px;padding:40px;
+  border:1px solid rgba(59,130,246,.2);
+  position:relative;overflow:hidden;
+  transition:.5s cubic-bezier(.4,0,.2,1);
+  opacity:0;transform:translateY(50px);
+}
+.program-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(139,92,246,.1));
+  opacity:0;transition:.5s;
+}
+.program-card:hover::before{opacity:1}
+.program-card:hover{
+  transform:translateY(-8px);
+  border-color:rgba(59,130,246,.5);
+  box-shadow:0 20px 60px rgba(59,130,246,.3);
+}
+.program-icon{
+  width:60px;height:60px;border-radius:16px;
+  background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;margin-bottom:24px;position:relative;
+}
+.panel-title{
+  font-family:"Playfair Display",serif;
+  color:#fff;font-weight:700;font-size:24px;margin-bottom:16px;
+  position:relative;
+}
+.panel-content{
+  color:var(--muted);font-size:16px;line-height:1.7;position:relative;
+}
 
-/* about/founders */
-.about-content{max-width:880px;margin:auto;color:var(--muted);font-size:18px;line-height:1.85;text-align:center}
-.founders-grid{display:flex;gap:28px;justify-content:center;flex-wrap:wrap}
-.founder-card{background:var(--card);padding:20px;width:260px;border-radius:12px;box-shadow:0 6px 20px rgba(12,32,64,.06);text-align:center}
-.founder-photo{height:120px;width:120px;margin:auto;border-radius:10px;background:linear-gradient(180deg,#e9f5fb,#fff)}
+/* Workshops - Horizontal Scroll */
+.workshop-container{overflow:hidden;padding:40px 0}
+.workshop-list{
+  display:flex;gap:30px;padding:0 20px;
+  animation:scroll-left 30s linear infinite;
+}
+.workshop-list:hover{animation-play-state:paused}
+@keyframes scroll-left{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(calc(-320px * 3 - 90px))}
+}
+.workshop{
+  min-width:320px;background:rgba(26,31,58,.6);
+  backdrop-filter:blur(20px);padding:32px;
+  border-radius:20px;border:1px solid rgba(59,130,246,.2);
+  transition:.4s;position:relative;overflow:hidden;
+}
+.workshop::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,#3b82f6,#8b5cf6);
+  transform:scaleX(0);transform-origin:left;transition:.4s;
+}
+.workshop:hover::before{transform:scaleX(1)}
+.workshop:hover{
+  border-color:rgba(59,130,246,.5);
+  transform:translateY(-8px);
+  box-shadow:0 16px 48px rgba(59,130,246,.3);
+}
+.workshop h4{color:#fff;margin-bottom:12px;font-size:20px}
+.workshop p{color:var(--muted);line-height:1.6}
 
-/* plans */
-.plans-grid{display:flex;gap:28px;justify-content:center;flex-wrap:wrap}
-.plan-card{width:300px;background:var(--card);border-radius:14px;padding:24px;text-align:center;box-shadow:0 12px 30px rgba(12,32,64,.06);
-  position:relative}
-.plan-card h3{color:var(--accent);margin-bottom:14px}
-.plan-recommended{border:2px solid rgba(0,120,215,.12);box-shadow:0 18px 40px rgba(6,110,200,.08);transform:translateY(-6px)}
-.plan-recommended .badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);
-  background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:6px 10px;border-radius:20px;font-weight:700;font-size:12px}
-.btn-outline{border:2px solid rgba(10,102,178,.12);background:#fff;color:var(--accent);padding:10px 18px;border-radius:40px;text-decoration:none}
+/* About */
+.about-content{
+  max-width:900px;margin:auto;color:var(--muted);
+  font-size:clamp(16px,2vw,20px);line-height:1.85;
+  text-align:center;opacity:0;
+}
+.about-content p{margin-bottom:20px}
+.about-content strong{color:#fff;font-weight:600}
 
-/* contact */
-.contact-stage{display:flex;gap:28px;justify-content:center;flex-wrap:wrap}
-.contact-left{min-width:320px;width:380px;background:linear-gradient(180deg,rgba(8,66,86,.95),rgba(8,50,62,.95));
-  color:#fff;padding:36px;border-radius:14px}
-.contact-list{list-style:none;margin-top:20px}
-.contact-list li{margin-bottom:18px;display:flex;gap:12px}
-.contact-list i{background:rgba(255,255,255,.08);padding:10px;border-radius:50%}
-.contact-form{min-width:360px;width:520px;background:var(--card);padding:28px;border-radius:14px;box-shadow:0 12px 30px rgba(12,32,64,.06)}
-.contact-form input,.contact-form textarea{width:100%;border:1px solid rgba(6,35,69,.08);padding:14px;border-radius:8px;margin-bottom:14px}
+/* Founders */
+.founders-grid{
+  display:flex;gap:40px;justify-content:center;flex-wrap:wrap;
+}
+.founder-card{
+  background:rgba(26,31,58,.6);backdrop-filter:blur(20px);
+  padding:32px;width:280px;border-radius:20px;
+  border:1px solid rgba(59,130,246,.2);
+  text-align:center;transition:.4s;
+  opacity:0;transform:scale(0.9);
+}
+.founder-card:hover{
+  transform:translateY(-8px) scale(1);
+  border-color:rgba(59,130,246,.5);
+  box-shadow:0 20px 60px rgba(59,130,246,.3);
+}
+.founder-photo{
+  height:140px;width:140px;margin:0 auto 20px;
+  border-radius:50%;border:3px solid rgba(59,130,246,.3);
+  background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(139,92,246,.2));
+  transition:.4s;
+}
+.founder-card:hover .founder-photo{
+  border-color:rgba(59,130,246,.6);
+  transform:scale(1.05);
+}
+.founder-card h4{color:#fff;margin-bottom:8px;font-size:20px}
+.founder-card p{color:var(--muted);font-size:14px}
 
-/* footer */
-.footer{background:linear-gradient(180deg,#08122a,#071222);color:#fff;padding:36px 20px;text-align:center}
-.footer a{color:#9fb5d1;text-decoration:none;padding:0 6px}
-@media(max-width:900px){.contact-stage{flex-direction:column;align-items:center}}
+/* Plans */
+.plans-grid{
+  display:flex;gap:30px;justify-content:center;flex-wrap:wrap;
+}
+.plan-card{
+  width:320px;background:rgba(26,31,58,.6);
+  backdrop-filter:blur(20px);border-radius:24px;
+  padding:40px;text-align:center;
+  border:1px solid rgba(59,130,246,.2);
+  position:relative;transition:.4s;
+  opacity:0;transform:translateY(30px);
+}
+.plan-card:hover{
+  transform:translateY(-12px);
+  border-color:rgba(59,130,246,.5);
+  box-shadow:0 24px 72px rgba(59,130,246,.4);
+}
+.plan-card h3{
+  color:#fff;margin-bottom:24px;font-size:28px;
+  font-family:"Playfair Display",serif;
+}
+.plan-card ul{list-style:none;margin:24px 0;text-align:left}
+.plan-card li{
+  color:var(--muted);margin-bottom:12px;padding-left:28px;
+  position:relative;line-height:1.6;
+}
+.plan-card li::before{
+  content:'✓';position:absolute;left:0;
+  color:var(--accent);font-weight:700;
+}
+.plan-recommended{
+  border:2px solid rgba(59,130,246,.5);
+  transform:translateY(-12px) scale(1.05);
+}
+.plan-recommended .badge{
+  position:absolute;top:-16px;left:50%;
+  transform:translateX(-50%);
+  background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+  color:#fff;padding:8px 20px;border-radius:30px;
+  font-weight:700;font-size:12px;text-transform:uppercase;
+  box-shadow:0 4px 16px rgba(59,130,246,.4);
+}
+.btn-outline{
+  border:2px solid rgba(59,130,246,.5);
+  background:transparent;color:var(--accent);
+  padding:12px 32px;border-radius:50px;
+  text-decoration:none;font-weight:600;
+  display:inline-block;margin-top:20px;
+  transition:.4s;position:relative;overflow:hidden;
+}
+.btn-outline::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+  transform:scaleX(0);transform-origin:left;
+  transition:.4s;z-index:-1;
+}
+.btn-outline:hover::before{transform:scaleX(1)}
+.btn-outline:hover{color:#fff;border-color:transparent}
+
+/* Contact */
+.contact-stage{
+  display:flex;gap:40px;justify-content:center;flex-wrap:wrap;
+  opacity:0;
+}
+.contact-left{
+  min-width:320px;width:400px;
+  background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(139,92,246,.2));
+  backdrop-filter:blur(20px);color:#fff;padding:40px;
+  border-radius:24px;border:1px solid rgba(59,130,246,.3);
+}
+.contact-left h3{margin-bottom:30px;font-size:28px}
+.contact-list{list-style:none;margin-top:24px}
+.contact-list li{
+  margin-bottom:24px;display:flex;gap:16px;align-items:flex-start;
+}
+.contact-list i{
+  background:rgba(255,255,255,.1);padding:12px;
+  border-radius:12px;width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;
+}
+.contact-list strong{display:block;margin-bottom:4px}
+.contact-form{
+  min-width:360px;width:520px;
+  background:rgba(26,31,58,.6);backdrop-filter:blur(20px);
+  padding:40px;border-radius:24px;
+  border:1px solid rgba(59,130,246,.2);
+}
+.contact-form h3{color:#fff;margin-bottom:24px;font-size:28px}
+.contact-form input,.contact-form textarea{
+  width:100%;border:1px solid rgba(59,130,246,.3);
+  padding:16px;border-radius:12px;margin-bottom:16px;
+  background:rgba(15,23,42,.6);color:#fff;
+  font-family:inherit;transition:.3s;
+}
+.contact-form input:focus,.contact-form textarea:focus{
+  outline:none;border-color:rgba(59,130,246,.6);
+  box-shadow:0 0 0 3px rgba(59,130,246,.1);
+}
+.contact-form textarea{resize:vertical;min-height:120px}
+
+/* Footer */
+.footer{
+  background:rgba(10,14,39,.95);
+  border-top:1px solid rgba(59,130,246,.2);
+  padding:40px 20px;text-align:center;
+  color:var(--muted);
+}
+.footer a{color:var(--accent);text-decoration:none;padding:0 8px;transition:.3s}
+.footer a:hover{color:#fff}
+
+/* Scroll Progress */
+.scroll-progress{
+  position:fixed;top:0;left:0;width:0;height:3px;
+  background:linear-gradient(90deg,#3b82f6,#8b5cf6);
+  z-index:2000;transition:width .1s;
+}
+
+@media(max-width:900px){
+  .contact-stage{flex-direction:column;align-items:center}
+  .workshop-list{animation:scroll-left 20s linear infinite}
+  .programs-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
-
 <body>
-<a href="#top" id="logo"><img src="https://i.postimg.cc/RJJFxfGs/edutrip-logo.png" alt="Edutrip logo"></a>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<a href="#top" id="logo">
+  <img src="https://i.postimg.cc/RJJFxfGs/edutrip-logo.png" alt="Edutrip logo">
+</a>
 
 <div class="ribbon" id="ribbon">
   <div class="ribbon-inner">
@@ -105,8 +400,6 @@ body{
       <div class="r-label">Programs <i class="fa-solid fa-caret-down"></i></div>
       <div class="r-menu">
         <a href="#programs">Programs</a>
-        <a href="#trips">Trips</a>
-        <a href="#simplearn">SimpLearn Sessions</a>
         <a href="#workshops">Workshops</a>
       </div>
     </div>
@@ -122,31 +415,36 @@ body{
   </div>
 </div>
 
-<header class="hero">
+<header class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="particles" id="particles"></div>
   <div class="hero-inner">
     <h1>Transform Classrooms into Real-World Adventures</h1>
     <p>Curriculum-aligned educational trips, expert-led SimpLearn sessions, and immersive workshops that bring learning to life.</p>
-    <a href="#contact" class="btn btn-primary">Get Proposal</a>
+    <a href="#contact" class="btn btn-primary"><span>Get Proposal</span></a>
   </div>
-  <div class="watermark"><img src="https://i.postimg.cc/RJJFxfGs/edutrip-logo.png" alt=""></div>
 </header>
 
 <section id="programs" class="section">
   <h2 class="section-title">Our Programs</h2>
-  <div class="programs-stage">
-    <div class="program-panel" id="p1">
+  <div class="programs-grid">
+    <div class="program-card">
+      <div class="program-icon"><i class="fa-solid fa-map-location-dot"></i></div>
       <h3 class="panel-title">Curriculum-Linked Trips</h3>
       <p class="panel-content">Co-designed experiential trips connecting classroom topics to real-world places.</p>
     </div>
-    <div class="program-panel minimized" id="p2">
+    <div class="program-card">
+      <div class="program-icon"><i class="fa-solid fa-lightbulb"></i></div>
       <h3 class="panel-title">SimpLearn Sessions</h3>
       <p class="panel-content">Interactive sessions led by experts focusing on STEM and design thinking.</p>
     </div>
-    <div class="program-panel minimized" id="p3">
+    <div class="program-card">
+      <div class="program-icon"><i class="fa-solid fa-flask"></i></div>
       <h3 class="panel-title">Workshops & Maker Labs</h3>
       <p class="panel-content">Hands-on maker labs developing design and prototyping skills.</p>
     </div>
-    <div class="program-panel minimized" id="p4">
+    <div class="program-card">
+      <div class="program-icon"><i class="fa-solid fa-chart-line"></i></div>
       <h3 class="panel-title">Impact & StuCom</h3>
       <p class="panel-content">Student communication and progress-tracking systems with measurable impact.</p>
     </div>
@@ -155,10 +453,33 @@ body{
 
 <section id="workshops" class="section">
   <h2 class="section-title">Workshops & Labs</h2>
-  <div class="workshop-list">
-    <div class="workshop"><h4>Maker Lab: Sustainable Design</h4><p>Prototyping with recycled materials and design thinking.</p></div>
-    <div class="workshop"><h4>Creative Writing & Journalism</h4><p>Storytelling, interviews, and publishing in student magazines.</p></div>
-    <div class="workshop"><h4>Robotics Bootcamp</h4><p>Building robots, sensors, and computational challenges.</p></div>
+  <div class="workshop-container">
+    <div class="workshop-list">
+      <div class="workshop">
+        <h4>Maker Lab: Sustainable Design</h4>
+        <p>Prototyping with recycled materials and design thinking.</p>
+      </div>
+      <div class="workshop">
+        <h4>Creative Writing & Journalism</h4>
+        <p>Storytelling, interviews, and publishing in student magazines.</p>
+      </div>
+      <div class="workshop">
+        <h4>Robotics Bootcamp</h4>
+        <p>Building robots, sensors, and computational challenges.</p>
+      </div>
+      <div class="workshop">
+        <h4>Maker Lab: Sustainable Design</h4>
+        <p>Prototyping with recycled materials and design thinking.</p>
+      </div>
+      <div class="workshop">
+        <h4>Creative Writing & Journalism</h4>
+        <p>Storytelling, interviews, and publishing in student magazines.</p>
+      </div>
+      <div class="workshop">
+        <h4>Robotics Bootcamp</h4>
+        <p>Building robots, sensors, and computational challenges.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -173,8 +494,16 @@ body{
 <section id="founders" class="section">
   <h2 class="section-title">Founders</h2>
   <div class="founders-grid">
-    <div class="founder-card"><div class="founder-photo"></div><h4>Raghavendra Prasad</h4><p>Founder & CEO</p></div>
-    <div class="founder-card"><div class="founder-photo"></div><h4>Koteswara Rao</h4><p>Co-Founder & COO</p></div>
+    <div class="founder-card">
+      <div class="founder-photo"></div>
+      <h4>Raghavendra Prasad</h4>
+      <p>Founder & CEO</p>
+    </div>
+    <div class="founder-card">
+      <div class="founder-photo"></div>
+      <h4>Koteswara Rao</h4>
+      <p>Co-Founder & COO</p>
+    </div>
   </div>
 </section>
 
@@ -183,18 +512,30 @@ body{
   <div class="plans-grid">
     <div class="plan-card">
       <h3>Gold Plan</h3>
-      <ul><li>3 Educational Trips</li><li>3 SimpLearn Sessions</li><li>2 Workshops</li></ul>
+      <ul>
+        <li>3 Educational Trips</li>
+        <li>3 SimpLearn Sessions</li>
+        <li>2 Workshops</li>
+      </ul>
       <a class="btn-outline" href="#contact">Request Pricing</a>
     </div>
     <div class="plan-card plan-recommended">
       <div class="badge">Recommended</div>
       <h3>Platinum Plan</h3>
-      <ul><li>Everything in Gold</li><li>+1 Educational Trip</li><li>Annual Smart Fest</li></ul>
+      <ul>
+        <li>Everything in Gold</li>
+        <li>+1 Educational Trip</li>
+        <li>Annual Smart Fest</li>
+      </ul>
       <a class="btn-outline" href="#contact">Request Pricing</a>
     </div>
     <div class="plan-card">
       <h3>Diamond Plan</h3>
-      <ul><li>Everything in Platinum</li><li>Real-World Skill Courses</li><li>Career Guidance</li></ul>
+      <ul>
+        <li>Everything in Platinum</li>
+        <li>Real-World Skill Courses</li>
+        <li>Career Guidance</li>
+      </ul>
       <a class="btn-outline" href="#contact">Request Pricing</a>
     </div>
   </div>
@@ -206,9 +547,18 @@ body{
     <div class="contact-left">
       <h3>Get in Touch</h3>
       <ul class="contact-list">
-        <li><i class="fa-solid fa-location-dot"></i><div><strong>Address</strong>Hyderabad, Telangana, India</div></li>
-        <li><i class="fa-solid fa-phone"></i><div><strong>Phone</strong>+91 81792 88678</div></li>
-        <li><i class="fa-solid fa-envelope"></i><div><strong>Email</strong>founders@edutripindia.com</div></li>
+        <li>
+          <i class="fa-solid fa-location-dot"></i>
+          <div><strong>Address</strong>Hyderabad, Telangana, India</div>
+        </li>
+        <li>
+          <i class="fa-solid fa-phone"></i>
+          <div><strong>Phone</strong>+91 81792 88678</div>
+        </li>
+        <li>
+          <i class="fa-solid fa-envelope"></i>
+          <div><strong>Email</strong>founders@edutripindia.com</div>
+        </li>
       </ul>
     </div>
     <form class="contact-form" id="contactForm">
@@ -216,7 +566,7 @@ body{
       <input type="text" placeholder="Full Name" required>
       <input type="email" placeholder="Email" required>
       <textarea rows="5" placeholder="Tell us what you need..."></textarea>
-      <button class="btn btn-primary" type="submit">Send Message</button>
+      <button class="btn btn-primary" type="submit"><span>Send Message</span></button>
     </form>
   </div>
 </section>
@@ -225,14 +575,9 @@ body{
   <p>© Edutrip Private Limited | Hyderabad, India</p>
 </footer>
 
-<!-- GSAP -->
-<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
-
 <script>
-// --- Embedded JS ---
 document.addEventListener('DOMContentLoaded',()=>{
-  // dropdown
+  // Dropdown navigation
   document.querySelectorAll('.r-dropdown').forEach(d=>{
     const m=d.querySelector('.r-menu');
     d.addEventListener('mouseenter',()=>m.style.display='block');
@@ -246,30 +591,242 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.addEventListener('click',()=>document.querySelectorAll('.r-menu').forEach(m=>m.style.display='none'));
   document.querySelector('.r-home').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 
-  // GSAP animations
-  gsap.registerPlugin(ScrollTrigger);
-  const panels=gsap.utils.toArray('.program-panel');
-  panels.forEach((p,i)=>{
-    ScrollTrigger.create({
-      trigger:p,start:"top center",end:"bottom center",
-      onEnter:()=>panels.forEach((q,j)=>{
-        if(j<i){q.classList.add('minimized');q.style.opacity=.9}
-        else if(j===i){q.classList.remove('minimized');q.style.opacity=1}
-        else{q.classList.add('minimized');q.style.opacity=.8}
-      })
-    });
-  });
-  gsap.utils.toArray('.workshop').forEach((w,i)=>{
-    gsap.fromTo(w,{x:i%2?-120:120,opacity:0},{x:0,opacity:1,duration:.8,scrollTrigger:{trigger:w,start:"top 80%"}})
+  // Scroll progress bar
+  const progressBar=document.getElementById('scrollProgress');
+  window.addEventListener('scroll',()=>{
+    const h=document.documentElement.scrollHeight-window.innerHeight;
+    const s=window.pageYOffset;
+    progressBar.style.width=(s/h*100)+'%';
   });
 
-  const f=document.getElementById('contactForm');
-  f.addEventListener('submit',e=>{
-    e.preventDefault();
-    const b=f.querySelector('button');
-    b.textContent='Sent ✓';setTimeout(()=>{b.textContent='Send Message';f.reset()},1500);
+  // Animate navigation on load
+  setTimeout(()=>{
+    document.getElementById('logo').style.cssText='opacity:1;transform:translateY(0);transition:.8s';
+    document.querySelector('.ribbon').style.cssText='opacity:1;transform:translateY(0);transition:.8s';
+  },300);
+
+  // Hero animations
+  const heroInner=document.querySelector('.hero-inner');
+  const heroP=document.querySelector('.hero p');
+  const heroBtn=document.querySelector('.hero .btn-primary');
+  
+  setTimeout(()=>{
+    heroInner.style.cssText='opacity:1;transform:translateY(0);transition:1.2s cubic-bezier(.4,0,.2,1)';
+  },500);
+  setTimeout(()=>{
+    heroP.style.cssText='opacity:1;transition:1s cubic-bezier(.4,0,.2,1)';
+  },800);
+  setTimeout(()=>{
+    heroBtn.style.cssText='opacity:1;transform:translateY(0);transition:1s cubic-bezier(.4,0,.2,1)';
+  },1100);
+
+  // Generate floating particles
+  const particlesContainer=document.getElementById('particles');
+  for(let i=0;i<30;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDelay=Math.random()*15+'s';
+    p.style.animationDuration=(10+Math.random()*10)+'s';
+    particlesContainer.appendChild(p);
+  }
+
+  // Intersection Observer for scroll animations
+  const observerOptions={threshold:0.1,rootMargin:'0px 0px -100px 0px'};
+  
+  const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.style.cssText='opacity:1;transform:translateY(0);transition:1s cubic-bezier(.4,0,.2,1)';
+        observer.unobserve(entry.target);
+      }
+    });
+  },observerOptions);
+
+  // Observe section titles
+  document.querySelectorAll('.section-title').forEach(t=>observer.observe(t));
+
+  // Observe program cards with stagger
+  document.querySelectorAll('.program-card').forEach((c,i)=>{
+    setTimeout(()=>{
+      const cardObserver=new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            setTimeout(()=>{
+              entry.target.style.cssText='opacity:1;transform:translateY(0);transition:.8s cubic-bezier(.4,0,.2,1)';
+            },i*150);
+            cardObserver.unobserve(entry.target);
+          }
+        });
+      },observerOptions);
+      cardObserver.observe(c);
+    },0);
   });
+
+  // Observe about content
+  const aboutContent=document.querySelector('.about-content');
+  if(aboutContent)observer.observe(aboutContent);
+
+  // Observe founder cards
+  document.querySelectorAll('.founder-card').forEach((c,i)=>{
+    const founderObserver=new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          setTimeout(()=>{
+            entry.target.style.cssText='opacity:1;transform:scale(1);transition:.8s cubic-bezier(.4,0,.2,1)';
+          },i*200);
+          founderObserver.unobserve(entry.target);
+        }
+      });
+    },observerOptions);
+    founderObserver.observe(c);
+  });
+
+  // Observe plan cards
+  document.querySelectorAll('.plan-card').forEach((c,i)=>{
+    const planObserver=new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          setTimeout(()=>{
+            entry.target.style.cssText='opacity:1;transform:translateY(0);transition:.8s cubic-bezier(.4,0,.2,1)';
+          },i*150);
+          planObserver.unobserve(entry.target);
+        }
+      });
+    },observerOptions);
+    planObserver.observe(c);
+  });
+
+  // Observe contact section
+  const contactStage=document.querySelector('.contact-stage');
+  if(contactStage)observer.observe(contactStage);
+
+  // Parallax effect for hero background
+  window.addEventListener('scroll',()=>{
+    const scrolled=window.pageYOffset;
+    const heroBg=document.querySelector('.hero-bg');
+    if(heroBg&&scrolled<window.innerHeight){
+      heroBg.style.transform=`translateY(${scrolled*0.5}px)`;
+    }
+  });
+
+  // Mouse parallax effect for hero
+  document.querySelector('.hero').addEventListener('mousemove',(e)=>{
+    const x=(e.clientX/window.innerWidth-0.5)*20;
+    const y=(e.clientY/window.innerHeight-0.5)*20;
+    document.querySelector('.hero-inner').style.transform=`translate(${x}px,${y}px)`;
+  });
+
+  // Smooth scroll for navigation links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+    anchor.addEventListener('click',function(e){
+      e.preventDefault();
+      const target=document.querySelector(this.getAttribute('href'));
+      if(target){
+        target.scrollIntoView({behavior:'smooth',block:'start'});
+      }
+    });
+  });
+
+  // Contact form submission
+  const form=document.getElementById('contactForm');
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const btn=form.querySelector('button');
+    const originalText=btn.innerHTML;
+    btn.innerHTML='<span>Sending...</span>';
+    btn.style.pointerEvents='none';
+    
+    setTimeout(()=>{
+      btn.innerHTML='<span>Sent ✓</span>';
+      btn.style.background='linear-gradient(135deg,#10b981,#059669)';
+      
+      setTimeout(()=>{
+        btn.innerHTML=originalText;
+        btn.style.background='';
+        btn.style.pointerEvents='';
+        form.reset();
+      },2000);
+    },1500);
+  });
+
+  // Add glow effect to cards on hover
+  document.querySelectorAll('.program-card, .workshop, .founder-card, .plan-card').forEach(card=>{
+    card.addEventListener('mousemove',(e)=>{
+      const rect=card.getBoundingClientRect();
+      const x=e.clientX-rect.left;
+      const y=e.clientY-rect.top;
+      
+      card.style.setProperty('--mouse-x',x+'px');
+      card.style.setProperty('--mouse-y',y+'px');
+    });
+  });
+
+  // Navbar background on scroll
+  const ribbon=document.querySelector('.ribbon-inner');
+  const logo=document.getElementById('logo');
+  window.addEventListener('scroll',()=>{
+    if(window.pageYOffset>100){
+      ribbon.style.background='rgba(26,31,58,.98)';
+      ribbon.style.boxShadow='0 8px 32px rgba(0,0,0,.5)';
+    }else{
+      ribbon.style.background='rgba(26,31,58,.95)';
+      ribbon.style.boxShadow='0 8px 32px rgba(0,0,0,.3)';
+    }
+  });
+
+  // Add typing effect to hero title (optional enhancement)
+  const heroTitle=document.querySelector('.hero h1');
+  const titleText=heroTitle.textContent;
+  heroTitle.textContent='';
+  heroTitle.style.opacity='1';
+  
+  let charIndex=0;
+  const typeSpeed=50;
+  
+  function typeWriter(){
+    if(charIndex<titleText.length){
+      heroTitle.textContent+=titleText.charAt(charIndex);
+      charIndex++;
+      setTimeout(typeWriter,typeSpeed);
+    }
+  }
+  
+  setTimeout(typeWriter,800);
+
+  // Cursor trail effect
+  const cursorTrail=[];
+  const trailLength=20;
+  
+  for(let i=0;i<trailLength;i++){
+    const dot=document.createElement('div');
+    dot.style.cssText=`position:fixed;width:${6-i*0.2}px;height:${6-i*0.2}px;background:rgba(59,130,246,${0.6-i*0.03});border-radius:50%;pointer-events:none;z-index:9999;transition:all 0.1s;`;
+    document.body.appendChild(dot);
+    cursorTrail.push(dot);
+  }
+  
+  let mouseX=0,mouseY=0;
+  
+  document.addEventListener('mousemove',(e)=>{
+    mouseX=e.clientX;
+    mouseY=e.clientY;
+  });
+  
+  function updateTrail(){
+    let x=mouseX;
+    let y=mouseY;
+    
+    cursorTrail.forEach((dot,i)=>{
+      dot.style.left=x+'px';
+      dot.style.top=y+'px';
+      
+      const nextDot=cursorTrail[i+1]||cursorTrail[0];
+      x+=(parseFloat(nextDot.style.left)||mouseX-x)*0.5;
+      y+=(parseFloat(nextDot.style.top)||mouseY-y)*0.5;
+    });
+    
+    requestAnimationFrame(updateTrail);
+  }
+  
+  updateTrail();
 });
-</script>
-</body>
-</html>
