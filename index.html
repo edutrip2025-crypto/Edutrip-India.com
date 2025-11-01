@@ -13,12 +13,12 @@
 <body>
 
 <!-- Background Watermark -->
-<div class="watermark">
+<div class="watermark" aria-hidden="true">
   <img src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip watermark">
 </div>
 
 <!-- HEADER -->
-<header class="site-header" id="site-header">
+<header class="site-header" id="site-header" role="banner">
   <div class="header-inner">
     <a class="brand" href="#top">
       <img class="brand-logo" src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip logo">
@@ -27,163 +27,174 @@
         <div class="tag">Don’t just learn it, know it.</div>
       </div>
     </a>
-    <nav class="main">
+
+    <nav class="main" id="main-nav" role="navigation" aria-label="Main navigation">
       <a href="#programs">Programs</a>
       <a href="#about">About Us</a>
       <a href="#workshops">Workshops</a>
       <a href="#pricing">Plans</a>
       <a href="#contact" class="btn btn-primary small">Get Proposal</a>
     </nav>
-    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span></button>
+
+    <!-- Hamburger (keeps fixed on mobile for easy access) -->
+    <button class="hamburger" id="hamburger" aria-label="Open navigation" aria-expanded="false" aria-controls="main-nav">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
   </div>
 </header>
 
-<!-- MAIN CONTENT -->
-<main style="padding-top:130px;">
+<!-- MAIN -->
+<main id="top" style="padding-top:130px;">
 
-<section class="hero wrap">
-  <h1>Transform Classrooms into Real-World Adventures</h1>
-  <p class="lead">Curriculum-aligned educational trips, expert-led sessions, and immersive workshops that bring learning to life.</p>
-  <a href="#contact" class="btn btn-primary large">Get Proposal</a>
-</section>
+  <!-- HERO -->
+  <section class="hero wrap" aria-label="Hero">
+    <h1>Transform Classrooms into Real-World Adventures</h1>
+    <p class="lead">Curriculum-aligned educational trips, expert-led sessions, and immersive workshops that bring learning to life.</p>
+    <a href="#contact" class="btn btn-primary large">Get Proposal</a>
+  </section>
 
-<!-- PROGRAMS -->
-<section id="programs" class="wrap">
-  <h2 class="section-title">Our Programs</h2>
-  <div class="program-grid">
-    <div class="program-card">📚 
-      <h4>Curriculum-Linked Trips</h4>
-      <p>Co-designed with educators, mapped to standards, includes teacher resource pack.</p>
-    </div>
-
-    <div class="program-card">🧠 
-      <h4>SimpLearn Sessions</h4>
-      <p>Expert-led interactive sessions within schools that enhance subject understanding and practical thinking.</p>
-    </div>
-
-    <div class="program-card">🛠️ 
-      <h4>Workshops & Maker Labs</h4>
-      <p>Hands-on STEAM and innovation labs encouraging creativity and teamwork.</p>
-    </div>
-
-    <div class="program-card">📊 
-      <h4>Impact & StuCom</h4>
-      <p>Digital dashboards, student tracking and post-trip assessment reports.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about" class="wrap">
-  <h2 class="section-title">About Us</h2>
-  <p class="about-text">
-    At <strong>Edutrip</strong>, we believe that true learning goes beyond classrooms.  
-    Our mission is to connect education with real-world experiences — turning concepts into adventures and knowledge into lifelong skills.  
-    Founded in Hyderabad, Edutrip partners with schools nationwide to provide meaningful, curriculum-aligned trips and workshops that inspire curiosity, collaboration, and confidence in every learner.
-  </p>
-</section>
-
-<!-- FOUNDERS -->
-<section id="founders" class="wrap">
-  <h2 class="section-title">Our Founders</h2>
-  <div class="founder-grid">
-    <div class="founder-card">
-      <img src="https://via.placeholder.com/350x350?text=Raghavendra+Prasad" alt="Raghavendra Prasad">
-      <h4>Raghavendra Prasad</h4>
-      <p class="founder-role">Founder & CEO</p>
-      <p>Visionary educator with a mission to bridge classroom learning with real-world applications.</p>
-    </div>
-    <div class="founder-card">
-      <img src="https://via.placeholder.com/350x350?text=Koteswara+Rao" alt="Koteswara Rao">
-      <h4>Koteswara Rao</h4>
-      <p class="founder-role">Co-Founder & COO</p>
-      <p>Operational strategist ensuring Edutrip delivers transformative experiences to schools across India.</p>
-    </div>
-  </div>
-</section>
-
-<!-- WORKSHOPS -->
-<section id="workshops" class="wrap">
-  <h2 class="section-title">Workshops & Labs</h2>
-  <div class="program-grid">
-    <div class="program-card"><h4>Maker Lab: Sustainable Design</h4><p>Students build prototypes from recycled materials applying design thinking principles.</p></div>
-    <div class="program-card"><h4>Creative Writing & Journalism</h4><p>From idea to print – students publish stories, learning structure and editing.</p></div>
-    <div class="program-card"><h4>Robotics Bootcamp</h4><p>Sensor-based robotics projects with challenge-driven activities and group builds.</p></div>
-  </div>
-</section>
-
-<!-- PLANS -->
-<section id="pricing" class="wrap">
-  <h2 class="section-title">Plans</h2>
-  <div class="pricing-grid">
-    <div class="price-card">
-      <h3>Gold Plan</h3>
-      <ul class="features-list">
-        <li>3 educational field trips</li>
-        <li>3 expert-led sessions</li>
-        <li>2 workshops or labs</li>
-        <li>Teacher training & assessment toolkit</li>
-      </ul>
-      <a class="btn btn-outline" href="#contact">Request Pricing</a>
-    </div>
-
-    <div class="price-card recommended">
-      <div class="badge-top">Recommended</div>
-      <h3>Platinum Plan</h3>
-      <ul class="features-list">
-        <li>4 educational trips per year</li>
-        <li>Access to StuCom Premium app</li>
-        <li>Annual participation in Smarti Assessments</li>
-        <li>Complimentary entry to Sporteen sports events</li>
-      </ul>
-      <a class="btn btn-outline" href="#contact">Request Pricing</a>
-    </div>
-
-    <div class="price-card">
-      <h3>Diamond Plan</h3>
-      <ul class="features-list">
-        <li>Everything in Platinum</li>
-        <li>5 field trips annually</li>
-        <li>Career guidance & mentorship</li>
-        <li>Certificate courses via partnered institutions</li>
-      </ul>
-      <a class="btn btn-outline" href="#contact">Request Pricing</a>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="wrap">
-  <h2 class="section-title">Contact Us</h2>
-  <div class="contact-layout">
-    <form id="contact-form" class="program-card">
-      <label>Organization<input name="organization" required></label>
-      <label>Contact Person<input name="name" required></label>
-      <label>Email<input name="email" type="email" required></label>
-      <label>Phone<input name="phone" type="tel"></label>
-      <label>Message<textarea name="message" rows="4"></textarea></label>
-      <button class="btn btn-primary" type="submit">Send Enquiry</button>
-    </form>
-
-    <aside class="contact-info-box">
-      <h3>Let’s Connect</h3>
-      <div class="contact-row"><div class="contact-icon">📞</div><a href="tel:+918179288678">+91 81792 88678</a></div>
-      <div class="contact-row"><div class="contact-icon">✉️</div><a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></div>
-      <div class="contact-row"><div class="contact-icon">📍</div><span>Hyderabad, India</span></div>
-      <div class="contact-note">
-        <p>We typically respond within 24 hours on working days.  
-        For urgent queries, please contact us directly by phone or email.</p>
+  <!-- PROGRAMS -->
+  <section id="programs" class="wrap" aria-labelledby="prog-title">
+    <h2 id="prog-title" class="section-title">Our Programs</h2>
+    <div class="program-grid">
+      <div class="program-card">📚
+        <h4>Curriculum-Linked Trips</h4>
+        <p>Co-designed with educators, mapped to standards, includes teacher resource pack.</p>
       </div>
-    </aside>
-  </div>
-</section>
+      <div class="program-card">🧠
+        <h4>SimpLearn Sessions</h4>
+        <p>Expert-led interactive sessions within schools that build practical understanding.</p>
+      </div>
+      <div class="program-card">🛠️
+        <h4>Workshops & Maker Labs</h4>
+        <p>Hands-on STEAM labs encouraging innovation, teamwork and reflection.</p>
+      </div>
+      <div class="program-card">📊
+        <h4>Impact & StuCom</h4>
+        <p>Student dashboards, post-program assessments and educator reports.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="wrap" aria-labelledby="about-title">
+    <h2 id="about-title" class="section-title">About Us</h2>
+    <p class="about-text">
+      At <strong>Edutrip</strong>, we believe that true learning happens when students experience the world.
+      We design curriculum-aligned trips and workshops to build curiosity, critical thinking and practical skills.
+      Based in Hyderabad, we partner with schools across India to transform learning into meaningful experiences.
+    </p>
+  </section>
+
+  <!-- FOUNDERS -->
+  <section id="founders" class="wrap" aria-labelledby="founders-title">
+    <h2 id="founders-title" class="section-title">Our Founders</h2>
+    <div class="founder-grid" role="list">
+      <div class="founder-card" role="listitem">
+        <img src="https://via.placeholder.com/600x600?text=Raghavendra+Prasad" alt="Raghavendra Prasad">
+        <h4>Raghavendra Prasad</h4>
+        <p class="founder-role">Founder & CEO</p>
+        <p>Visionary educator focused on bridging classroom content with real-world application and meaningful learning experiences.</p>
+      </div>
+
+      <div class="founder-card" role="listitem">
+        <img src="https://via.placeholder.com/600x600?text=Koteswara+Rao" alt="Koteswara Rao">
+        <h4>Koteswara Rao</h4>
+        <p class="founder-role">Co-Founder & COO</p>
+        <p>Operational leader ensuring every program meets safety, learning and delivery standards across partner schools.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKSHOPS -->
+  <section id="workshops" class="wrap" aria-labelledby="workshops-title">
+    <h2 id="workshops-title" class="section-title">Workshops & Labs</h2>
+    <div class="program-grid">
+      <div class="program-card"><h4>Maker Lab: Sustainable Design</h4><p>Prototyping with recycled materials & design thinking.</p></div>
+      <div class="program-card"><h4>Creative Writing & Journalism</h4><p>From narrative to publication — culminating in a student magazine.</p></div>
+      <div class="program-card"><h4>Robotics Bootcamp</h4><p>Sensor-driven robots and challenge tasks.</p></div>
+    </div>
+  </section>
+
+  <!-- PLANS -->
+  <section id="pricing" class="wrap" aria-labelledby="plans-title">
+    <h2 id="plans-title" class="section-title">Plans</h2>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Gold Plan</h3>
+        <ul class="features-list">
+          <li>3 educational field trips</li>
+          <li>3 expert-led sessions</li>
+          <li>2 workshops or labs</li>
+          <li>Teacher training & assessment toolkit</li>
+        </ul>
+        <a class="btn btn-outline" href="#contact">Request Pricing</a>
+      </div>
+
+      <div class="price-card recommended">
+        <div class="badge-top">Recommended</div>
+        <h3>Platinum Plan</h3>
+        <ul class="features-list">
+          <li>4 educational trips per year</li>
+          <li>Access to StuCom Premium app</li>
+          <li>Annual participation in Smarti Assessments</li>
+          <li>Complimentary entry to Sporteen sports events</li>
+        </ul>
+        <a class="btn btn-outline" href="#contact">Request Pricing</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Diamond Plan</h3>
+        <ul class="features-list">
+          <li>Everything in Platinum</li>
+          <li>5 field trips annually</li>
+          <li>Career guidance & mentorship</li>
+          <li>Certificate courses via partnered institutions</li>
+        </ul>
+        <a class="btn btn-outline" href="#contact">Request Pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="wrap" aria-labelledby="contact-title">
+    <h2 id="contact-title" class="section-title">Contact Us</h2>
+    <div class="contact-layout">
+      <form id="contact-form" class="program-card" autocomplete="on" novalidate>
+        <label>Organization<input name="organization" required placeholder="St. Xavier's"></label>
+        <label>Contact Person<input name="name" required placeholder="Your name"></label>
+        <label>Email<input name="email" type="email" required placeholder="you@school.edu"></label>
+        <label>Phone<input name="phone" type="tel" placeholder="+91 9XXXXXXXXX"></label>
+        <label>Message<textarea name="message" rows="4" placeholder="Tell us grade, tentative dates, chosen plan etc."></textarea></label>
+        <div style="margin-top:10px">
+          <button class="btn btn-primary" type="submit">Send Enquiry</button>
+        </div>
+      </form>
+
+      <aside class="contact-info-box" aria-labelledby="contact-info">
+        <h3 id="contact-info">Let’s Connect</h3>
+        <div class="contact-row"><div class="contact-icon">📞</div><a href="tel:+918179288678">+91 81792 88678</a></div>
+        <div class="contact-row"><div class="contact-icon">✉️</div><a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></div>
+        <div class="contact-row"><div class="contact-icon">📍</div><span>Hyderabad, India</span></div>
+        <div class="contact-note">
+          <p>We typically respond within 24 hours on working days. For urgent queries, please contact us directly by phone or email.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
 
 </main>
 
 <!-- FOOTER -->
-<footer class="site-footer">
+<footer class="site-footer" role="contentinfo">
   <div class="footer-grid">
-    <div><strong>Edutrip</strong><p class="muted-sm">Don’t just learn it, know it.</p></div>
+    <div>
+      <strong>Edutrip</strong>
+      <p class="muted-sm">Don’t just learn it, know it.</p>
+    </div>
+
     <div>
       <h4>Programs</h4>
       <ul>
@@ -192,6 +203,7 @@
         <li><a href="#workshops">Workshops</a></li>
       </ul>
     </div>
+
     <div>
       <h4>Company</h4>
       <ul>
