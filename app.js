@@ -2,23 +2,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const header = document.getElementById("site-header");
   const hamburger = document.getElementById("hamburger");
   const nav = document.querySelector("nav.main");
+  const navLinks = nav.querySelectorAll("a");
   let lastScroll = 0;
 
-  // Header hides immediately on first scroll down, shows when scrolling up
+  // Header hides on first scroll down, reappears when scrolling up
   window.addEventListener("scroll", () => {
     const current = window.scrollY;
-    if (current > lastScroll && current > 5) {
-      header.classList.add("hidden");
-    } else {
-      header.classList.remove("hidden");
-    }
+    if (current > lastScroll && current > 5) header.classList.add("hidden");
+    else header.classList.remove("hidden");
     lastScroll = current;
   });
 
   // Mobile hamburger menu toggle
   hamburger.addEventListener("click", () => {
-    if (nav.style.display === "flex") nav.style.display = "none";
-    else {
+    const isOpen = nav.style.display === "flex";
+    if (isOpen) {
+      nav.style.display = "none";
+    } else {
       nav.style.display = "flex";
       nav.style.flexDirection = "column";
       nav.style.position = "absolute";
@@ -32,7 +32,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Contact form sends email using mailto
+  // Auto-close menu when a link is clicked (mobile only)
+  navLinks.forEach(link => {
+    link.addEventListener("click", () => {
+      if (window.innerWidth < 900) {
+        nav.style.display = "none";
+      }
+    });
+  });
+
+  // Smooth scroll for internal navigation
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function (e) {
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target) {
+        e.preventDefault();
+        window.scrollTo({
+          top: target.offsetTop - 90,
+          behavior: "smooth",
+        });
+      }
+    });
+  });
+
+  // Contact form -> mailto
   const form = document.getElementById("contact-form");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
