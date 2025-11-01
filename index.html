@@ -1,193 +1,158 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Edutrip • Curriculum-Linked Learning Adventures</title>
-  <meta name="description" content="Edutrip — curriculum-aligned educational trips, expert-led sessions, and immersive workshops that turn classrooms into adventures.">
-  <link rel="icon" href="https://i.postimg.cc/RJJFxfGs/logo.png" type="image/png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edutrip India - Curriculum Linked Adventures</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="app.js"></script>
 </head>
-
 <body>
-<!-- Large Watermark -->
-<div class="watermark">
-  <img src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip watermark">
-</div>
-
-<!-- HEADER -->
-<header id="site-header" class="site-header">
-  <div class="header-inner">
-    <a class="brand" href="#top">
-      <img class="brand-logo" src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip logo">
-      <div>
-        <div class="title">Edutrip</div>
-        <div class="tag">Don’t just learn it, know it.</div>
-      </div>
-    </a>
-    <nav id="main-nav" class="main">
-      <a href="#programs">Programs</a>
-      <a href="#about">About Us</a>
-      <a href="#workshops">Workshops</a>
-      <a href="#pricing">Plans</a>
-      <a href="#contact">Contact</a>
-    </nav>
+  <!-- Watermark -->
+  <div class="watermark fade-in">
+    <img src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip watermark">
   </div>
-</header>
 
-<!-- HERO -->
-<section id="top" class="hero wrap">
-  <h1>Transform Classrooms into Real-World Adventures</h1>
-  <p class="lead">Curriculum-aligned educational trips, expert-led sessions, and immersive workshops that bring learning to life.</p>
-  <a href="#contact" class="btn btn-primary large">Get Proposal</a>
-</section>
+  <!-- Header -->
+  <header id="site-header">
+    <div class="container nav-container">
+      <div class="logo-section">
+        <img src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip logo" class="logo" />
+        <div class="brand">
+          <h1>Edutrip</h1>
+          <p>Don't just learn it, know it.</p>
+        </div>
+      </div>
+      <nav class="navbar" id="navbar">
+        <ul>
+          <li><a href="#programs">Programs</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#workshops">Workshops</a></li>
+          <li><a href="#plans">Plans</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="burger" id="burger">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </header>
 
-<!-- PROGRAMS -->
-<section id="programs" class="wrap">
-  <h2 class="section-title">Our Programs</h2>
-  <div class="program-grid">
-    <div class="program-card flip">
-      <div class="card-front">
-        <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" alt="Trips icon">
+  <!-- Hero -->
+  <section class="hero fade-in">
+    <h1>Transform Classrooms into Real-World Adventures</h1>
+    <p>Curriculum-aligned educational trips, expert-led SimplLearn sessions, and immersive workshops that bring learning to life.</p>
+    <a href="#contact" class="cta-btn">Get Proposal</a>
+  </section>
+
+  <!-- Programs -->
+  <section class="programs" id="programs">
+    <h2>Our Programs</h2>
+    <div class="program-grid">
+      <div class="program-card reveal">
+        <img src="https://cdn.jsdelivr.net/gh/icons8/flat-color-icons/svg/reading.svg" alt="Curriculum Trips">
         <h4>Curriculum-Linked Trips</h4>
+        <p>Hands-on educational travel programs connecting learning with real-world exploration.</p>
       </div>
-      <div class="card-back">
-        <p>Co-designed with educators, aligned to standards, and connecting classroom learning with real-world applications through experiential journeys.</p>
-      </div>
-    </div>
 
-    <div class="program-card flip">
-      <div class="card-front">
-        <img src="https://cdn-icons-png.flaticon.com/512/6165/6165856.png" alt="SimpLearn icon">
-        <h4>SimpLearn Sessions</h4>
+      <div class="program-card reveal">
+        <img src="https://cdn.jsdelivr.net/gh/icons8/flat-color-icons/svg/classroom.svg" alt="SimplLearn">
+        <h4>SimplLearn Sessions</h4>
+        <p>Interactive sessions led by industry experts focusing on skills and innovation.</p>
       </div>
-      <div class="card-back">
-        <p>Interactive expert-led in-school sessions blending theory with practical insights, designed to make learning engaging and fun.</p>
-      </div>
-    </div>
 
-    <div class="program-card flip">
-      <div class="card-front">
-        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712100.png" alt="Workshops icon">
+      <div class="program-card reveal">
+        <img src="https://cdn.jsdelivr.net/gh/icons8/flat-color-icons/svg/workshop.svg" alt="Workshops">
         <h4>Workshops & Maker Labs</h4>
+        <p>Creative STEM and design workshops that encourage problem solving and collaboration.</p>
       </div>
-      <div class="card-back">
-        <p>Hands-on innovation and STEAM-based workshops focusing on design thinking, creativity, and teamwork through real projects.</p>
-      </div>
-    </div>
 
-    <div class="program-card flip">
-      <div class="card-front">
-        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135706.png" alt="Impact icon">
+      <div class="program-card reveal">
+        <img src="https://cdn.jsdelivr.net/gh/icons8/flat-color-icons/svg/report-card.svg" alt="Impact StuCom">
         <h4>Impact & StuCom</h4>
-      </div>
-      <div class="card-back">
-        <p>Analytics and communication tools that help schools monitor student growth, engagement, and impact through digital dashboards.</p>
+        <p>Tracking measurable student outcomes and improving classroom communication.</p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ABOUT -->
-<section id="about" class="wrap about-section">
-  <h2 class="section-title">About Us</h2>
-  <div class="about-container">
-    <p><strong>Edutrip</strong> is a Hyderabad-based organization redefining how students learn by connecting classrooms to real-world experiences. We design curriculum-aligned learning adventures that merge discovery, exploration, and life skills.</p>
-    <p>Our programs include heritage trails, scientific expeditions, innovation bootcamps, and environmental explorations — all crafted in collaboration with educators and industry experts. We believe learning happens best when curiosity meets experience.</p>
-    <p>From safety to measurable outcomes, every Edutrip experience is built with care and precision. We transform “learning by reading” into “learning by doing,” preparing students to think critically, collaborate effectively, and lead confidently.</p>
-  </div>
-</section>
+  <!-- About -->
+  <section class="about" id="about">
+    <h2>About Us</h2>
+    <p><b>Edutrip</b> is a Hyderabad-based organization redefining how students learn by connecting classrooms to real-world experiences. We create curriculum-aligned educational journeys that blend discovery, exploration, and skill development.</p>
+    <p>From biology expeditions to innovation bootcamps and heritage trails, every Edutrip experience is crafted by educators and industry experts. Our programs nurture curiosity, teamwork, and critical thinking — the building blocks of tomorrow’s innovators.</p>
+    <p>Trusted by leading schools, we ensure every trip and workshop meets global standards of safety, learning outcomes, and measurable impact. Edutrip transforms “learning by reading” into “learning by doing.”</p>
+  </section>
 
-<!-- WORKSHOPS -->
-<section id="workshops" class="wrap">
-  <h2 class="section-title">Workshops & Labs</h2>
-  <div class="program-grid">
-    <div class="program-card"><h4>Maker Lab: Sustainable Design</h4><p>Prototyping with recycled materials and applying design thinking to solve real challenges.</p></div>
-    <div class="program-card"><h4>Creative Writing & Journalism</h4><p>From idea to publication — developing voice, creativity, and communication through storytelling.</p></div>
-    <div class="program-card"><h4>Robotics Bootcamp</h4><p>Hands-on robotics workshops introducing coding, sensors, and automation for young innovators.</p></div>
-  </div>
-</section>
-
-<!-- PLANS -->
-<section id="pricing" class="wrap">
-  <h2 class="section-title">Plans</h2>
-  <div class="pricing-grid">
-    <div class="price-card">
-      <h3>Gold Plan</h3>
-      <ul class="features-list">
-        <li>3 educational field trips</li>
-        <li>3 SimpLearn sessions</li>
-        <li>2 workshops or maker labs</li>
-        <li>Teacher assessment toolkit</li>
-      </ul>
-      <a class="btn btn-outline" href="#contact">Request Pricing</a>
-    </div>
-
-    <div class="price-card recommended">
-      <div class="badge-top">Recommended</div>
-      <h3>Platinum Plan</h3>
-      <ul class="features-list">
-        <li>4 curriculum-aligned trips annually</li>
-        <li>StuCom Premium access</li>
-        <li>Participation in Smarti Assessments</li>
-        <li>Free entry to Sporteen events</li>
-      </ul>
-      <a class="btn btn-outline" href="#contact">Request Pricing</a>
-    </div>
-
-    <div class="price-card">
-      <h3>Diamond Plan</h3>
-      <ul class="features-list">
-        <li>Everything in Platinum</li>
-        <li>5 educational journeys per year</li>
-        <li>Career mentorship and guidance</li>
-        <li>Certified partner courses</li>
-      </ul>
-      <a class="btn btn-outline" href="#contact">Request Pricing</a>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="wrap">
-  <h2 class="section-title">Contact Us</h2>
-  <div class="contact-layout">
-    <form id="contact-form" class="enhanced-form">
-      <div class="form-row">
-        <div class="field"><label>Organization</label><input name="organization" required></div>
-        <div class="field"><label>Contact Person</label><input name="name" required></div>
+  <!-- Plans -->
+  <section class="plans" id="plans">
+    <h2>Plans</h2>
+    <div class="plan-grid">
+      <div class="plan-card reveal">
+        <h3>Gold Plan</h3>
+        <p>Perfect for schools starting their Edutrip journey. Includes 3 curated educational trips and SimplLearn access.</p>
+        <a href="#contact" class="plan-btn">Request Pricing</a>
       </div>
-      <div class="form-row">
-        <div class="field"><label>Email</label><input name="email" type="email" required></div>
-        <div class="field"><label>Phone</label><input name="phone" type="tel"></div>
+
+      <div class="plan-card reveal recommended">
+        <h3>Platinum Plan</h3>
+        <p>Extended experiences with additional workshops, SimplLearn sessions, and skill development add-ons.</p>
+        <a href="#contact" class="plan-btn">Request Pricing</a>
       </div>
-      <div class="field">
-        <label>Message</label>
-        <textarea name="message" rows="4" placeholder="Tell us what you need..."></textarea>
+
+      <div class="plan-card reveal">
+        <h3>Diamond Plan</h3>
+        <p>Comprehensive year-long programs designed for complete experiential learning integration.</p>
+        <a href="#contact" class="plan-btn">Request Pricing</a>
       </div>
-      <button class="btn btn-primary" type="submit">Send Enquiry</button>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <h2>Contact Us</h2>
+    <form id="contact-form">
+      <input type="text" name="organization" placeholder="Organization" required>
+      <input type="text" name="name" placeholder="Contact Person" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="tel" name="phone" placeholder="Phone" required>
+      <textarea name="message" placeholder="Tell us what you need..." rows="5"></textarea>
+      <button type="submit" class="cta-btn">Send Enquiry</button>
     </form>
 
-    <aside class="contact-info-box">
+    <div class="contact-details">
       <h3>Let’s Connect</h3>
-      <div class="contact-chip"><div class="chip-icon">📞</div><div class="chip-content"><span class="chip-label">Call Us</span><a href="tel:+918179288678" class="chip-link">+91 81792 88678</a></div></div>
-      <div class="contact-chip"><div class="chip-icon">✉️</div><div class="chip-content"><span class="chip-label">Email</span><a href="mailto:founders@edutripindia.com" class="chip-link">founders@edutripindia.com</a></div></div>
-      <div class="contact-chip"><div class="chip-icon">📍</div><div class="chip-content"><span class="chip-label">Office</span><span class="chip-text">Hyderabad, India</span></div></div>
-    </aside>
-  </div>
-</section>
+      <p>📞 <a href="tel:+918179288678">+91 81792 88678</a></p>
+      <p>✉️ <a href="mailto:founders@edutripindia.com">founders@edutripindia.com</a></p>
+      <p>📍 Hyderabad, India</p>
+    </div>
+  </section>
 
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="footer-grid">
-    <div><strong>Edutrip</strong><p class="muted-sm">Don’t just learn it, know it.</p></div>
-    <div><h4>Programs</h4><ul><li><a href="#programs">Trips</a></li><li><a href="#programs">SimpLearn Sessions</a></li><li><a href="#workshops">Workshops</a></li></ul></div>
-    <div><h4>Company</h4><ul><li><a href="#about">About Us</a></li><li><a href="#founders">Founders</a></li></ul></div>
-  </div>
-  <p class="footer-legal">© Edutrip Private Limited | Hyderabad, India</p>
-</footer>
-
-<script src="app.js"></script>
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h4>Edutrip</h4>
+        <p>Don't just learn it, know it.</p>
+      </div>
+      <div>
+        <h4>Programs</h4>
+        <ul>
+          <li><a href="#programs">Trips</a></li>
+          <li><a href="#programs">SimplLearn Sessions</a></li>
+          <li><a href="#workshops">Workshops</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#founders">Founders</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-note">© Edutrip Private Limited | Hyderabad, India</p>
+  </footer>
 </body>
 </html>
