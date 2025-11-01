@@ -2,11 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const header = document.getElementById("site-header");
   const hamburger = document.getElementById("hamburger");
   const nav = document.getElementById("main-nav");
-  const navLinks = Array.from(nav.querySelectorAll("a[href^='#']"));
+  const navLinks = nav.querySelectorAll("a[href^='#']");
   let lastScroll = 0;
   let menuOpen = false;
 
-  // Header hide on first scroll down, show when scrolling up
+  // Header hides on scroll down, shows on scroll up
   window.addEventListener("scroll", () => {
     const current = window.scrollY;
     if (current > lastScroll && current > 5) {
@@ -15,13 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
       header.classList.remove("hidden");
     }
     lastScroll = current;
-    // If user scrolls while mobile menu is open, close it
-    if (menuOpen && window.innerWidth < 900) {
-      closeMobileMenu();
-    }
+    // Close mobile menu on scroll
+    if (menuOpen && window.innerWidth < 900) closeMobileMenu();
   });
 
-  // Hamburger click toggles mobile menu
+  // Hamburger toggle
   hamburger.addEventListener("click", (e) => {
     e.stopPropagation();
     if (menuOpen) closeMobileMenu();
@@ -29,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function openMobileMenu() {
-    // show nav as mobile dropdown (inline styles used so CSS doesn't conflict)
     nav.style.display = "flex";
     nav.style.flexDirection = "column";
     nav.style.position = "fixed";
@@ -42,28 +39,13 @@ document.addEventListener("DOMContentLoaded", () => {
     nav.style.zIndex = "115";
     nav.style.minWidth = "200px";
     hamburger.classList.add("open");
-    hamburger.setAttribute("aria-expanded", "true");
     menuOpen = true;
-    // trap focus loosely (optional)
-    nav.querySelectorAll("a,button").forEach(el=> el.setAttribute("tabindex", "0"));
-    // click outside to close
-    setTimeout(() => { document.addEventListener("click", outsideClickHandler); }, 50);
+    document.addEventListener("click", outsideClickHandler);
   }
 
   function closeMobileMenu() {
-    nav.style.display = "";
-    nav.style.flexDirection = "";
-    nav.style.position = "";
-    nav.style.top = "";
-    nav.style.right = "";
-    nav.style.background = "";
-    nav.style.padding = "";
-    nav.style.borderRadius = "";
-    nav.style.boxShadow = "";
-    nav.style.zIndex = "";
-    nav.style.minWidth = "";
+    nav.removeAttribute("style");
     hamburger.classList.remove("open");
-    hamburger.setAttribute("aria-expanded", "false");
     menuOpen = false;
     document.removeEventListener("click", outsideClickHandler);
   }
@@ -72,36 +54,33 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!nav.contains(e.target) && !hamburger.contains(e.target)) closeMobileMenu();
   }
 
-  // Auto-close when a navigation link is tapped (mobile)
-  navLinks.forEach(link => {
-    link.addEventListener("click", (ev) => {
-      // smooth scroll handled below; close menu if on mobile
+  // Auto-close menu when link clicked
+  navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
       if (window.innerWidth < 900) closeMobileMenu();
     });
   });
 
-  // Smooth scroll for internal links (offset header)
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
-      const href = this.getAttribute("href");
-      if (!href || href === "#") return;
-      const target = document.querySelector(href);
+      const target = document.querySelector(this.getAttribute("href"));
       if (target) {
         e.preventDefault();
-        // compute target top considering header height (approx 90)
-        const headerOffset = 90;
-        const topPos = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
-        window.scrollTo({ top: topPos, behavior: "smooth" });
+        window.scrollTo({
+          top: target.offsetTop - 90,
+          behavior: "smooth",
+        });
       }
     });
   });
 
-  // Close mobile menu on resize if moving to desktop
+  // Close menu on resize to desktop
   window.addEventListener("resize", () => {
     if (window.innerWidth >= 900 && menuOpen) closeMobileMenu();
   });
 
-  // Contact form mailto fallback
+  // Contact form → mailto
   const form = document.getElementById("contact-form");
   if (form) {
     form.addEventListener("submit", (e) => {
