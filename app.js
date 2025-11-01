@@ -1,82 +1,135 @@
-// minimal helpers
-const $ = s => document.querySelector(s);
-const $$ = s => Array.from(document.querySelectorAll(s));
+// app.js
+// Handles ribbon dropdowns, GSAP ScrollTrigger animations for programs & workshops,
+// mobile dropdown toggles and contact form basic behavior.
 
-// Ribbon: hide when scrolling down on small screens
-const ribbon = $('#floatingRibbon');
-let lastScroll = window.scrollY;
-window.addEventListener('scroll', () => {
-  const cur = window.scrollY;
-  if (cur > lastScroll && window.innerWidth < 900) {
-    ribbon.style.opacity = '0';
-    ribbon.style.pointerEvents = 'none';
-  } else {
-    ribbon.style.opacity = '1';
-    ribbon.style.pointerEvents = 'auto';
-  }
-  lastScroll = cur;
-});
+document.addEventListener('DOMContentLoaded', function () {
+  // Ribbon dropdown show/hide (desktop hover + click fallback)
+  document.querySelectorAll('.r-dropdown').forEach(drop => {
+    const menu = drop.querySelector('.r-menu');
+    drop.addEventListener('mouseenter', ()=> menu.style.display = 'block');
+    drop.addEventListener('mouseleave', ()=> menu.style.display = 'none');
 
-// Ribbon dropdown show on hover (desktop) - already CSS handles :hover. For mobile, toggle on click
-document.querySelectorAll('.ribbon-dropdown').forEach(dd => {
-  const btn = dd.querySelector('.ribbon-item');
-  const menu = dd.querySelector('.ribbon-menu');
-  btn.addEventListener('click', (e) => {
-    if (window.innerWidth < 900) {
-      e.preventDefault();
+    // mobile toggle
+    drop.querySelector('.r-label').addEventListener('click', (e)=>{
+      e.stopPropagation();
+      // close other menus
+      document.querySelectorAll('.r-menu').forEach(m => { if(m !== menu) m.style.display = 'none' });
       menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-    }
+    });
   });
-  document.addEventListener('click', (ev) => {
-    if (window.innerWidth < 900 && !dd.contains(ev.target)) {
-      menu.style.display = 'none';
-    }
-  });
-});
 
-// Program tiles: toggle active on mobile click; keyboard accessible
-$$('.program-tile').forEach(tile => {
-  tile.addEventListener('click', () => {
-    if (window.innerWidth < 900) tile.classList.toggle('active');
+  // close dropdowns when clicking outside
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.r-menu').forEach(m => m.style.display = 'none');
   });
-  tile.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') tile.classList.toggle('active');
-  });
-});
 
-// Intersection observer: big banners reveal
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(en => {
-    if (en.isIntersecting) {
-      en.target.classList.add('visible');
-    }
-  });
-}, {threshold:0.35});
-$$('.big-banner').forEach(el => io.observe(el));
-
-// reveal-step / workshop cards observer (stagger)
-const revealObs = new IntersectionObserver((entries, obs) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      obs.unobserve(entry.target);
-    }
-  });
-}, {threshold:0.25});
-
-$$('.reveal-step, .workshop-card, .reveal-item').forEach(el => revealObs.observe(el));
-
-// Demo form handling
-const form = $('#enquiryForm');
-if (form) {
-  form.addEventListener('submit', (e) => {
+  // ribbon home click scroll to top
+  document.querySelector('.r-home').addEventListener('click', (e)=>{
     e.preventDefault();
-    alert('Demo: message sent (client-side). Configure a real endpoint to receive enquiries.');
-    form.reset();
+    window.scrollTo({top:0, behavior:'smooth'});
   });
-}
 
-// Close ribbon menus on ESC
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') document.querySelectorAll('.ribbon-menu').forEach(m => m.style.display = 'none');
+  // internal ribbon links scroll
+  document.querySelectorAll('[data-target]').forEach(a=>{
+    a.addEventListener('click', (ev)=>{
+      ev.preventDefault();
+      const sel = a.getAttribute('data-target');
+      document.querySelector(sel).scrollIntoView({behavior:'smooth', block:'start'});
+      // hide menus
+      document.querySelectorAll('.r-menu').forEach(m => m.style.display = 'none');
+    });
+  });
+
+  // GSAP - scroll-based animations
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Programs: each panel becomes active when it reaches center
+    const panels = gsap.utils.toArray('.program-panel');
+    panels.forEach((panel, i) => {
+      // initial state: only first panel is active, others minimized
+      if (i === 0) {
+        panel.classList.remove('minimized'); // full
+      } else {
+        panel.classList.add('minimized');
+      }
+
+      ScrollTrigger.create({
+        trigger: panel,
+        start: "top center",
+        end: "bottom center",
+        onEnter: () => {
+          // make this full and minimize previous ones
+          panels.forEach((p,idx)=>{
+            if (p === panel) {
+              p.classList.remove('minimized');
+              p.style.opacity = 1;
+              p.style.transform = 'translateY(0px) scale(1)';
+            } else if (idx < i) {
+              p.classList.add('minimized');
+              p.style.opacity = 0.95;
+              p.style.transform = 'translateY(0px) scale(0.98)';
+            } else {
+              // after ones - default card state
+              p.classList.add('minimized');
+              p.style.opacity = 0.9;
+              p.style.transform = 'translateY(0px) scale(0.99)';
+            }
+          });
+        },
+        onEnterBack: () => {
+          // if scrolling up, restore previous accordingly
+          panels.forEach((p,idx)=>{
+            if (idx <= i) {
+              p.classList.remove('minimized');
+              p.style.opacity = 1;
+              p.style.transform = 'translateY(0px) scale(1)';
+            } else {
+              p.classList.add('minimized');
+            }
+          });
+        }
+      });
+    });
+
+    // Workshops: slide each in when near viewport
+    gsap.utils.toArray('.workshop').forEach((w, idx) => {
+      const fromX = (idx % 2 === 0) ? -120 : 120;
+      gsap.fromTo(w, {x: fromX, opacity: 0, y: 40}, {
+        x: 0, opacity: 1, y:0, duration: 0.8, ease: "power3.out",
+        scrollTrigger: {
+          trigger: w,
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        }
+      });
+    });
+
+    // minor hero animation
+    gsap.from('.hero-inner h1', {y:20, opacity:0, duration:0.9, ease: "power2.out", delay: 0.05});
+    gsap.from('.hero-inner p', {y:20, opacity:0, duration:0.9, ease: "power2.out", delay: 0.18});
+    gsap.from('.hero .btn-primary', {scale:0.98, opacity:0, duration:0.6, delay:0.28});
+  }
+
+  // Simple contact form submit (demo)
+  const form = document.getElementById('contactForm');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      // user feedback (demo)
+      const btn = form.querySelector('button[type="submit"]');
+      btn.innerText = 'Sending...';
+      setTimeout(()=>{ btn.innerText = 'Sent ✓'; form.reset(); setTimeout(()=>btn.innerText='Send Message', 1400); }, 900);
+    });
+  }
+
+  // Mobile: ensure dropdowns close on scroll to reduce clutter
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const sc = window.scrollY;
+    if (Math.abs(sc - lastScroll) > 20) {
+      document.querySelectorAll('.r-menu').forEach(m => m.style.display = 'none');
+      lastScroll = sc;
+    }
+  });
 });
