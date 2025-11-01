@@ -1,106 +1,95 @@
-// === Utilities ===
+// small helper
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-// Floating ribbon fade in on load + hide on quick scroll
-const ribbon = $('#floatingRibbon');
-let lastScroll = 0, ribbonHidden = false;
-function showRibbon(){ ribbon.classList.remove('hidden'); }
-function hideRibbon(){ ribbon.classList.add('hidden'); }
-
-window.addEventListener('load', () => {
-  setTimeout(showRibbon, 360); // subtle fade in
-});
-
-// Hide ribbon while scrolling fast down, show when idle or scrolling up
+// Floating ribbon: on small screens make dropdowns click -> toggle; hide on scroll down
+const ribbon = document.getElementById('floatingRibbon');
+let lastScroll = window.scrollY;
 window.addEventListener('scroll', () => {
   const cur = window.scrollY;
-  if (Math.abs(cur - lastScroll) > 40 && cur > lastScroll) {
-    // scrolling down quickly -> hide
-    hideRibbon();
-    ribbonHidden = true;
+  if (cur > lastScroll && window.innerWidth < 900) {
+    ribbon.style.opacity = '0'; ribbon.style.pointerEvents = 'none';
   } else {
-    // show when scroll up
-    showRibbon();
-    ribbonHidden = false;
+    ribbon.style.opacity = '1'; ribbon.style.pointerEvents = 'auto';
   }
   lastScroll = cur;
 });
 
-// === Dropdowns: make click-to-open on small screens ===
-const dropdowns = Array.from(document.querySelectorAll('.ribbon-dropdown'));
-dropdowns.forEach(dd => {
+// Dropdowns click behavior for mobile
+document.querySelectorAll('.ribbon-dropdown').forEach(dd => {
   const btn = dd.querySelector('.ribbon-item');
   const menu = dd.querySelector('.ribbon-menu');
-
-  // mobile: toggle on click
   btn.addEventListener('click', (e) => {
-    if (window.innerWidth <= 900) {
+    if (window.innerWidth < 900) {
       e.preventDefault();
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+      if (menu.style.display === 'block') menu.style.display = 'none';
+      else menu.style.display = 'block';
     }
   });
 
-  // close when clicking outside
+  // close on outside click
   document.addEventListener('click', (ev) => {
-    if (window.innerWidth <= 900 && !dd.contains(ev.target)) {
+    if (window.innerWidth < 900 && !dd.contains(ev.target)) {
       menu.style.display = 'none';
     }
   });
 });
 
-// Close ribbon dropdowns when user scrolls on mobile (requested)
-window.addEventListener('scroll', () => {
-  if (window.innerWidth <= 900) {
-    document.querySelectorAll('.ribbon-menu').forEach(m => m.style.display = 'none');
-  }
-});
-
-// === Programs tiles: on mobile tap reveal (toggle a class that shows description) ===
+// Programs tile: keep title visible; description reveals on hover; enable keyboard toggles
 $$('.program-tile').forEach(tile => {
-  tile.addEventListener('click', () => tile.classList.toggle('active'));
+  tile.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') tile.classList.toggle('active');
+  });
+  tile.addEventListener('click', () => {
+    if (window.innerWidth < 900) tile.classList.toggle('active');
+  });
 });
 
-// small CSS fallback to show tile details when .active (we rely on :hover in CSS)
-// Add class styles dynamically if needed:
-const style = document.createElement('style');
-style.innerHTML = `
-.program-tile.active .tile-desc { opacity:1; transform:translateY(0) }
-`;
-document.head.appendChild(style);
-
-// === Workshops: reveal one-by-one with IntersectionObserver ===
-const workshopCards = $$('.workshop-card');
-const seqObserver = new IntersectionObserver((entries) => {
+// IntersectionObserver for big banners (Add -> Send -> Learn) to reveal in sequence
+const bigItems = $$('.big-banner');
+const ioBig = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
-    } else {
-      entry.target.classList.remove('visible');
     }
   });
-}, { threshold: 0.25 });
+}, {threshold: 0.35});
+bigItems.forEach(b => ioBig.observe(b));
 
-workshopCards.forEach(card => seqObserver.observe(card));
+// Reveal items helper for workshops and other sections: staggered reveal
+const revealObserver = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // if card has reveal-step, add incremental delay
+      if (entry.target.classList.contains('reveal-step')) {
+        const siblings = Array.from(entry.target.parentElement.children);
+        const idx = siblings.indexOf(entry.target);
+        entry.target.style.transitionDelay = `${idx * 140}ms`;
+      }
+      obs.unobserve(entry.target);
+    }
+  });
+}, {threshold: 0.25});
 
-// === Contact form submit (demo only) ===
+// Observe workshop cards and any reveal-item
+$$('.reveal-step').forEach(el => revealObserver.observe(el));
+$$('.workshop-card').forEach(el => revealObserver.observe(el));
+$$('.reveal-item').forEach(el => revealObserver.observe(el));
+
+// Contact form demo submit
 const form = $('#enquiryForm');
 if (form) {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    // for now just show a lightweight toast
-    alert('Thanks — your enquiry is received (demo). Replace this with real backend submission.');
+    alert('Thank you — demo submission received. Wire the form to your backend as needed.');
     form.reset();
   });
 }
 
-// === Accessibility: keyboard open for ribbon dropdowns ===
-document.querySelectorAll('.ribbon-dropdown .ribbon-item').forEach(btn => {
-  btn.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      const menu = btn.parentElement.querySelector('.ribbon-menu');
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
-  });
+// Accessibility: close all ribbon menus on escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.ribbon-menu').forEach(m => m.style.display = 'none');
+  }
 });
