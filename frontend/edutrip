@@ -1,1 +1,26 @@
-json
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Edutrip • Curriculum-Linked Student Travel & Learning</title>
+  <meta name="description" content="Edutrip — experiential, curriculum-aligned student trips, SimpLearn expert sessions, and hands-on workshops. Transform learning beyond the classroom." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="theme-color" content="#0b3d91">
+</head>
+<body>
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Edutrip home">
+        <svg class="logo" width="46" height="46" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="1" y="4" width="22" height="16" rx="3" fill="#0b3d91"/>
+          <path d="M8 9l4 3 4-3" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 13v2c0 .5.4 1 1 1h6" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="brand-text">
+          <span class="brand-name">Edutrip</span>
+          <span class="brand-tag">Curriculum‑Linked Student Travel</span>
+        </div>
+      </a>
