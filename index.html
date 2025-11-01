@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
   <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-sV2vDLb4Cdd4u7SzJtT24sv0B6LTIJHNe6RxVb5LzJfUzEJGko7d9YhnzZGG+rfaDLcShtr3lL5bLPP5xjC5tw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Styles -->
   <link rel="stylesheet" href="./styles.css" />
@@ -20,7 +20,7 @@
 </head>
 <body>
 
-  <!-- Watermark -->
+  <!-- Background Watermark -->
   <div class="watermark">
     <img src="https://i.postimg.cc/RJJFxfGs/logo.png" alt="Edutrip watermark">
   </div>
@@ -40,16 +40,13 @@
         <ul>
           <li><a href="#programs">Programs</a></li>
           <li><a href="#about">About Us</a></li>
-          <li><a href="#workshops">Workshops</a></li>
           <li><a href="#plans">Plans</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
 
       <div class="burger">
-        <div></div>
-        <div></div>
-        <div></div>
+        <div></div><div></div><div></div>
       </div>
     </div>
   </header>
@@ -66,24 +63,24 @@
     <h2>Our Programs</h2>
     <div class="program-grid">
       <div class="program-card reveal">
-        <i class="fa-solid fa-graduation-cap program-icon"></i>
+        <i class="fa-solid fa-earth-asia program-icon"></i>
         <h4>Curriculum-Linked Trips</h4>
-        <p>Co-designed educational travel connecting classroom learning to real-world experiences.</p>
+        <p>Educational tours aligned with academic curriculum for experiential learning.</p>
       </div>
       <div class="program-card reveal">
-        <i class="fa-solid fa-chalkboard-user program-icon"></i>
+        <i class="fa-solid fa-person-chalkboard program-icon"></i>
         <h4>SimpLearn Sessions</h4>
-        <p>Interactive sessions led by industry experts focusing on innovation, STEM, and life skills.</p>
+        <p>Interactive, concept-driven classroom programs by experts and facilitators.</p>
       </div>
       <div class="program-card reveal">
-        <i class="fa-solid fa-flask program-icon"></i>
+        <i class="fa-solid fa-lightbulb program-icon"></i>
         <h4>Workshops & Maker Labs</h4>
-        <p>Creative workshops encouraging design thinking, experimentation, and teamwork.</p>
+        <p>Hands-on labs that bring innovation, creativity, and problem-solving to life.</p>
       </div>
       <div class="program-card reveal">
         <i class="fa-solid fa-chart-line program-icon"></i>
         <h4>Impact & StuCom</h4>
-        <p>Student communication and progress-tracking systems with measurable impact reports.</p>
+        <p>Analytics-based impact tracking and communication support for schools.</p>
       </div>
     </div>
   </section>
@@ -92,10 +89,13 @@
   <section class="about" id="about">
     <h2>About Us</h2>
     <p>
-      <strong>Edutrip</strong> is a Hyderabad-based organization redefining how students learn by connecting classrooms to real-world environments. We design curriculum-aligned journeys that nurture curiosity, creativity, and collaboration among students.
+      <strong>Edutrip</strong> is a Hyderabad-based organization transforming education through experiential learning. 
+      We connect classroom teaching with real-world exploration, empowering students through structured, interactive programs.
     </p>
     <p>
-      From field-based science explorations to heritage residencies and innovation bootcamps, every Edutrip experience is guided by educators and mentors. We transform <em>“learning by reading”</em> into <em>“learning by doing.”</em>
+      Our initiatives combine curriculum relevance with engaging, hands-on learning — 
+      from educational trips and expert-led sessions to maker workshops and innovation bootcamps. 
+      We focus on developing curiosity, creativity, and collaboration among learners.
     </p>
   </section>
 
@@ -107,17 +107,19 @@
         <h3>Gold Plan</h3>
         <ul>
           <li>3 Educational Trips</li>
-          <li>3 SimpLearn Sessions</li>
-          <li>2 Workshops & Assessments</li>
+          <li>2 SimpLearn Sessions</li>
+          <li>1 Workshop Module</li>
         </ul>
         <a href="#contact" class="plan-btn">Request Pricing</a>
       </div>
-      <div class="plan-card reveal">
+      <div class="plan-card highlight reveal">
+        <div class="tag">Recommended</div>
         <h3>Platinum Plan</h3>
         <ul>
-          <li>Everything in Gold</li>
-          <li>+1 Educational Trip</li>
-          <li>Exclusive Annual Smart Fest</li>
+          <li>4 Educational Trips</li>
+          <li>4 SimpLearn Sessions</li>
+          <li>3 Workshops + Assessments</li>
+          <li>Annual Learning Report</li>
         </ul>
         <a href="#contact" class="plan-btn">Request Pricing</a>
       </div>
@@ -125,8 +127,9 @@
         <h3>Diamond Plan</h3>
         <ul>
           <li>Everything in Platinum</li>
-          <li>Access to Real-World Skill Courses</li>
-          <li>Certificates & Career Guidance</li>
+          <li>Priority Support</li>
+          <li>Innovation Bootcamps</li>
+          <li>Certification for Students</li>
         </ul>
         <a href="#contact" class="plan-btn">Request Pricing</a>
       </div>
@@ -136,21 +139,23 @@
   <!-- Contact -->
   <section class="contact" id="contact">
     <h2>Contact Us</h2>
-    <form id="contact-form">
-      <input type="text" placeholder="Organization" required />
-      <input type="text" placeholder="Contact Person" required />
-      <input type="email" placeholder="Email" required />
-      <input type="tel" placeholder="Phone" required />
-      <textarea rows="4" placeholder="Tell us what you need..." required></textarea>
-      <button type="submit">Send Enquiry</button>
-    </form>
+    <div class="contact-box">
+      <form id="contact-form">
+        <input type="text" placeholder="Organization" required />
+        <input type="text" placeholder="Contact Person" required />
+        <input type="email" placeholder="Email" required />
+        <input type="tel" placeholder="Phone" required />
+        <textarea rows="4" placeholder="Tell us what you need..." required></textarea>
+        <button type="submit">Send Enquiry</button>
+      </form>
 
-    <div class="contact-details">
-      <h3>Let's Connect</h3>
-      <p><i class="fa-solid fa-phone"></i> +91 81792 88678</p>
-      <p><i class="fa-solid fa-envelope"></i> founders@edutripindia.com</p>
-      <p><i class="fa-solid fa-location-dot"></i> Hyderabad, India</p>
-      <p>We typically respond within 24 hours on working days.</p>
+      <div class="contact-details">
+        <h3>Let's Connect</h3>
+        <p><i class="fa-solid fa-phone"></i> +91 81792 88678</p>
+        <p><i class="fa-solid fa-envelope"></i> founders@edutripindia.com</p>
+        <p><i class="fa-solid fa-location-dot"></i> Hyderabad, India</p>
+        <p>We typically respond within 24 hours on working days.</p>
+      </div>
     </div>
   </section>
 
@@ -173,7 +178,7 @@
         <h4>Company</h4>
         <ul>
           <li><a href="#about">About Us</a></li>
-          <li><a href="#founders">Founders</a></li>
+          <li><a href="#plans">Plans</a></li>
         </ul>
       </div>
     </div>
