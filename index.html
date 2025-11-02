@@ -50,14 +50,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.6s ease, transform 0.6s ease;
-  will-change: opacity, transform;
-}
-
-.logo.hidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-40px) scale(0.9);
 }
 
 .logo img {
@@ -1406,7 +1398,10 @@ gsap.to('.hero-title', { opacity: 1, y: 0, duration: 1.2, delay: 0.9, ease: 'pow
 gsap.to('.hero-subtitle', { opacity: 1, y: 0, duration: 1, delay: 1.2, ease: 'power3.out' });
 gsap.to('.hero-buttons', { opacity: 1, y: 0, duration: 1, delay: 1.5, ease: 'power3.out' });
 
-gsap.fromTo('.logo', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)', delay: 0.3 });
+gsap.fromTo('.logo', 
+  { opacity: 0, y: -50 }, 
+  { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.3 }
+);
 
 window.addEventListener('scroll', () => {
   const logo = document.querySelector('.logo');
@@ -1414,9 +1409,23 @@ window.addEventListener('scroll', () => {
   const hideThreshold = 200;
   
   if (scrollPos > hideThreshold) {
-    logo.classList.add('hidden');
+    gsap.to(logo, {
+      opacity: 0,
+      y: -50,
+      duration: 0.5,
+      ease: 'power2.inOut',
+      onComplete: () => {
+        logo.style.pointerEvents = 'none';
+      }
+    });
   } else {
-    logo.classList.remove('hidden');
+    logo.style.pointerEvents = 'auto';
+    gsap.to(logo, {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      ease: 'power2.inOut'
+    });
   }
 });
 
