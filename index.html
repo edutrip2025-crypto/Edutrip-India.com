@@ -54,7 +54,8 @@ body {
 .logo.hidden {
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-20px);
+  transform: translateY(-30px);
+  visibility: hidden;
 }
 
 .logo img {
@@ -1318,20 +1319,17 @@ gsap.to('.hero-buttons', { opacity: 1, y: 0, duration: 1, delay: 1.5, ease: 'pow
 gsap.fromTo('.logo', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)', delay: 0.3 });
 
 // Logo hide on scroll
-let logoScrollHandler = () => {
+window.addEventListener('scroll', () => {
   const logo = document.querySelector('.logo');
   const scrollPos = window.scrollY;
-  const hideThreshold = 300;
+  const hideThreshold = 200;
   
   if (scrollPos > hideThreshold) {
     logo.classList.add('hidden');
   } else {
     logo.classList.remove('hidden');
   }
-};
-
-window.addEventListener('scroll', logoScrollHandler);
-logoScrollHandler();
+});
 
 gsap.to('.hero-content', {
   y: 250,
