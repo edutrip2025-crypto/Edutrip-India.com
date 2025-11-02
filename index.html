@@ -48,7 +48,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.logo.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-20px);
 }
 
 .logo img {
@@ -508,7 +514,8 @@ body {
 .about-image img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: center 35%;
   display: block;
 }
 
@@ -1312,26 +1319,21 @@ gsap.to('.hero-buttons', { opacity: 1, y: 0, duration: 1, delay: 1.5, ease: 'pow
 
 gsap.fromTo('.logo', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)', delay: 0.3 });
 
-// Logo fade on scroll
-let logoFadeHandler = () => {
+// Logo hide/show on scroll with animation
+let logoScrollHandler = () => {
   const logo = document.querySelector('.logo');
   const scrollPos = window.scrollY;
-  const fadeStart = 200;
-  const fadeEnd = 800;
+  const hideThreshold = 300;
   
-  if (scrollPos <= fadeStart) {
-    logo.style.opacity = '1';
-  } else if (scrollPos >= fadeEnd) {
-    logo.style.opacity = '0.2';
+  if (scrollPos > hideThreshold) {
+    logo.classList.add('hidden');
   } else {
-    const opacity = 1 - ((scrollPos - fadeStart) / (fadeEnd - fadeStart)) * 0.8;
-    logo.style.opacity = opacity.toString();
+    logo.classList.remove('hidden');
   }
 };
 
-window.addEventListener('scroll', logoFadeHandler);
-// Also call once on load
-logoFadeHandler();
+window.addEventListener('scroll', logoScrollHandler);
+logoScrollHandler();
 
 gsap.to('.hero-content', {
   y: 250,
