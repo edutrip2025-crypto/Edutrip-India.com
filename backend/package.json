@@ -1,0 +1,42 @@
+// FILE 1: package.json
+// Create this file in your project root
+{
+  "name": "edutrip-backend",
+  "version": "1.0.0",
+  "description": "Edutrip contact form backend",
+  "main": "api/contact.js",
+  "scripts": {
+    "test": "echo \"No tests specified\""
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.7"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}
+
+// FILE 2: vercel.json
+// Create this file in your project root
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    }
+  ]
+}
+
+// FILE 3: .gitignore (optional but recommended)
+// Create this file in your project root
+node_modules/
+.env
+.vercel
+.DS_Store
