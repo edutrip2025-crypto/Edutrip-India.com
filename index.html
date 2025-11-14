@@ -546,21 +546,6 @@ body {
   box-shadow: 0 20px 60px rgba(14, 165, 233, 0.15);
 }
 
-.founder-photo {
-  height: 200px;
-  width: 200px;
-  margin: 0 auto 28px;
-  border-radius: 50%;
-  border: 4px solid rgba(14, 165, 233, 0.2);
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(6, 182, 212, 0.05));
-  transition: all 0.4s ease;
-}
-
-.founder-card:hover .founder-photo {
-  border-color: rgba(14, 165, 233, 0.4);
-  transform: scale(1.05);
-}
-
 .founder-card h4 {
   color: #0a1628;
   margin-bottom: 12px;
@@ -831,6 +816,12 @@ body {
 .submit-btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 14px 40px rgba(14, 165, 233, 0.35);
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .footer {
@@ -1240,13 +1231,11 @@ body {
   </div>
   <div class="founders-grid">
     <div class="founder-card">
-      <div class="founder-photo"></div>
       <h4>Raghavendra Prasad</h4>
       <p class="role">Founder & CEO</p>
       <p>Passionate educator dedicated to creating transformative learning experiences that bridge classroom knowledge with real-world applications.</p>
     </div>
     <div class="founder-card">
-      <div class="founder-photo"></div>
       <h4>Koteswara Rao</h4>
       <p class="role">Co-Founder & COO</p>
       <p>Operations expert committed to scaling impactful educational experiences and making experiential learning accessible across India.</p>
@@ -1517,10 +1506,58 @@ document.addEventListener('click', (e) => {
   }
 });
 
-function handleSubmit(e) {
+async function handleSubmit(e) {
   e.preventDefault();
-  alert('Message sent successfully! We\'ll get back to you soon.');
-  e.target.reset();
+  
+  const form = e.target;
+  const submitBtn = form.querySelector('.submit-btn');
+  const originalText = submitBtn.textContent;
+  
+  // Get form data
+  const formData = {
+    name: form.querySelector('input[placeholder="Your Name"]').value,
+    email: form.querySelector('input[placeholder="Your Email"]').value,
+    school: form.querySelector('input[placeholder="School Name"]').value,
+    phone: form.querySelector('input[placeholder="Phone Number"]').value,
+    message: form.querySelector('textarea').value
+  };
+  
+  // Disable button and show loading state
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
+  submitBtn.style.opacity = '0.7';
+  submitBtn.style.cursor = 'not-allowed';
+  
+  try {
+    // 👇 REPLACE THIS URL WITH YOUR VERCEL URL AFTER DEPLOYMENT
+    const response = await fetch('https://your-project-name.vercel.app/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok && data.success) {
+      // Success message
+      alert('✅ Message sent successfully! We\'ll get back to you within 24-48 hours.');
+      form.reset();
+    } else {
+      // Error message from server
+      alert('❌ ' + (data.message || 'Something went wrong. Please try again.'));
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('❌ Failed to send message. Please check your internet connection and try again.');
+  } finally {
+    // Re-enable button and restore state
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+    submitBtn.style.opacity = '1';
+    submitBtn.style.cursor = 'pointer';
+  }
 }
 </script>
 
