@@ -984,6 +984,7 @@ body {
 @media (max-width: 768px) {
   /* Founders Mobile Layout */
   .founders-horizontal-container {
+    /* Ensure container grows with content */
     height: auto;
     min-height: 500px;
   }
