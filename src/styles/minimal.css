@@ -984,9 +984,18 @@ body {
 @media (max-width: 768px) {
   /* Founders Mobile Layout */
   .founders-horizontal-container {
-    /* Ensure container grows with content */
     height: auto;
-    min-height: 500px;
+    min-height: 0;
+  }
+
+  .founders-card-closed-horizontal {
+    position: relative;
+    height: 400px;
+    width: 100%;
+  }
+
+  .founders-horizontal-container.open .founders-card-closed-horizontal {
+    display: none;
   }
   
   .founders-split-horizontal {
@@ -1000,20 +1009,6 @@ body {
   
   .founders-horizontal-container.open .founders-split-horizontal {
     display: flex;
-  }
-
-  /* Fix Founders Hover on Mobile - Disable hover effect so it relies on click */
-  .founders-horizontal-container:hover .founders-card-closed-horizontal {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-  }
-  
-  /* Ensure correct state when open */
-  .founders-horizontal-container.open .founders-card-closed-horizontal {
-    opacity: 0;
-    transform: scale(1.5);
-    pointer-events: none;
   }
   
   .founder-panel-horizontal {
@@ -1117,11 +1112,12 @@ body {
 
   .idea-statement {
     position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
     width: 90% !important;
-    margin: 20px auto;
+    max-width: none !important;
+    margin: 20px auto !important;
     display: none;
   }
 

@@ -64,7 +64,7 @@
 <!-- Font Awesome for Social Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<link rel="stylesheet" href="src/styles/minimal.css?v=2">
+<link rel="stylesheet" href="src/styles/minimal.css?v=3">
 <style>
 /* Success Modal & Animation */
 .success-modal {
@@ -881,9 +881,14 @@ async function handleSubmit(e) {
     const maxWidth = 550;
     
     // Set width within bounds, allowing natural wrapping for very long text
-    const optimalWidth = Math.max(minWidth, Math.min(maxWidth, estimatedWidth));
-    ideaStatement.style.width = optimalWidth + 'px';
-    ideaStatement.style.maxWidth = maxWidth + 'px';
+    if (window.innerWidth > 768) {
+      const optimalWidth = Math.max(minWidth, Math.min(maxWidth, estimatedWidth));
+      ideaStatement.style.width = optimalWidth + 'px';
+      ideaStatement.style.maxWidth = maxWidth + 'px';
+    } else {
+      ideaStatement.style.width = '';
+      ideaStatement.style.maxWidth = '';
+    }
   }
   
   function startStatementRotation() {
