@@ -1000,6 +1000,20 @@ body {
   .founders-horizontal-container.open .founders-split-horizontal {
     display: flex;
   }
+
+  /* Fix Founders Hover on Mobile - Disable hover effect so it relies on click */
+  .founders-horizontal-container:hover .founders-card-closed-horizontal {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  
+  /* Ensure correct state when open */
+  .founders-horizontal-container.open .founders-card-closed-horizontal {
+    opacity: 0;
+    transform: scale(1.5);
+    pointer-events: none;
+  }
   
   .founder-panel-horizontal {
     padding: 40px 20px;
@@ -1089,24 +1103,30 @@ body {
 
   /* Mobile Compass & About */
   .compass-container {
-    height: 320px;
+    height: auto;
+    min-height: 350px;
+    padding-bottom: 30px;
   }
 
   .compass-wrapper {
     width: 200px;
     height: 200px;
+    flex-shrink: 0;
   }
 
   .idea-statement {
-    left: 50%;
-    top: 105%; /* Position below compass */
-    transform: translateX(-50%) scale(0.9);
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
     width: 90% !important;
-    margin-top: 0;
+    margin: 20px auto;
+    display: none;
   }
 
   .compass-toggle:checked ~ .idea-statement {
-    transform: translateX(-50%) scale(1);
+    transform: none;
+    display: block;
   }
 
   /* Mobile Footer */
