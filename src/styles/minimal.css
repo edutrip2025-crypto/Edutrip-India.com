@@ -1126,6 +1126,113 @@ body {
     display: block !important;
   }
 
+  /* Mobile Offerings - Accordion (replaces cards) */
+  .offerings-mobile {
+    display: flex !important;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 5px;
+    margin-top: 20px;
+  }
+
+  .offerings-mobile .offering-accordion-item {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+  }
+
+  .offerings-mobile .offering-accordion-item[open] {
+    border-color: #0ea5e9;
+    box-shadow: 0 4px 16px rgba(14, 165, 233, 0.15);
+  }
+
+  .offerings-mobile .offering-accordion-item summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    cursor: pointer;
+    list-style: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    min-height: 56px;
+  }
+
+  .offerings-mobile .offering-accordion-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .offerings-mobile .accordion-icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 10px;
+  }
+
+  .offerings-mobile .accordion-icon img {
+    max-width: 36px;
+    max-height: 36px;
+    object-fit: contain;
+  }
+
+  .offerings-mobile .accordion-title {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 600;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .offerings-mobile .accordion-chevron {
+    flex-shrink: 0;
+    font-size: 14px;
+    color: #666;
+    transition: transform 0.3s ease;
+  }
+
+  .offerings-mobile .offering-accordion-item[open] .accordion-chevron {
+    transform: rotate(180deg);
+    color: #0ea5e9;
+  }
+
+  .offerings-mobile .accordion-content {
+    padding: 0 18px 18px 18px;
+    animation: accordionSlide 0.3s ease;
+  }
+
+  @keyframes accordionSlide {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .offerings-mobile .accordion-summary {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .offerings-mobile .accordion-details {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+  }
+
   /* New Separate Mobile Structure */
   .founders-mobile-view {
     display: flex;

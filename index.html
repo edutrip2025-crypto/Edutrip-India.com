@@ -378,8 +378,8 @@
               <p>Comprehensive educational solutions for modern learning</p>
             </div>
 
-            <!-- Modern Interactive Grid Layout -->
-            <div class="offerings-grid-container">
+            <!-- Desktop: Card Grid Layout -->
+            <div class="offerings-grid-container desktop-only">
               <div class="offerings-grid">
                 <div class="offering-grid-card" data-offering="1">
                   <div class="offering-card-header">
@@ -493,6 +493,65 @@
                   </div>
                 </div>
               </div>
+            </div>
+
+            <!-- Mobile: Accordion Layout (touch-friendly) -->
+            <div class="offerings-mobile mobile-only">
+              <details class="offering-accordion-item">
+                <summary>
+                  <span class="accordion-icon"><img src="./edutrip-logo.png" alt="Edutrip" loading="lazy"></span>
+                  <span class="accordion-title">Curriculum Linked Trips</span>
+                  <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+                </summary>
+                <div class="accordion-content">
+                  <p class="accordion-summary">Co-designed experiential trips connecting classroom topics to real-world places.</p>
+                  <p class="accordion-details">Students explore museums, historical sites, science centers, and natural environments while learning alongside expert guides. Our curriculum-linked trips align with educational standards.</p>
+                </div>
+              </details>
+              <details class="offering-accordion-item">
+                <summary>
+                  <span class="accordion-icon"><img src="./assets/simplearn.png" alt="SimpLearn" loading="lazy"></span>
+                  <span class="accordion-title">SimpLearn Sessions</span>
+                  <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+                </summary>
+                <div class="accordion-content">
+                  <p class="accordion-summary">Interactive sessions led by industry experts focusing on STEM and design thinking.</p>
+                  <p class="accordion-details">Hands-on learning that simplifies complex concepts through engaging demonstrations and activities.</p>
+                </div>
+              </details>
+              <details class="offering-accordion-item">
+                <summary>
+                  <span class="accordion-icon"><img src="./assets/sporteen.png?v=20251223040736" alt="SporTeen" loading="lazy"></span>
+                  <span class="accordion-title">SporTeen Sports Events</span>
+                  <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+                </summary>
+                <div class="accordion-content">
+                  <p class="accordion-summary">Comprehensive sports events and competitions promoting physical fitness and teamwork.</p>
+                  <p class="accordion-details">Inter-school tournaments and skill development workshops fostering sportsmanship and leadership.</p>
+                </div>
+              </details>
+              <details class="offering-accordion-item">
+                <summary>
+                  <span class="accordion-icon"><img src="./assets/smarti.png" alt="Smarti" loading="lazy"></span>
+                  <span class="accordion-title">Smarti Assessments</span>
+                  <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+                </summary>
+                <div class="accordion-content">
+                  <p class="accordion-summary">Intelligent assessment systems for comprehensive evaluation of student learning outcomes.</p>
+                  <p class="accordion-details">Actionable insights into student performance, learning patterns, and educational effectiveness.</p>
+                </div>
+              </details>
+              <details class="offering-accordion-item">
+                <summary>
+                  <span class="accordion-icon"><img src="./assets/init_logo.png" alt="Init App" loading="lazy"></span>
+                  <span class="accordion-title">Init Application</span>
+                  <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+                </summary>
+                <div class="accordion-content">
+                  <p class="accordion-summary">Innovative application platform designed to streamline educational processes.</p>
+                  <p class="accordion-details">From attendance tracking to progress monitoring—intuitive tools for modern education management.</p>
+                </div>
+              </details>
             </div>
 
             <!-- OLD CAROUSEL CODE (COMMENTED FOR EASY REVERT) -->
@@ -675,7 +734,6 @@
               <div class="founder-mobile-inner">
                 <div class="founder-mobile-front">
                   <h3>Raghavendra Prasad</h3>
-                  <span class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Tap to Reveal</span>
                 </div>
                 <div class="founder-mobile-back">
                   <div class="founder-img-wrapper">
@@ -694,7 +752,6 @@
               <div class="founder-mobile-inner">
                 <div class="founder-mobile-front">
                   <h3>Koteswara Rao</h3>
-                  <span class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Tap to Reveal</span>
                 </div>
                 <div class="founder-mobile-back">
                   <div class="founder-img-wrapper">
