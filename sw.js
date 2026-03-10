@@ -1,8 +1,8 @@
-const CACHE_NAME = 'edutrip-cache-v3';
+const CACHE_NAME = 'edutrip-cache-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './src/styles/minimal.css',
+  './src/styles/minimal.css?v=20260311-2',
   '/edutrip-logo.png',
   './assets/india-map-icon.png',
   './assets/tech-icon.png',
@@ -37,14 +37,34 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
-        // Only cache successful GET requests
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic' && event.request.method === 'GET') {
+  const request = event.request;
+  const isCriticalAsset = request.mode === 'navigate' ||
+    request.destination === 'style' ||
+    request.destination === 'script';
+
+  if (isCriticalAsset) {
+    event.respondWith(
+      fetch(request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic' && request.method === 'GET') {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
+            cache.put(request, responseToCache);
+          });
+        }
+        return networkResponse;
+      }).catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  event.respondWith(
+    caches.match(request).then((cachedResponse) => {
+      const fetchPromise = fetch(request).then((networkResponse) => {
+        // Only cache successful GET requests
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic' && request.method === 'GET') {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, responseToCache);
           });
         }
         return networkResponse;
