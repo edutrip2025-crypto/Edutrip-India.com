@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Edutrip India website - Static HTML site",
   "scripts": {
-    "dev": "npx http-server . -p 8080 -o",
-    "start": "npx http-server . -p 8080 -o"
+    "dev": "npx http-server . -p 304 -o",
+    "start": "npx http-server . -p 304 -o"
   },
   "keywords": [
     "edutrip",

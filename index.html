@@ -73,6 +73,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="dns-prefetch" href="https://api.edutripindia.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
 
   <!-- Structured Data (JSON-LD) -->
   <script type="application/ld+json">
@@ -231,7 +232,9 @@
   </style>
 </head>
 
-<body>
+<body data-theme="ocean">
+
+  <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress-bar"></span></div>
 
   <!-- Shooting Stars Background -->
   <div class="shooting-stars" id="shooting-stars"></div>
@@ -248,7 +251,7 @@
       const video = document.getElementById('bg-video');
       if (video) {
         // Set styles immediately
-        video.style.cssText = 'position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; object-fit: cover !important; z-index: -1 !important; opacity: 0.3 !important; pointer-events: none !important; display: block !important; visibility: visible !important; background: transparent !important;';
+        video.style.cssText = 'position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; object-fit: cover !important; z-index: -1 !important; opacity: 0 !important; pointer-events: none !important; display: block !important; visibility: visible !important; background: transparent !important;';
 
         // Try to play video
         const playPromise = video.play();
@@ -307,7 +310,7 @@
     <!-- Pages Container for Sticky Scroll -->
     <div class="pages-container">
       <!-- Page 1: Home -->
-      <section id="home" class="page">
+      <section id="home" class="page" data-theme="ocean">
         <div class="logo">
           <img src="edutrip-logo.png" alt="Edutrip">
         </div>
@@ -328,7 +331,7 @@
       </section>
 
       <!-- Page 2: The Learning Gap (Problem/Solution) -->
-      <section id="learning-gap" class="page fade-in-up">
+      <section id="learning-gap" class="page fade-in-up" data-theme="sunset">
         <div class="page-content">
           <div class="section-header">
             <h2>The Learning Gap</h2>
@@ -370,7 +373,7 @@
 
       <!-- Page 3: Our Offerings with Carousel -->
 
-      <section id="offerings" class="page">
+      <section id="offerings" class="page" data-theme="mint">
         <div class="page-content">
           <div class="offerings-wrapper">
             <div class="offerings-header">
@@ -448,7 +451,7 @@
                   </div>
                 </div>
 
-                <div class="offering-grid-card reveal-3d" data-offering="4">
+                <div class="offering-grid-card" data-offering="4">
                   <div class="offering-card-header">
                     <div class="offering-logo-wrapper">
                       <img src="./assets/smarti.png" alt="Smarti Logo" loading="lazy">
@@ -471,7 +474,7 @@
                   </div>
                 </div>
 
-                <div class="offering-grid-card reveal-3d" data-offering="5">
+                <div class="offering-grid-card" data-offering="5">
                   <div class="offering-card-header">
                     <div class="offering-logo-wrapper">
                       <img src="./assets/init_logo.png" alt="Init Application Logo" loading="lazy">
@@ -568,13 +571,13 @@
       </section>
 
       <!-- Page 3: About -->
-      <section id="about" class="page">
+      <section id="about" class="page" data-theme="lavender">
         <div class="page-content">
           <div class="section-header">
             <h2>About Edutrip</h2>
             <p>Redefining education through real-world experiences</p>
           </div>
-          <div class="about-wrapper">
+          <div class="about-wrapper" data-scroll-enter>
             <div class="about-content">
               <h3>Building the Future of Learning</h3>
               <p><strong>Edutrip</strong> is a Hyderabad-based experiential learning organization redefining education
@@ -597,15 +600,97 @@
         </div>
       </section>
 
+      <!-- Page 4: Trip Gallery -->
+      <section id="trip-gallery" class="page" data-theme="coral">
+        <div class="page-content">
+          <div class="section-header">
+            <h2>Educational Trip Gallery</h2>
+            <p>Moments from real journeys where curiosity turns into learning</p>
+          </div>
+
+          <div class="trip-gallery-shell fade-in-up">
+            <div class="trip-carousel-shell">
+              <button class="trip-carousel-nav prev" type="button" aria-label="Previous trip photo">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+
+              <div class="trip-carousel-viewport">
+                <div class="trip-carousel-track" id="trip-carousel-track">
+                  <button class="trip-card gallery-item" type="button"
+                data-src="assets/trip_photo3.JPG"
+                data-title="Fun in the Trip"
+                data-caption="Students enjoying memorable moments during the educational trip.">
+                    <img src="assets/trip_photo3.JPG" alt="Students during educational trip" loading="lazy">
+                    <span class="trip-overlay">
+                      <strong>Fun in the Trip</strong>
+                    </span>
+                  </button>
+
+                  <button class="trip-card gallery-item" type="button"
+                data-src="assets/trip_photo1.JPG"
+                data-title="Immersive Campus Visit"
+                data-caption="A close-up look at applied learning in action.">
+                    <img src="assets/trip_photo1.JPG" alt="Educational trip activity" loading="lazy">
+                    <span class="trip-overlay">
+                      <strong>Immersive Campus Visit</strong>
+                    </span>
+                  </button>
+
+                  <button class="trip-card gallery-item" type="button"
+                data-src="assets/trip_photo2.JPG"
+                data-title="Peer Collaboration Moments"
+                data-caption="Team learning, discussion, and on-ground discovery.">
+                    <img src="assets/trip_photo2.JPG" alt="Students collaborating during a trip" loading="lazy">
+                    <span class="trip-overlay">
+                      <strong>Peer Collaboration Moments</strong>
+                    </span>
+                  </button>
+
+                  <button class="trip-card gallery-item" type="button"
+                data-src="assets/trip_photo.JPG"
+                data-title="On-Ground Discovery Trail"
+                data-caption="Exploration-based learning that connects concepts to lived environments.">
+                    <img src="assets/trip_photo.JPG" alt="Students on educational discovery trail" loading="lazy">
+                    <span class="trip-overlay">
+                      <strong>On-Ground Discovery Trail</strong>
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <button class="trip-carousel-nav next" type="button" aria-label="Next trip photo">
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+            <div class="trip-carousel-dots" id="trip-carousel-dots" aria-label="Trip photo slides"></div>
+
+            <div class="trip-gallery-stats">
+              <div class="trip-stat">
+                <span class="trip-stat-value">100%</span>
+                <span class="trip-stat-label">Experiential Learning</span>
+              </div>
+              <div class="trip-stat">
+                <span class="trip-stat-value">Curriculum</span>
+                <span class="trip-stat-label">Mapped Journeys</span>
+              </div>
+              <div class="trip-stat">
+                <span class="trip-stat-value">Real World</span>
+                <span class="trip-stat-label">Skill Exposure</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Page 4: Plans -->
-      <section id="plans" class="page">
+      <section id="plans" class="page" data-theme="coral">
         <div class="page-content">
           <div class="section-header">
             <h2>Choose Your Plan</h2>
             <p>Flexible packages designed for your school's needs</p>
           </div>
           <div class="plans-grid">
-            <div class="plan-card">
+            <div class="plan-card reveal-side from-left">
               <h3 class="plan-name">Gold Plan</h3>
               <p class="plan-price">Essential Package</p>
               <ul class="plan-features">
@@ -617,7 +702,7 @@
               <button onclick="selectPlan('Gold Plan')">Request Pricing</button>
             </div>
 
-            <div class="plan-card">
+            <div class="plan-card reveal-side from-right">
               <h3 class="plan-name">Platinum Plan</h3>
               <p class="plan-price">Most Popular</p>
               <ul class="plan-features">
@@ -631,7 +716,7 @@
               <button onclick="selectPlan('Platinum Plan')">Request Pricing</button>
             </div>
 
-            <div class="plan-card">
+            <div class="plan-card reveal-side from-left">
               <h3 class="plan-name">Diamond Plan</h3>
               <p class="plan-price">Premium Package</p>
               <ul class="plan-features">
@@ -649,13 +734,13 @@
       </section>
 
       <!-- Page 5: Our Vision (Investors) -->
-      <section id="vision" class="vision-section fade-in-up">
+      <section id="vision" class="vision-section fade-in-up" data-theme="dawn">
         <div class="vision-header">
           <h2>Building Tomorrow's Education</h2>
           <p>We are a fast-growing startup on a mission to democratize experiential learning across India.</p>
         </div>
         <div class="vision-grid">
-          <div class="vision-card stagger-delay-1">
+          <div class="vision-card stagger-delay-1 reveal-side from-right">
             <div class="vision-icon">
               <img src="assets/india-map-icon.png" alt="India Map"
                 style="width: 50px; height: 50px; object-fit: contain;">
@@ -664,7 +749,7 @@
             <p>Scaling our operations to tier-1 and tier-2 cities, bringing world-class educational trips to every
               student.</p>
           </div>
-          <div class="vision-card stagger-delay-2">
+          <div class="vision-card stagger-delay-2 reveal-side from-left">
             <div class="vision-icon">
               <img src="assets/tech-icon.png" alt="Tech" style="width: 40px; height: 40px; object-fit: contain;">
             </div>
@@ -672,7 +757,7 @@
             <p>Leveraging our <strong>Init App</strong> and <strong>Smarti</strong> AI to provide data-driven insights
               into student growth and engagement.</p>
           </div>
-          <div class="vision-card stagger-delay-3">
+          <div class="vision-card stagger-delay-3 reveal-side from-right">
             <div class="vision-icon"><i class="fa-solid fa-handshake"></i></div>
             <h3>Strategic Partnerships</h3>
             <p>Collaborating with leading institutions and industry experts to curate exclusive, high-impact learning
@@ -683,7 +768,7 @@
 
       <!-- Page 6: Founders -->
 
-      <section id="founders" class="page">
+      <section id="founders" class="page" data-theme="sage">
         <div class="page-content">
           <div class="section-header">
             <h2>Meet Our Founders</h2>
@@ -770,7 +855,7 @@
       </section>
 
       <!-- Page 6: Contact -->
-      <section id="contact" class="page">
+      <section id="contact" class="page" data-theme="mist">
         <div class="page-content">
           <div class="section-header">
             <h2>Contact Us</h2>
@@ -789,9 +874,7 @@
                   <input type="tel" name="phone" placeholder="Phone Number">
                 </div>
                 <div class="form-row">
-                  <select name="inquiry_type"
-                    style="width: 100%; padding: 14px 18px; border: 1px solid #000; border-radius: 4px; font-size: 15px; background: #fff; color: #333;"
-                    required>
+                  <select name="inquiry_type" class="contact-select" required>
                     <option value="" disabled selected>Nature of Inquiry</option>
                     <option value="School Enquiry">School Enquiry</option>
                     <option value="Investor">Investor / Funding Opportunity</option>
@@ -806,6 +889,16 @@
 
             <div class="contact-info">
               <h3>Let's Connect</h3>
+              <div class="contact-highlights">
+                <div class="highlight-item">
+                  <strong>Response Time</strong>
+                  <span>Within 24 Hours</span>
+                </div>
+                <div class="highlight-item">
+                  <strong>Best For</strong>
+                  <span>School Partnerships, Investors, Strategic Collaborations</span>
+                </div>
+              </div>
               <div class="contact-list">
                 <div class="contact-item">
                   <strong>Our Location</strong>
@@ -829,6 +922,10 @@
                     </a>
                   </div>
                 </div>
+              </div>
+              <div class="contact-cta-row">
+                <a href="mailto:founders@edutripindia.com" class="contact-cta-btn">Email Team</a>
+                <a href="tel:+918179288678" class="contact-cta-btn">Call Now</a>
               </div>
             </div>
           </div>
@@ -893,6 +990,24 @@
       </div>
     </div>
 
+    <!-- Trip Gallery Lightbox -->
+    <div id="trip-lightbox" class="trip-lightbox" aria-hidden="true">
+      <button class="trip-lightbox-close" type="button" aria-label="Close photo viewer">&times;</button>
+      <button class="trip-lightbox-nav prev" type="button" aria-label="Previous photo">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <figure class="trip-lightbox-figure">
+        <img id="trip-lightbox-image" src="" alt="">
+        <figcaption>
+          <strong id="trip-lightbox-title"></strong>
+          <span id="trip-lightbox-caption"></span>
+        </figcaption>
+      </figure>
+      <button class="trip-lightbox-nav next" type="button" aria-label="Next photo">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+
     <script>
       // ============================================
       // WEB APP CONFIGURATION
@@ -917,6 +1032,64 @@
             loginBtn.removeAttribute('rel');
           }
         }
+      })();
+
+      // Home logo + content reveal linked directly to page scroll
+      (function initHomeScrollIntro() {
+        const homeSection = document.getElementById('home');
+        if (!homeSection) return;
+
+        const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+        let ticking = false;
+
+        const update = () => {
+          const revealDistance = Math.max(320, window.innerHeight * 0.75);
+          const progress = clamp(window.scrollY / revealDistance, 0, 1);
+          document.documentElement.style.setProperty('--home-progress', progress.toFixed(3));
+          ticking = false;
+        };
+
+        const requestTick = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(update);
+        };
+
+        update();
+        window.addEventListener('scroll', requestTick, { passive: true });
+        window.addEventListener('resize', requestTick);
+      })();
+
+      // Apply scroll-linked shrink/settle effect to other sections
+      (function initSectionScrollScale() {
+        const sections = Array.from(document.querySelectorAll('section.page, section.vision-section'))
+          .filter(section => section.id !== 'home');
+        if (!sections.length) return;
+
+        const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+        let ticking = false;
+
+        const update = () => {
+          const vh = window.innerHeight || 1;
+          sections.forEach((section) => {
+            const rect = section.getBoundingClientRect();
+            const start = vh * 1.02;
+            const end = vh * 0.2;
+            const progress = clamp((start - rect.top) / (start - end), 0, 1);
+            section.style.setProperty('--section-progress', progress.toFixed(3));
+          });
+          ticking = false;
+        };
+
+        const requestTick = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(update);
+        };
+
+        update();
+        window.addEventListener('scroll', requestTick, { passive: true });
+        window.addEventListener('resize', requestTick);
       })();
 
       // Plan Selection Logic
@@ -952,7 +1125,7 @@
       function updateActiveNav() {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
-          const pages = ['home', 'offerings', 'about', 'plans', 'founders', 'contact'];
+          const pages = ['home', 'learning-gap', 'offerings', 'about', 'plans', 'vision', 'founders', 'contact'];
           const scrollPosition = window.scrollY + window.innerHeight / 2;
 
           pages.forEach((pageId) => {
@@ -974,6 +1147,354 @@
       window.addEventListener('scroll', updateActiveNav);
       window.addEventListener('load', updateActiveNav);
 
+      // Premium visual polish: scroll progress + pointer spotlight
+      (function initVisualPolish() {
+        const progressBar = document.getElementById('scroll-progress-bar');
+
+        const updateProgress = () => {
+          if (!progressBar) return;
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const ratio = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+          progressBar.style.transform = `scaleX(${Math.max(0, Math.min(1, ratio))})`;
+        };
+
+        let ticking = false;
+        const requestProgressFrame = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            updateProgress();
+            ticking = false;
+          });
+        };
+
+        window.addEventListener('scroll', requestProgressFrame, { passive: true });
+        window.addEventListener('resize', requestProgressFrame);
+        updateProgress();
+      })();
+
+      // Dynamic section-based color and typography theme sync
+      (function initSectionThemeSync() {
+        // Performance mode: keep a static high-contrast white theme.
+        document.body.style.setProperty('--bg-primary', '#ffffff');
+        document.body.style.setProperty('--bg-secondary', '#ffffff');
+        document.body.style.setProperty('--text-primary', '#111111');
+        document.body.style.setProperty('--text-secondary', '#333333');
+        document.body.style.setProperty('--accent', '#000000');
+        document.body.style.setProperty('--nav-icon', '#222222');
+        document.body.style.setProperty('--nav-icon-active', '#000000');
+        document.body.dataset.theme = 'ocean';
+        return;
+
+        const themePalettes = {
+          ocean: { bg1: '#000000', bg2: '#000000', text1: '#ffffff', text2: '#ffffff', accent: '#ffffff', nav: '#ffffff', navActive: '#ffffff' },
+          sunset: { bg1: '#000000', bg2: '#000000', text1: '#ffffff', text2: '#ffffff', accent: '#ffffff', nav: '#ffffff', navActive: '#ffffff' },
+          mint: { bg1: '#000000', bg2: '#000000', text1: '#ffffff', text2: '#ffffff', accent: '#ffffff', nav: '#ffffff', navActive: '#ffffff' },
+          lavender: { bg1: '#000000', bg2: '#000000', text1: '#ffffff', text2: '#ffffff', accent: '#ffffff', nav: '#ffffff', navActive: '#ffffff' },
+          coral: { bg1: '#000000', bg2: '#000000', text1: '#ffffff', text2: '#ffffff', accent: '#ffffff', nav: '#ffffff', navActive: '#ffffff' },
+          dawn: { bg1: '#000000', bg2: '#000000', text1: '#ffffff', text2: '#ffffff', accent: '#ffffff', nav: '#ffffff', navActive: '#ffffff' },
+          sage: { bg1: '#000000', bg2: '#000000', text1: '#ffffff', text2: '#ffffff', accent: '#ffffff', nav: '#ffffff', navActive: '#ffffff' },
+          mist: { bg1: '#000000', bg2: '#000000', text1: '#ffffff', text2: '#ffffff', accent: '#ffffff', nav: '#ffffff', navActive: '#ffffff' }
+        };
+
+        const hexToRgb = (hex) => {
+          const value = hex.replace('#', '');
+          return {
+            r: parseInt(value.substring(0, 2), 16),
+            g: parseInt(value.substring(2, 4), 16),
+            b: parseInt(value.substring(4, 6), 16)
+          };
+        };
+
+        const rgbToHex = ({ r, g, b }) => {
+          const toHex = (n) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+          return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+        };
+
+        const mixColor = (a, b, t) => {
+          const colorA = hexToRgb(a);
+          const colorB = hexToRgb(b);
+          return rgbToHex({
+            r: colorA.r + (colorB.r - colorA.r) * t,
+            g: colorA.g + (colorB.g - colorA.g) * t,
+            b: colorA.b + (colorB.b - colorA.b) * t
+          });
+        };
+
+        let centers = [];
+        const setCenters = () => {
+          centers = themeSections.map((section) => section.offsetTop + section.offsetHeight / 2);
+        };
+
+        const applyInterpolatedTheme = (fromTheme, toTheme, progress) => {
+          const from = themePalettes[fromTheme];
+          const to = themePalettes[toTheme];
+          if (!from || !to) return;
+
+          document.body.style.setProperty('--bg-primary', mixColor(from.bg1, to.bg1, progress));
+          document.body.style.setProperty('--bg-secondary', mixColor(from.bg2, to.bg2, progress));
+          document.body.style.setProperty('--text-primary', mixColor(from.text1, to.text1, progress));
+          document.body.style.setProperty('--text-secondary', mixColor(from.text2, to.text2, progress));
+          document.body.style.setProperty('--accent', mixColor(from.accent, to.accent, progress));
+          document.body.style.setProperty('--nav-icon', mixColor(from.nav, to.nav, progress));
+          document.body.style.setProperty('--nav-icon-active', mixColor(from.navActive, to.navActive, progress));
+
+          document.body.dataset.theme = progress < 0.5 ? fromTheme : toTheme;
+        };
+
+        const updateInterpolatedTheme = () => {
+          const viewportMid = window.scrollY + window.innerHeight / 2;
+          if (!centers.length) return;
+
+          if (viewportMid <= centers[0]) {
+            const firstTheme = themeSections[0].dataset.theme;
+            applyInterpolatedTheme(firstTheme, firstTheme, 0);
+            return;
+          }
+
+          if (viewportMid >= centers[centers.length - 1]) {
+            const lastTheme = themeSections[themeSections.length - 1].dataset.theme;
+            applyInterpolatedTheme(lastTheme, lastTheme, 0);
+            return;
+          }
+
+          for (let i = 0; i < centers.length - 1; i++) {
+            const start = centers[i];
+            const end = centers[i + 1];
+            if (viewportMid >= start && viewportMid < end) {
+              const fromTheme = themeSections[i].dataset.theme;
+              const toTheme = themeSections[i + 1].dataset.theme;
+              const progress = (viewportMid - start) / (end - start);
+              applyInterpolatedTheme(fromTheme, toTheme, progress);
+              return;
+            }
+          }
+        };
+
+        let ticking = false;
+        const requestThemeFrame = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            updateInterpolatedTheme();
+            ticking = false;
+          });
+        };
+
+        setCenters();
+        updateInterpolatedTheme();
+        window.addEventListener('scroll', requestThemeFrame, { passive: true });
+        window.addEventListener('resize', () => {
+          setCenters();
+          requestThemeFrame();
+        });
+      })();
+
+      // Scroll-scrub enter animation: elements settle into place as user scrolls
+      (function initScrollEnterScrub() {
+        const elements = Array.from(document.querySelectorAll('[data-scroll-enter]'));
+        if (!elements.length) return;
+
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+        let ticking = false;
+
+        elements.forEach((el, index) => {
+          const direction = index % 2 === 0 ? -1 : 1;
+          el.style.setProperty('--enter-direction', String(direction));
+        });
+
+        const update = () => {
+          const vh = window.innerHeight || 1;
+          elements.forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            const start = vh * 1.05;
+            const end = vh * 0.25;
+            const progress = clamp((start - rect.top) / (start - end), 0, 1);
+            el.style.setProperty('--enter-progress', progress.toFixed(3));
+          });
+        };
+
+        const requestTick = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            update();
+            ticking = false;
+          });
+        };
+
+        update();
+        window.addEventListener('scroll', requestTick, { passive: true });
+        window.addEventListener('resize', requestTick);
+      })();
+
+      // Side reveal animation for selected cards (Plans + Vision)
+      (function initSideRevealCards() {
+        const cards = document.querySelectorAll('.reveal-side');
+        if (!cards.length) return;
+
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('in-view');
+            obs.unobserve(entry.target);
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: '0px 0px -12% 0px'
+        });
+
+        cards.forEach(card => observer.observe(card));
+      })();
+
+      // Trip gallery carousel
+      (function initTripGalleryCarousel() {
+        const track = document.getElementById('trip-carousel-track');
+        const dotsWrap = document.getElementById('trip-carousel-dots');
+        const prev = document.querySelector('.trip-carousel-nav.prev');
+        const next = document.querySelector('.trip-carousel-nav.next');
+        if (!track || !dotsWrap) return;
+
+        const slides = Array.from(track.querySelectorAll('.trip-card'));
+        if (!slides.length) return;
+
+        let activeIndex = 0;
+        let autoplayTimer = null;
+
+        const buildDots = () => {
+          dotsWrap.innerHTML = '';
+          slides.forEach((_, index) => {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+            dot.addEventListener('click', () => setActive(index));
+            dotsWrap.appendChild(dot);
+          });
+        };
+
+        const updateDots = () => {
+          Array.from(dotsWrap.children).forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === activeIndex);
+          });
+        };
+
+        const updateTrackPosition = () => {
+          const viewport = track.parentElement;
+          const active = slides[activeIndex];
+          if (!viewport || !active) return;
+
+          const slideWidth = active.getBoundingClientRect().width;
+          const style = getComputedStyle(track);
+          const gap = parseFloat(style.columnGap || style.gap || '16') || 16;
+          const target = (activeIndex * (slideWidth + gap)) - ((viewport.clientWidth - slideWidth) / 2);
+          const max = Math.max(0, track.scrollWidth - viewport.clientWidth);
+          const safe = Math.max(0, Math.min(max, target));
+          track.style.transform = `translate3d(${-safe}px, 0, 0)`;
+        };
+
+        const setActive = (index) => {
+          activeIndex = (index + slides.length) % slides.length;
+          slides.forEach((slide, idx) => {
+            slide.classList.toggle('is-active', idx === activeIndex);
+          });
+          updateDots();
+          updateTrackPosition();
+        };
+
+        const startAutoplay = () => {
+          stopAutoplay();
+          autoplayTimer = setInterval(() => setActive(activeIndex + 1), 4200);
+        };
+
+        const stopAutoplay = () => {
+          if (!autoplayTimer) return;
+          clearInterval(autoplayTimer);
+          autoplayTimer = null;
+        };
+
+        buildDots();
+        setActive(0);
+        startAutoplay();
+
+        prev?.addEventListener('click', () => {
+          setActive(activeIndex - 1);
+          startAutoplay();
+        });
+        next?.addEventListener('click', () => {
+          setActive(activeIndex + 1);
+          startAutoplay();
+        });
+
+        track.addEventListener('mouseenter', stopAutoplay);
+        track.addEventListener('mouseleave', startAutoplay);
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) stopAutoplay();
+          else startAutoplay();
+        });
+        window.addEventListener('resize', () => setActive(activeIndex));
+      })();
+
+      // Trip gallery lightbox
+      (function initTripGalleryLightbox() {
+        const items = Array.from(document.querySelectorAll('.gallery-item'));
+        const lightbox = document.getElementById('trip-lightbox');
+        const image = document.getElementById('trip-lightbox-image');
+        const title = document.getElementById('trip-lightbox-title');
+        const caption = document.getElementById('trip-lightbox-caption');
+        const closeBtn = document.querySelector('.trip-lightbox-close');
+        const prevBtn = document.querySelector('.trip-lightbox-nav.prev');
+        const nextBtn = document.querySelector('.trip-lightbox-nav.next');
+        if (!items.length || !lightbox || !image || !title || !caption) return;
+
+        let activeIndex = 0;
+
+        const render = (index) => {
+          const item = items[index];
+          image.src = item.dataset.src;
+          image.alt = item.querySelector('img')?.alt || 'Trip photo';
+          title.textContent = item.dataset.title || 'Educational Trip';
+          caption.textContent = item.dataset.caption || '';
+        };
+
+        const open = (index) => {
+          activeIndex = index;
+          render(activeIndex);
+          lightbox.classList.add('show');
+          lightbox.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        };
+
+        const close = () => {
+          lightbox.classList.remove('show');
+          lightbox.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        };
+
+        const go = (direction) => {
+          activeIndex = (activeIndex + direction + items.length) % items.length;
+          render(activeIndex);
+        };
+
+        items.forEach((item, index) => {
+          item.addEventListener('click', () => open(index));
+        });
+
+        closeBtn?.addEventListener('click', close);
+        prevBtn?.addEventListener('click', () => go(-1));
+        nextBtn?.addEventListener('click', () => go(1));
+
+        lightbox.addEventListener('click', (e) => {
+          if (e.target === lightbox) close();
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (!lightbox.classList.contains('show')) return;
+          if (e.key === 'Escape') close();
+          if (e.key === 'ArrowLeft') go(-1);
+          if (e.key === 'ArrowRight') go(1);
+        });
+      })();
+
       // Scroll Animations (IntersectionObserver)
       document.addEventListener('DOMContentLoaded', () => {
         const observerOptions = {
@@ -994,11 +1515,8 @@
           });
         }, observerOptions);
 
-        const elementsToAnimate = document.querySelectorAll('.fade-in-up, .page-content, .reveal-3d');
+        const elementsToAnimate = document.querySelectorAll('.fade-in-up, .reveal-3d');
         elementsToAnimate.forEach(el => {
-          if (!el.classList.contains('fade-in-up') && !el.classList.contains('reveal-3d')) {
-            el.classList.add('fade-in-up'); // auto-add class if missing
-          }
           observer.observe(el);
         });
 
@@ -1006,15 +1524,7 @@
         const buttons = document.querySelectorAll('.btn-primary, .btn-secondary, button');
         buttons.forEach(btn => {
           btn.classList.add('magnetic-btn');
-          btn.addEventListener('mousemove', function (e) {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
-          });
-          btn.addEventListener('mouseleave', function () {
-            btn.style.transform = 'translate(0, 0)';
-          });
+          btn.style.transform = 'none';
         });
 
         // Innovation 3: Typewriter Effect
@@ -1270,37 +1780,9 @@
 
       // Founders Section - Interactive Card
       (function initFoundersCard() {
+        // Founders are intentionally static now for clarity and readability.
         const foundersContainer = document.querySelector('.founders-horizontal-container');
-
-        // Desktop Hover Logic
-        if (foundersContainer) {
-          foundersContainer.addEventListener('mouseenter', function () {
-            if (window.innerWidth > 768) {
-              this.classList.add('open');
-            }
-          });
-
-          foundersContainer.addEventListener('mouseleave', function () {
-            if (window.innerWidth > 768) {
-              this.classList.remove('open');
-            }
-          });
-        }
-
-        // Mobile Flip Interaction (New DOM)
-        const mobileCards = document.querySelectorAll('.founder-mobile-card');
-        mobileCards.forEach(card => {
-          card.addEventListener('click', function (e) {
-            e.stopPropagation();
-            // Toggle flip state
-            this.classList.toggle('flipped');
-
-            // Optional: Close others
-            mobileCards.forEach(c => {
-              if (c !== this) c.classList.remove('flipped');
-            });
-          });
-        });
+        if (foundersContainer) foundersContainer.classList.add('open');
       })();
 
       // OLD CAROUSEL CODE (COMMENTED FOR EASY REVERT)
@@ -1514,9 +1996,10 @@
       function createShootingStars() {
         const container = document.getElementById('shooting-stars');
         if (!container) return;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
         // Create static stars
-        for (let i = 0; i < 250; i++) {
+        for (let i = 0; i < 80; i++) {
           const star = document.createElement('div');
           star.className = 'star';
           star.style.left = Math.random() * 100 + '%';
@@ -1527,6 +2010,9 @@
 
         // Create shooting stars
         function createShootingStar() {
+          const active = container.querySelectorAll('.shooting-star').length;
+          if (active > 8) return;
+
           const shootingStar = document.createElement('div');
           shootingStar.className = 'shooting-star';
           shootingStar.style.left = Math.random() * 100 + '%';
@@ -1542,7 +2028,7 @@
         }
 
         // Create shooting stars periodically
-        setInterval(createShootingStar, 300);
+        setInterval(createShootingStar, 900);
 
         // Create initial shooting stars
         for (let i = 0; i < 10; i++) {
