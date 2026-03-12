@@ -373,6 +373,46 @@ body {
 }
 
 /* =========================================
+   5A. TESTIMONIALS SECTION
+   ========================================= */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.testimonial-card {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 30px 24px;
+  text-align: left;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.05);
+}
+
+.testimonial-quote {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #111;
+  margin-bottom: 18px;
+}
+
+.testimonial-author {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 6px;
+}
+
+.testimonial-role {
+  font-size: 14px;
+  color: #4b5563;
+  margin: 0;
+}
+
+/* =========================================
    6. SIMPLE VERTICAL FACT TREE
    ========================================= */
 .fact-tree-container {
@@ -687,6 +727,15 @@ body {
 
   .about-content {
     padding-right: 0;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .testimonial-card {
+    padding: 22px 18px;
   }
 
   .contact-wrapper {
