@@ -46,6 +46,109 @@ function canSendAlertForIp(ip, nowMs) {
   return true;
 }
 
+async function fetchJsonWithTimeout(url, options = {}, timeoutMs = 2800) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+
+    return response;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function normalizeCompanyPayload(payload, source) {
+  if (!payload || typeof payload !== "object") return null;
+
+  const name = payload.name || payload.company?.name || null;
+  const domain = payload.domain || payload.company?.domain || null;
+  const industry = payload.category?.industry || payload.company?.category?.industry || payload.industry || null;
+  const employees = payload.metrics?.employees || payload.company?.metrics?.employees || payload.employees || null;
+
+  if (!name && !domain) return null;
+
+  return {
+    source,
+    name,
+    domain,
+    industry,
+    employees
+  };
+}
+
+async function enrichCompanyFromIp(ip) {
+  const enabled = String(process.env.VISIT_COMPANY_ENRICHMENT_ENABLED || "false").toLowerCase() === "true";
+  if (!enabled) return null;
+  if (!ip || ip === "unknown") return null;
+
+  const provider = String(process.env.VISIT_COMPANY_ENRICHMENT_PROVIDER || "clearbit").toLowerCase();
+
+  try {
+    if (provider === "clearbit") {
+      const clearbitApiKey = process.env.CLEARBIT_API_KEY;
+      if (!clearbitApiKey) {
+        return { source: "clearbit", error: "missing_clearbit_key" };
+      }
+
+      const clearbitUrl = `https://reveal.clearbit.com/v1/companies/find?ip=${encodeURIComponent(ip)}`;
+      const response = await fetchJsonWithTimeout(clearbitUrl, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${clearbitApiKey}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (response.status === 404) return null;
+      if (!response.ok) {
+        return { source: "clearbit", error: `status_${response.status}` };
+      }
+
+      const payload = await response.json();
+      return normalizeCompanyPayload(payload, "clearbit");
+    }
+
+    if (provider === "custom") {
+      const apiUrl = process.env.VISIT_COMPANY_ENRICHMENT_URL;
+      if (!apiUrl) {
+        return { source: "custom", error: "missing_custom_url" };
+      }
+
+      const authHeader = process.env.VISIT_COMPANY_ENRICHMENT_API_KEY;
+      const resolvedUrl = apiUrl.includes("{ip}")
+        ? apiUrl.replaceAll("{ip}", encodeURIComponent(ip))
+        : `${apiUrl}${apiUrl.includes("?") ? "&" : "?"}ip=${encodeURIComponent(ip)}`;
+
+      const headers = { "Content-Type": "application/json" };
+      if (authHeader) {
+        headers.Authorization = `Bearer ${authHeader}`;
+      }
+
+      const response = await fetchJsonWithTimeout(resolvedUrl, {
+        method: "GET",
+        headers
+      });
+
+      if (response.status === 404) return null;
+      if (!response.ok) {
+        return { source: "custom", error: `status_${response.status}` };
+      }
+
+      const payload = await response.json();
+      return normalizeCompanyPayload(payload, "custom");
+    }
+
+    return { source: provider, error: "unsupported_provider" };
+  } catch (error) {
+    return { source: provider, error: error?.name === "AbortError" ? "timeout" : "request_failed" };
+  }
+}
+
 async function sendViaResend(subject, htmlBody, textBody) {
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.VISIT_ALERT_TO_EMAIL;
@@ -105,13 +208,33 @@ module.exports = async function handler(req, res) {
     page_title: typeof body.page_title === "string" ? body.page_title : ""
   };
 
+  const shouldSendEmail = canSendAlertForIp(visitData.ip, nowMs);
+
+  if (!shouldSendEmail) {
+    console.log("visit_event_rate_limited", { ...visitData, email_sent: false, rate_limited: true });
+    return res.status(200).json({ success: true, email_sent: false, rate_limited: true });
+  }
+
+  const company = await enrichCompanyFromIp(visitData.ip);
+  const hasCompanyMatch = Boolean(company?.name || company?.domain);
+  const companyLine = hasCompanyMatch
+    ? `${company.name || "Unknown"}${company.domain ? ` (${company.domain})` : ""}`
+    : "No confident company match";
+
   const locationLine = [visitData.city, visitData.region, visitData.country].filter(Boolean).join(", ") || "Unknown";
-  const subject = `New website visit: ${locationLine}`;
+  const subject = hasCompanyMatch
+    ? `New website visit: ${company.name || company.domain}`
+    : `New website visit: ${locationLine}`;
+
   const textBody = [
     "New website visit recorded.",
     `Time (UTC): ${visitData.timestamp_utc}`,
     `IP: ${visitData.ip}`,
     `Approx location: ${locationLine}`,
+    `Company guess: ${companyLine}`,
+    `Company source: ${company?.source || "n/a"}`,
+    `Industry: ${company?.industry || "Unknown"}`,
+    `Employees: ${company?.employees || "Unknown"}`,
     `Path: ${visitData.path}`,
     `Referrer: ${visitData.referrer || "Direct / none"}`,
     `Timezone: ${visitData.timezone || "Unknown"}`,
@@ -124,6 +247,10 @@ module.exports = async function handler(req, res) {
     <p><strong>Time (UTC):</strong> ${visitData.timestamp_utc}</p>
     <p><strong>IP:</strong> ${visitData.ip}</p>
     <p><strong>Approx Location:</strong> ${locationLine}</p>
+    <p><strong>Company Guess:</strong> ${companyLine}</p>
+    <p><strong>Company Source:</strong> ${company?.source || "n/a"}</p>
+    <p><strong>Industry:</strong> ${company?.industry || "Unknown"}</p>
+    <p><strong>Employees:</strong> ${company?.employees || "Unknown"}</p>
     <p><strong>Path:</strong> ${visitData.path}</p>
     <p><strong>Referrer:</strong> ${visitData.referrer || "Direct / none"}</p>
     <p><strong>Timezone:</strong> ${visitData.timezone || "Unknown"}</p>
@@ -131,20 +258,13 @@ module.exports = async function handler(req, res) {
     <p><strong>User-Agent:</strong> ${visitData.user_agent}</p>
   `;
 
-  const shouldSendEmail = canSendAlertForIp(visitData.ip, nowMs);
-
-  if (!shouldSendEmail) {
-    console.log("visit_event_rate_limited", { ...visitData, email_sent: false, rate_limited: true });
-    return res.status(200).json({ success: true, email_sent: false, rate_limited: true });
-  }
-
   try {
     const emailResult = await sendViaResend(subject, htmlBody, textBody);
-    console.log("visit_event", { ...visitData, email_sent: emailResult.sent, rate_limited: false });
-    return res.status(200).json({ success: true, email_sent: emailResult.sent, rate_limited: false });
+    console.log("visit_event", { ...visitData, company, email_sent: emailResult.sent, rate_limited: false });
+    return res.status(200).json({ success: true, email_sent: emailResult.sent, rate_limited: false, company });
   } catch (error) {
     console.error("visit_email_failed", error);
-    console.log("visit_event", visitData);
-    return res.status(200).json({ success: true, email_sent: false, fallback_logged: true, rate_limited: false });
+    console.log("visit_event", { ...visitData, company });
+    return res.status(200).json({ success: true, email_sent: false, fallback_logged: true, rate_limited: false, company });
   }
 };
