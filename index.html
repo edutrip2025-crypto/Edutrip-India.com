@@ -980,6 +980,7 @@
         </div>
         <div class="footer-bottom">
           <p>&copy; 2026 Edutrip India. All rights reserved.</p>
+          <p style="margin-top: 8px; font-size: 0.9rem; opacity: 0.85;">For security and fraud prevention, we log visitor IP-based approximate location (city/region/country).</p>
         </div>
       </footer>
     </div>
@@ -990,7 +991,7 @@
         <div class="cookie-text">
           <h4>🍪 We Value Your Privacy</h4>
           <p>We use cookies to enhance your browsing experience, analyze site traffic, and personalize content. By
-            clicking "Accept All", you consent to our use of cookies. <a href="#privacy"
+            clicking "Accept All", you consent to our use of cookies. We also process IP-based approximate location for security and fraud prevention. <a href="#privacy"
               style="color: #0ea5e9; text-decoration: underline;">Learn more</a></p>
         </div>
         <div class="cookie-buttons">
@@ -1888,6 +1889,32 @@
             .catch(err => console.log('Service Worker Error', err));
         });
       }
+
+      // Visitor logging (IP-based location via server headers; no GPS used)
+      (function initVisitLogger() {
+        const visitMarkerKey = 'edutrip_visit_logged';
+        if (sessionStorage.getItem(visitMarkerKey) === '1') return;
+
+        const payload = {
+          path: window.location.pathname + window.location.search,
+          page_title: document.title,
+          referrer: document.referrer || null,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || null,
+          screen: `${window.screen.width}x${window.screen.height}`
+        };
+
+        fetch('/api/visit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true
+        }).catch(() => {
+          // Silent fail to avoid impacting user experience.
+        });
+
+        sessionStorage.setItem(visitMarkerKey, '1');
+      })();
+
       // Cookie Consent Logic
       (function initCookieConsent() {
         const cookieBanner = document.getElementById('cookie-consent');
@@ -2066,3 +2093,4 @@
 </body>
 
 </html>
+
