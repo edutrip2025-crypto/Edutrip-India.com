@@ -19,6 +19,33 @@ function normalizeBody(body) {
   return {};
 }
 
+const DEFAULT_WINDOW_MINUTES = 30;
+const configuredWindowMinutes = Number(process.env.VISIT_ALERT_WINDOW_MINUTES || DEFAULT_WINDOW_MINUTES);
+const RATE_LIMIT_WINDOW_MS = Math.max(1, configuredWindowMinutes) * 60 * 1000;
+
+// Best-effort per-instance cooldown cache for alert throttling by IP.
+const alertWindowByIp = globalThis.__edutripVisitAlertWindowByIp || new Map();
+globalThis.__edutripVisitAlertWindowByIp = alertWindowByIp;
+
+function pruneCooldownMap(nowMs) {
+  if (alertWindowByIp.size < 5000) return;
+  for (const [ip, lastSentAt] of alertWindowByIp.entries()) {
+    if (nowMs - lastSentAt > RATE_LIMIT_WINDOW_MS) {
+      alertWindowByIp.delete(ip);
+    }
+  }
+}
+
+function canSendAlertForIp(ip, nowMs) {
+  pruneCooldownMap(nowMs);
+  const previous = alertWindowByIp.get(ip);
+  if (typeof previous === "number" && nowMs - previous < RATE_LIMIT_WINDOW_MS) {
+    return false;
+  }
+  alertWindowByIp.set(ip, nowMs);
+  return true;
+}
+
 async function sendViaResend(subject, htmlBody, textBody) {
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.VISIT_ALERT_TO_EMAIL;
@@ -60,6 +87,7 @@ module.exports = async function handler(req, res) {
 
   const body = normalizeBody(req.body);
   const now = new Date();
+  const nowMs = now.getTime();
 
   const visitData = {
     timestamp_utc: now.toISOString(),
@@ -103,13 +131,20 @@ module.exports = async function handler(req, res) {
     <p><strong>User-Agent:</strong> ${visitData.user_agent}</p>
   `;
 
+  const shouldSendEmail = canSendAlertForIp(visitData.ip, nowMs);
+
+  if (!shouldSendEmail) {
+    console.log("visit_event_rate_limited", { ...visitData, email_sent: false, rate_limited: true });
+    return res.status(200).json({ success: true, email_sent: false, rate_limited: true });
+  }
+
   try {
     const emailResult = await sendViaResend(subject, htmlBody, textBody);
-    console.log("visit_event", { ...visitData, email_sent: emailResult.sent });
-    return res.status(200).json({ success: true, email_sent: emailResult.sent });
+    console.log("visit_event", { ...visitData, email_sent: emailResult.sent, rate_limited: false });
+    return res.status(200).json({ success: true, email_sent: emailResult.sent, rate_limited: false });
   } catch (error) {
     console.error("visit_email_failed", error);
     console.log("visit_event", visitData);
-    return res.status(200).json({ success: true, email_sent: false, fallback_logged: true });
+    return res.status(200).json({ success: true, email_sent: false, fallback_logged: true, rate_limited: false });
   }
 };

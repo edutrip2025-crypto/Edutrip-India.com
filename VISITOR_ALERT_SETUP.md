@@ -22,13 +22,22 @@ Optional:
 
 - `VISIT_ALERT_FROM_EMAIL`: sender email (must be verified in Resend)
   - Default used if omitted: `Edutrip Alerts <alerts@edutripindia.com>`
+- `VISIT_ALERT_WINDOW_MINUTES`: cooldown window per IP before sending the next alert
+  - Default: `30`
 
 ## How it works
 
 1. Frontend sends a non-blocking POST request to `/api/visit` once per browser tab session.
 2. API extracts IP/location from request headers.
-3. API sends an email via Resend.
-4. If email fails, visit data is still written to function logs.
+3. API checks per-IP cooldown (default 30 minutes).
+4. If not rate-limited, API sends an email via Resend.
+5. If rate-limited or email fails, visit data is still written to function logs.
+
+## Notes on rate limiting
+
+- Current rate limiting is **best-effort per serverless instance memory**.
+- It reduces duplicate alerts significantly but is not globally strict across all instances.
+- For strict global throttling, use Redis/KV as shared storage.
 
 ## Test
 
@@ -36,4 +45,5 @@ Optional:
 2. Open the homepage in a private window.
 3. Confirm:
    - API call appears at `/api/visit` in Vercel logs.
-   - Alert email arrives at `VISIT_ALERT_TO_EMAIL`.
+   - First visit sends an alert email.
+4. Refresh within 30 minutes from same IP and confirm logs show `rate_limited: true`.
