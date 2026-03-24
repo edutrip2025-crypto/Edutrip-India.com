@@ -62,13 +62,38 @@ async function fetchJsonWithTimeout(url, options = {}, timeoutMs = 2800) {
   }
 }
 
+function stripAsnPrefix(orgText) {
+  if (typeof orgText !== "string") return null;
+  return orgText.replace(/^AS\d+\s+/i, "").trim() || null;
+}
+
 function normalizeCompanyPayload(payload, source) {
   if (!payload || typeof payload !== "object") return null;
 
-  const name = payload.name || payload.company?.name || null;
-  const domain = payload.domain || payload.company?.domain || null;
-  const industry = payload.category?.industry || payload.company?.category?.industry || payload.industry || null;
-  const employees = payload.metrics?.employees || payload.company?.metrics?.employees || payload.employees || null;
+  const name = payload.name
+    || payload.company?.name
+    || payload.as?.name
+    || payload.asn?.name
+    || stripAsnPrefix(payload.org)
+    || null;
+
+  const domain = payload.domain
+    || payload.company?.domain
+    || payload.as?.domain
+    || payload.asn?.domain
+    || null;
+
+  const industry = payload.category?.industry
+    || payload.company?.category?.industry
+    || payload.industry
+    || null;
+
+  const employees = payload.metrics?.employees
+    || payload.company?.metrics?.employees
+    || payload.employees
+    || null;
+
+  const type = payload.company?.type || payload.as?.type || payload.asn?.type || payload.type || null;
 
   if (!name && !domain) return null;
 
@@ -77,8 +102,51 @@ function normalizeCompanyPayload(payload, source) {
     name,
     domain,
     industry,
-    employees
+    employees,
+    type
   };
+}
+
+async function enrichFromIpinfo(ip) {
+  const token = process.env.IPINFO_TOKEN;
+  if (!token) {
+    return { source: "ipinfo", error: "missing_ipinfo_token" };
+  }
+
+  const ipParam = encodeURIComponent(ip);
+  const endpoints = [
+    `https://api.ipinfo.io/lookup/${ipParam}?token=${token}`,
+    `https://ipinfo.io/${ipParam}/json?token=${token}`
+  ];
+
+  let lastError = null;
+
+  for (const endpoint of endpoints) {
+    try {
+      const response = await fetchJsonWithTimeout(endpoint, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (response.status === 404) continue;
+      if (!response.ok) {
+        lastError = `status_${response.status}`;
+        continue;
+      }
+
+      const payload = await response.json();
+      const normalized = normalizeCompanyPayload(payload, "ipinfo");
+      if (normalized) return normalized;
+    } catch (error) {
+      lastError = error?.name === "AbortError" ? "timeout" : "request_failed";
+    }
+  }
+
+  if (lastError) {
+    return { source: "ipinfo", error: lastError };
+  }
+
+  return null;
 }
 
 async function enrichCompanyFromIp(ip) {
@@ -86,9 +154,13 @@ async function enrichCompanyFromIp(ip) {
   if (!enabled) return null;
   if (!ip || ip === "unknown") return null;
 
-  const provider = String(process.env.VISIT_COMPANY_ENRICHMENT_PROVIDER || "clearbit").toLowerCase();
+  const provider = String(process.env.VISIT_COMPANY_ENRICHMENT_PROVIDER || "ipinfo").toLowerCase();
 
   try {
+    if (provider === "ipinfo") {
+      return enrichFromIpinfo(ip);
+    }
+
     if (provider === "clearbit") {
       const clearbitApiKey = process.env.CLEARBIT_API_KEY;
       if (!clearbitApiKey) {
@@ -233,6 +305,7 @@ module.exports = async function handler(req, res) {
     `Approx location: ${locationLine}`,
     `Company guess: ${companyLine}`,
     `Company source: ${company?.source || "n/a"}`,
+    `Company type: ${company?.type || "Unknown"}`,
     `Industry: ${company?.industry || "Unknown"}`,
     `Employees: ${company?.employees || "Unknown"}`,
     `Path: ${visitData.path}`,
@@ -249,6 +322,7 @@ module.exports = async function handler(req, res) {
     <p><strong>Approx Location:</strong> ${locationLine}</p>
     <p><strong>Company Guess:</strong> ${companyLine}</p>
     <p><strong>Company Source:</strong> ${company?.source || "n/a"}</p>
+    <p><strong>Company Type:</strong> ${company?.type || "Unknown"}</p>
     <p><strong>Industry:</strong> ${company?.industry || "Unknown"}</p>
     <p><strong>Employees:</strong> ${company?.employees || "Unknown"}</p>
     <p><strong>Path:</strong> ${visitData.path}</p>

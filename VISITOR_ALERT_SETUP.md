@@ -30,13 +30,19 @@ Optional:
 
 Enable organization-level enrichment using one of these providers.
 
-### Option A: Clearbit Reveal
+### Option A: IPinfo (recommended)
+
+- `VISIT_COMPANY_ENRICHMENT_ENABLED=true`
+- `VISIT_COMPANY_ENRICHMENT_PROVIDER=ipinfo`
+- `IPINFO_TOKEN=your_ipinfo_token`
+
+### Option B: Clearbit Reveal (legacy existing accounts)
 
 - `VISIT_COMPANY_ENRICHMENT_ENABLED=true`
 - `VISIT_COMPANY_ENRICHMENT_PROVIDER=clearbit`
 - `CLEARBIT_API_KEY=your_clearbit_key`
 
-### Option B: Custom provider endpoint
+### Option C: Custom provider endpoint
 
 - `VISIT_COMPANY_ENRICHMENT_ENABLED=true`
 - `VISIT_COMPANY_ENRICHMENT_PROVIDER=custom`
