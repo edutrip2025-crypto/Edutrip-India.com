@@ -20,7 +20,7 @@
       <h1>Capacity Building &amp;<br>Exposure Visit</h1>
       <p class="destination">Chennai · Participant Registration</p>
       <p class="lead">Register for the Chennai exposure visit. Your details help us arrange travel, meals, accommodation, ID cards and venue entry passes.</p>
-      <div class="trip"><span><strong>28–31 October 2026</strong>Planned travel dates</span><span><strong>Hyderabad → Chennai</strong>SCERT Tamil Nadu · IIT Madras</span></div>
+      <div class="trip"><span><strong>28–31 October 2026</strong>Planned travel dates</span><span><strong>Hyderabad → Chennai</strong>SCERT, IIT Madras &amp; NIOT/Periyar Science and Technology Center.</span></div>
       <p class="note">Schedules and institutional visits are subject to confirmation. Registration does not confirm a travel booking.</p>
     </section>
     <aside id="setup-notice" class="notice" hidden>Registration is being set up. Please contact Edutrip on <a href="tel:+917989054712">7989054712</a> before entering your details.</aside>
@@ -30,7 +30,10 @@
         <label class="wide">Full name (as per Aadhaar) *<input name="full_name" autocomplete="name" maxlength="150" required><small>Use the spelling on your travel ID. An Aadhaar number or copy is not required here.</small></label>
         <label>Date of birth *<input type="date" name="date_of_birth" autocomplete="bday" min="1900-01-01" required><small>Tap the calendar or enter your date of birth.</small></label>
         <label>Gender *<select name="gender" required><option value="">Select gender</option><option>Female</option><option>Male</option><option>Other</option><option>Prefer not to say</option></select></label>
-        <label>Mobile / WhatsApp number *<input type="tel" name="mobile" autocomplete="tel-national" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required><small>10-digit Indian mobile number.</small></label>
+        <div><label>Mobile number *<input type="tel" name="mobile" autocomplete="tel-national" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required><small>10-digit Indian mobile number.</small></label>
+          <label class="inline-check"><input type="checkbox" id="whatsapp-different" name="whatsapp_different" aria-controls="whatsapp-wrap">My WhatsApp Number is different</label>
+          <label id="whatsapp-wrap" hidden>WhatsApp number *<input type="tel" name="whatsapp_phone" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" disabled><small>Enter your separate 10-digit WhatsApp number.</small></label>
+        </div>
         <label>Email (optional)<input type="email" name="email" autocomplete="email" maxlength="254"></label>
         <label>District *<select name="district" required><option value="">Select district</option><option>Hyderabad</option><option>Sangareddy</option><option>Medak</option><option>Medchal–Malkajgiri</option></select></label>
         <label>Participant role *<select name="role" id="role" required><option value="">Select role</option><option>Headmaster / Headmistress</option><option>Principal</option><option>School Complex Headmaster</option><option>DEO / Department Official</option><option>Accompanying Visitor</option><option>Other</option></select></label>

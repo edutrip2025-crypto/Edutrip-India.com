@@ -30,11 +30,12 @@ legend span { font-size:12px; background:#e0f2fe; color:#0369a1; display:inline-
 label { display:block; font-size:14px; font-weight:600; margin-bottom:16px; }
 input,select,textarea { font:inherit; width:100%; border:1px solid #b9d1e1; border-radius:8px; background:#fcfeff; padding:12px; color:var(--ink); margin-top:7px; min-height:46px; }
 textarea { resize:vertical; min-height:94px; }
-input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible { outline:3px solid #7dd3fc; outline-offset:2px; }
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible { outline:3px solid #7dd3fc; outline-offset:2px; }
 input[type=checkbox] { width:17px; height:17px; min-height:0; margin:0; accent-color:#0284c7; flex-shrink:0; }
 .checks { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:16px 0 24px; }
-.checks label { display:flex; gap:9px; align-items:center; border:1px solid var(--line); border-radius:7px; padding:11px; margin:0; font-size:14px; }
-.checks label:has(input:checked) { background:#e0f2fe; border-color:#38bdf8; }
+.checks label { display:flex; gap:9px; align-items:center; border:0; border-radius:7px; padding:11px; margin:0; font-size:14px; }
+.checks label:has(input:checked) { background:#e0f2fe; }
+.inline-check { display:flex; gap:9px; align-items:center; border:0; font-weight:400; }
 #food-help { font-size:14px; font-weight:600; }
 .upload { padding:18px; background:#f0f9ff; border:1px dashed #7dbdda; border-radius:10px; }
 .upload input { background:white; }

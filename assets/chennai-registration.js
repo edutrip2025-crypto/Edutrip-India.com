@@ -15,6 +15,11 @@
   form.elements.role.addEventListener('change', () => {
     conditional('role-other-wrap', form.elements.role.value === 'Other');
   });
+  form.elements.whatsapp_different.addEventListener('change', () => {
+    const different = form.elements.whatsapp_different.checked;
+    conditional('whatsapp-wrap', different);
+    if (!different) form.elements.whatsapp_phone.value = '';
+  });
   form.elements.medical_declaration.addEventListener('change', () => {
     conditional('medical-wrap', form.elements.medical_declaration.value === 'Yes');
     document.querySelector('#medical-private').hidden = form.elements.medical_declaration.value !== 'Discuss privately';

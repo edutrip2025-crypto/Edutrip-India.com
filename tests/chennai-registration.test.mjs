@@ -23,6 +23,13 @@ test('invalid dates, contact numbers and missing consent are rejected',()=>{
     const form=fixture();form.set(key,value);assert.throws(()=>validateFields(form));
   }
 });
+test('a different WhatsApp number is collected only when requested and validated',()=>{
+  const form=fixture(); form.set('whatsapp_phone','invalid');
+  assert.equal(validateFields(form).whatsapp_phone,null);
+  form.set('whatsapp_different','on'); assert.throws(()=>validateFields(form));
+  form.set('whatsapp_phone','9000000002'); assert.equal(validateFields(form).whatsapp_phone,'9000000002');
+  form.delete('whatsapp_phone'); assert.throws(()=>validateFields(form));
+});
 test('food None is exclusive and conditional declarations require details',()=>{
   const form=fixture();form.append('food_restrictions','Other');assert.throws(()=>validateFields(form));
   form.delete('food_restrictions');form.append('food_restrictions','Other');assert.throws(()=>validateFields(form));

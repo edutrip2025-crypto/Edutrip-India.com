@@ -26,6 +26,9 @@ export function validateFields(form, today = new Date().toISOString().slice(0,10
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dob) || !Number.isFinite(parsedDate.getTime()) || parsedDate.toISOString().slice(0,10) !== dob || dob < '1900-01-01' || dob > today || dob > '2026-10-28') throw new InputError('Please enter a valid date of birth.');
   choice('gender',['Female','Male','Other','Prefer not to say']);
   for (const key of ['mobile','emergency_phone']) if (!/^[6-9][0-9]{9}$/.test(text(key,10,true))) throw new InputError('Please enter valid 10-digit mobile and emergency numbers.');
+  if (form.get('whatsapp_different') === 'on') {
+    if (!/^[6-9][0-9]{9}$/.test(text('whatsapp_phone',10,true))) throw new InputError('Please enter a valid 10-digit WhatsApp number.');
+  } else record.whatsapp_phone = null;
   const email = text('email',254); if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new InputError('Please check your email address.');
   choice('district',DISTRICTS); const role = choice('role',ROLES);
   if (role === 'Other') text('role_other',120,true); else record.role_other = null;
