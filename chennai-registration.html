@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#153d38">
+  <title>Chennai Exposure Visit Registration | Edutrip</title>
+  <link rel="stylesheet" href="/assets/chennai-registration.css">
+  <script src="/assets/chennai-registration-config.js" defer></script>
+  <script src="/assets/chennai-registration.js" defer></script>
+</head>
+<body>
+  <header><a href="/" aria-label="Edutrip home"><img src="/edutrip-logo.png" alt="Edutrip"></a><span>PM SHRI · Telangana</span></header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">CAPACITY BUILDING & EXPOSURE VISIT</p>
+      <h1>Chennai Exposure Visit</h1>
+      <p class="lead">Register for the Chennai exposure visit. Your details help us arrange travel, meals, accommodation, ID cards and venue entry passes.</p>
+      <div class="trip"><span><strong>28–31 October 2026</strong>Planned travel dates</span><span><strong>Hyderabad → Chennai</strong>SCERT Tamil Nadu · IIT Madras</span></div>
+      <p class="districts">Hyderabad · Sangareddy · Medak · Medchal–Malkajgiri</p>
+      <p class="note">Schedules and institutional visits are subject to confirmation. Registration does not confirm a travel booking.</p>
+    </section>
+    <aside id="setup-notice" class="notice" hidden>Registration is being set up. Please contact Edutrip on <a href="tel:+917989054712">7989054712</a> before entering your details.</aside>
+    <form id="registration" enctype="multipart/form-data">
+      <p class="form-guide">Complete one form per traveller. Fields marked <span aria-hidden="true">*</span> are required.</p>
+      <fieldset><legend><span>01</span> Participant details</legend><div class="grid">
+        <label class="wide">Full name (as per Aadhaar) *<input name="full_name" autocomplete="name" maxlength="150" required><small>Use the spelling on your travel ID. An Aadhaar number or copy is not required here.</small></label>
+        <label>Date of birth *<input type="date" name="date_of_birth" autocomplete="bday" min="1900-01-01" required><small>Tap the calendar or enter your date of birth.</small></label>
+        <label>Gender *<select name="gender" required><option value="">Select gender</option><option>Female</option><option>Male</option><option>Other</option><option>Prefer not to say</option></select></label>
+        <label>Mobile / WhatsApp number *<input type="tel" name="mobile" autocomplete="tel-national" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required><small>10-digit Indian mobile number.</small></label>
+        <label>Email (optional)<input type="email" name="email" autocomplete="email" maxlength="254"></label>
+        <label>District *<select name="district" required><option value="">Select district</option><option>Hyderabad</option><option>Sangareddy</option><option>Medak</option><option>Medchal–Malkajgiri</option></select></label>
+        <label>Participant role *<select name="role" id="role" required><option value="">Select role</option><option>Headmaster / Headmistress</option><option>Principal</option><option>School Complex Headmaster</option><option>DEO / Department Official</option><option>Accompanying Visitor</option><option>Other</option></select></label>
+        <label id="role-other-wrap" class="wide" hidden>Please specify your role *<input name="role_other" maxlength="120" disabled></label>
+        <label class="wide">School / institution / department name *<input name="institution" maxlength="200" required></label>
+        <label>UDISE code <span id="udise-required"></span><input name="udise" inputmode="numeric" pattern="[0-9]{11}" maxlength="11"><small>11 digits; required for school headmasters and principals.</small></label>
+        <label>Mandal (optional)<input name="mandal" maxlength="100"></label>
+      </div></fieldset>
+      <fieldset><legend><span>02</span> Meals & dietary needs</legend><div class="grid">
+        <label>Meal preference *<select name="meal" required><option value="">Select preference</option><option>Veg</option><option>Non Veg</option></select></label>
+        <label>Beverage preference *<select name="beverage" required><option value="">Select preference</option><option>Tea</option><option>Coffee</option><option>Neither</option></select></label>
+      </div>
+      <p id="food-help">Food allergies, intolerances or ingredients to avoid *<small>Select all that apply, including dietary restrictions.</small></p>
+      <div class="checks" role="group" aria-labelledby="food-help">
+        <label><input type="checkbox" name="food_restrictions" value="None">None</label>
+        <label><input type="checkbox" name="food_restrictions" value="Onion">Onion</label>
+        <label><input type="checkbox" name="food_restrictions" value="Garlic">Garlic</label>
+        <label><input type="checkbox" name="food_restrictions" value="Mushroom">Mushroom</label>
+        <label><input type="checkbox" name="food_restrictions" value="Curd">Curd</label>
+        <label><input type="checkbox" name="food_restrictions" value="Milk / dairy">Milk / dairy</label>
+        <label><input type="checkbox" name="food_restrictions" value="Nuts / peanuts">Nuts / peanuts</label>
+        <label><input type="checkbox" name="food_restrictions" value="Eggs">Eggs</label>
+        <label><input type="checkbox" name="food_restrictions" value="Wheat / gluten">Wheat / gluten</label>
+        <label><input type="checkbox" name="food_restrictions" value="Seafood">Seafood</label>
+        <label><input type="checkbox" name="food_restrictions" value="Soy">Soy</label>
+        <label><input type="checkbox" name="food_restrictions" value="Other" id="food-other">Other</label>
+      </div>
+      <label id="food-other-wrap" hidden>Other food restrictions *<textarea name="food_other" maxlength="500" disabled></textarea></label>
+      <label>Allergy severity / meal instructions (optional)<textarea name="food_notes" maxlength="1000" placeholder="For example: severe peanut allergy; avoid cross-contact."></textarea><small>For a severe allergy, also call the coordinator before travel so arrangements can be confirmed.</small></label>
+      </fieldset>
+      <fieldset><legend><span>03</span> Health & emergency contact</legend>
+        <label>Any medical condition or support need relevant to travel? *<select name="medical_declaration" id="medical" required><option value="">Select an answer</option><option value="None">None to declare</option><option value="Yes">Yes</option><option value="Discuss privately">I will discuss privately with the coordinator</option></select></label>
+        <label id="medical-wrap" hidden>Medical condition and relevant care instructions *<textarea name="medical_details" maxlength="1500" disabled placeholder="Share only what the trip coordinator needs for your safety."></textarea></label>
+        <p id="medical-private" class="note" hidden>Please call <a href="tel:+917989054712">7989054712</a> before travel to share the necessary information privately.</p>
+        <label>Accessibility / mobility assistance (optional)<textarea name="accessibility" maxlength="1000" placeholder="For example: assistance with stairs or walking longer distances."></textarea></label>
+        <div class="grid">
+          <label>Emergency contact name *<input name="emergency_name" maxlength="150" required></label>
+          <label>Relationship to you *<input name="emergency_relationship" maxlength="80" required></label>
+          <label class="wide">Emergency contact number *<input type="tel" name="emergency_phone" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required><small>Please give a contact who will not be travelling with you.</small></label>
+        </div>
+      </fieldset>
+      <fieldset><legend><span>04</span> Photo for your ID & entry pass</legend>
+        <label class="upload">Upload a passport-size photograph *<input id="photo" type="file" name="photo" accept="image/jpeg,image/png" required><small>JPG or PNG, up to 2 MB. Use a clear, recent, front-facing photo with a plain background.</small></label>
+        <img id="photo-preview" alt="Preview of your selected passport photograph" hidden>
+      </fieldset>
+      <section class="consent">
+        <h2>Before you submit</h2>
+        <p>Your details and photo will be stored privately for this programme. Edutrip will use them for coordination and share the necessary details with authorised travel providers, accommodation providers, institutions and emergency responders. Health information is for meal planning, support and emergencies. Contact <a href="tel:+917989054712">7989054712</a> for corrections or deletion requests.</p>
+        <label><input type="checkbox" name="consent" required>I confirm the details are accurate, have informed my emergency contact, and consent to this use of my details and photo. *</label>
+        <label class="trap" aria-hidden="true">Leave empty<input name="website" tabindex="-1" autocomplete="off"></label>
+        <button id="submit-button" type="submit">Submit registration</button>
+        <p id="status" role="status" tabindex="-1"></p>
+      </section>
+    </form>
+    <section id="success" class="success" hidden tabindex="-1"><p class="eyebrow">DETAILS RECEIVED</p><h2>Thank you for registering.</h2><p>Your registration reference is <strong id="reference"></strong>. Save this reference for any corrections. Edutrip will coordinate the confirmed travel arrangements separately.</p><a href="tel:+917989054712">Contact Edutrip: 7989054712</a></section>
+  </main><footer>Coordinated by Edutrip · Chennai Exposure Visit 2026</footer>
+</body></html>

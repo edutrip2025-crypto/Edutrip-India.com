@@ -1,0 +1,2 @@
+// Public connection details only. Never place a service-role key in this file.
+window.CHENNAI_REGISTRATION = { endpoint: 'https://vrmubjmgwlbypfwctwgq.supabase.co/functions/v1/chennai-registration', publicKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZybXViam1nd2xieXBmd2N0d2dxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyODc4NDcsImV4cCI6MjA4Nzg2Mzg0N30._8ivzj6KmbJOVkcd5pzktYzEnmIuVTcZUJAayQD5TVw' };
