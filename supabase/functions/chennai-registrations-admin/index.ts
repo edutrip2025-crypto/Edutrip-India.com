@@ -44,6 +44,28 @@ Deno.serve(async req => {
       if (!idPattern.test(id || '')) return null;
       return (await (await api(`/rest/v1/${table}?id=eq.${id}&removed_at=is.null&select=*`)).json())[0];
     };
+    if (data.action === 'delete') {
+      if (data.confirmed !== true || !idPattern.test(data.id || '')) return reply({error:'Select a registration and confirm deletion.'},400);
+      const removed = await (await api(`/rest/v1/${table}?id=eq.${data.id}&removed_at=is.null`,{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({removed_at:new Date().toISOString(),removed_by:uid})})).json();
+      if (!removed.length) return reply({error:'Registration is no longer active. Refresh the list.'},409);
+      return reply({removedId:data.id});
+    }
+    if (data.action === 'prepare-photos') {
+      const rows = await (await api(`/rest/v1/${table}?removed_at=is.null&select=id,full_name,photo_path&limit=1000`)).json();
+      for (const row of rows) {
+        if (!row.photo_path.startsWith(`${row.id}/`) || row.photo_path.includes('..')) throw new Error('Invalid photo path');
+        if (row.photo_path.split('/').length === 3) continue;
+        const extension = row.photo_path.endsWith('.png') ? 'png' : 'jpg';
+        const first = row.full_name.normalize('NFKC').trim().split(/\s+/)[0].replace(/[^\p{L}\p{N}_-]/gu,'').slice(0,70) || 'Participant';
+        const namedPath = `${row.id}/${crypto.randomUUID()}/${first}_Photo.${extension}`;
+        // Copy before updating the row so interruption cannot lose the existing portrait.
+        await api('/storage/v1/object/copy',{method:'POST',body:JSON.stringify({bucketId:bucket,sourceKey:row.photo_path,destinationKey:namedPath})});
+        const updated = await (await api(`/rest/v1/${table}?id=eq.${row.id}&photo_path=eq.${encodeURIComponent(row.photo_path)}`,{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({photo_path:namedPath})})).json();
+        if (updated.length) await api(`/storage/v1/object/${bucket}`,{method:'DELETE',body:JSON.stringify({prefixes:[row.photo_path]})});
+        else await api(`/storage/v1/object/${bucket}`,{method:'DELETE',body:JSON.stringify({prefixes:[namedPath]})});
+      }
+      return reply({prepared:true});
+    }
     if (data.action === 'photo') {
       const row = await get(data.id); if (!row) return reply({error:'Registration not found.'},404);
       if (!row.photo_path.startsWith(`${row.id}/`) || row.photo_path.includes('..')) throw new Error('Invalid photo path');

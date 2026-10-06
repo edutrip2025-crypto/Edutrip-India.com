@@ -44,8 +44,16 @@ Deno.serve(async req => {
     const folders = await list('');
     for (const folder of folders) {
       if (!/^[0-9a-f-]{36}$/i.test(folder.name) || folder.id) throw new Error('Unexpected bucket entry');
-      const files = await list(folder.name);
-      const paths = files.map(f => `${folder.name}/${f.name}`);
+      const paths: string[] = [];
+      const walk = async (prefix: string, depth: number) => {
+        if (depth > 2) throw new Error('Unexpected photo folder depth');
+        for (const entry of await list(prefix)) {
+          if (entry.name.includes('/') || entry.name.includes('..')) throw new Error('Unexpected photo entry');
+          const path = `${prefix}/${entry.name}`;
+          if (entry.id) paths.push(path); else await walk(path, depth + 1);
+        }
+      };
+      await walk(folder.name, 0);
       for (let i=0;i<paths.length;i+=100) await api(`/storage/v1/object/${bucket}`,{method:'DELETE',body:JSON.stringify({prefixes:paths.slice(i,i+100)})});
     }
     return reply({status:'complete',removed});

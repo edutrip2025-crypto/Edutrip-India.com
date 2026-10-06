@@ -55,6 +55,10 @@ export function validatePhoto(file, bytes) {
   if ((file.type === 'image/png' && !png) || (file.type === 'image/jpeg' && !jpg)) throw new InputError('The photo does not match its file type. Please use a JPG or PNG image.');
   return file.type === 'image/png' ? 'png' : 'jpg';
 }
+export function photoFilename(name, extension) {
+  const first = name.normalize('NFKC').trim().split(/\s+/)[0].replace(/[^\p{L}\p{N}_-]/gu,'').slice(0,70) || 'Participant';
+  return `${first}_Photo.${extension}`;
+}
 export function createHandler({url, serviceKey, fetcher = fetch}) {
   const headers = {apikey:serviceKey, Authorization:`Bearer ${serviceKey}`};
   const api = (path, options = {}) => fetcher(`${url}${path}`, {...options, headers:{...headers,...options.headers}, signal:AbortSignal.timeout(20000)});
@@ -84,27 +88,30 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
       const photo = form.get('photo');
       if (!photo || typeof photo.arrayBuffer !== 'function' || photo.size > 2097152) throw new InputError('Upload a JPG or PNG photograph up to 2 MB.');
       const bytes = new Uint8Array(await photo.arrayBuffer()); const extension = validatePhoto(photo,bytes);
-      const existing = await api(`/rest/v1/${TABLE}?id=eq.${record.id}&select=id`);
+      const existing = await api(`/rest/v1/${TABLE}?id=eq.${record.id}&select=registration_reference`);
       if (!existing.ok) throw new Error('Database lookup failed');
-      if ((await existing.json()).length) return reply({reference:record.id});
+      const previous = (await existing.json())[0];
+      if (previous) return reply({reference:previous.registration_reference});
       // Each attempt gets its own photo path; a concurrent retry cannot overwrite another attempt's photo.
-      uploadedPath = `${record.id}/${crypto.randomUUID()}.${extension}`;
+      uploadedPath = `${record.id}/${crypto.randomUUID()}/${photoFilename(record.full_name,extension)}`;
       const upload = await api(`/storage/v1/object/${BUCKET}/${uploadedPath}`,{method:'POST',headers:{'Content-Type':photo.type,'x-upsert':'false'},body:bytes});
       if (!upload.ok) { uploadedPath = null; throw new Error('Photo upload failed'); }
       record.photo_path = uploadedPath;
       record.consent_version = 'chennai-2026-v2';
-      const insert = await api(`/rest/v1/${TABLE}`,{method:'POST',headers:{'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(record)});
+      const insert = await api(`/rest/v1/${TABLE}`,{method:'POST',headers:{'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(record)});
       if (!insert.ok) {
         // A simultaneous retry may have committed the same request ID.
-        const check = await api(`/rest/v1/${TABLE}?id=eq.${record.id}&select=id`);
-        if (check.ok && (await check.json()).length) {
+        const check = await api(`/rest/v1/${TABLE}?id=eq.${record.id}&select=registration_reference`);
+        const committed = check.ok ? (await check.json())[0] : null;
+        if (committed) {
           await api(`/storage/v1/object/${BUCKET}`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({prefixes:[uploadedPath]})});
-          uploadedPath = null; return reply({reference:record.id});
+          uploadedPath = null; return reply({reference:committed.registration_reference});
         }
         throw new Error('Database write failed');
       }
       uploadedPath = null;
-      return reply({reference:record.id},201);
+      const saved = (await insert.json())[0];
+      return reply({reference:saved.registration_reference},201);
     } catch (error) {
       // If an insert timed out, keep the photo: the database may already reference it.
       // Definite rejected inserts are cleaned up; ambiguous failures are reconciled by the organiser.

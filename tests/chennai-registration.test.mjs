@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createHandler,validateFields,validatePhoto} from '../supabase/functions/chennai-registration/handler.mjs';
+import {createHandler,validateFields,validatePhoto,photoFilename} from '../supabase/functions/chennai-registration/handler.mjs';
 
 function fixture() {
   const form = new FormData();
@@ -42,15 +42,15 @@ test('spoofed and oversized photo files are rejected',()=>{
 });
 test('stores photo then record; reply exposes only registration reference',async()=>{
   const calls=[]; const handler=createHandler({url:'https://db.test',serviceKey:'server-only-test-key',fetcher:async(url,options)=>{
-    calls.push({url,options});return url.includes('?id=')?Response.json([]):new Response(null,{status:201});
+    calls.push({url,options});return url.includes('?id=')?Response.json([]):url.includes('/rest/')?Response.json([{registration_reference:'REGCHN0001'}],{status:201}):new Response(null,{status:201});
   }});
   const response=await handler(request(fixture()));assert.equal(response.status,201);
-  assert.deepEqual(Object.keys(await response.json()),['reference']);assert.equal(calls.length,3);
+  assert.deepEqual(await response.json(),{reference:'REGCHN0001'});assert.equal(calls.length,3);
   const stored=JSON.parse(calls[2].options.body);assert.match(stored.photo_path,/\.png$/);assert.equal(stored.consent_version,'chennai-2026-v2');assert.equal(stored.photo,undefined);
 });
 test('retry returns original reference without another upload',async()=>{
-  let count=0;const handler=createHandler({url:'https://db.test',serviceKey:'test',fetcher:async()=>{count++;return Response.json([{id:'10000000-0000-4000-8000-000000000001'}]);}});
-  assert.equal((await handler(request(fixture()))).status,200);assert.equal(count,1);
+  let count=0;const handler=createHandler({url:'https://db.test',serviceKey:'test',fetcher:async()=>{count++;return Response.json([{registration_reference:'REGCHN0001'}]);}});
+  const response = await handler(request(fixture())); assert.equal(response.status,200); assert.deepEqual(await response.json(),{reference:'REGCHN0001'});assert.equal(count,1);
 });
 test('database rejection removes uploaded photo and never reports success',async()=>{
   const calls=[];const handler=createHandler({url:'https://db.test',serviceKey:'test',fetcher:async(url,options)=>{
@@ -65,3 +65,5 @@ test('disallowed origin and oversized payload stop before storage',async()=>{
   const preflight=await handler(new Request('https://db.test',{method:'OPTIONS',headers:{Origin:'https://www.registrationpmshri.edutripindia.com'}}));
   assert.equal(preflight.status,204);assert.equal(preflight.headers.get('Access-Control-Allow-Origin'),'https://www.registrationpmshri.edutripindia.com');
 });
+
+test('photo filenames use participant names safely and preserve format',()=>{assert.equal(photoFilename('Raghavendra Prasad','jpg'),'Raghavendra_Photo.jpg');assert.equal(photoFilename('../ Unsafe','png'),'Participant_Photo.png');});
