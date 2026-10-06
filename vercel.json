@@ -4,6 +4,7 @@
   "outputDirectory": ".",
   "framework": null,
   "rewrites": [
+    {"source":"/data-handling-policy","destination":"/data-handling-policy.html"},
     {
       "source": "/",
       "has": [{ "type": "host", "value": "www.registrationpmshri.edutripindia.com" }],

@@ -63,6 +63,7 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
     if (origin && !ORIGINS.includes(origin)) return reply({error:'This registration form is not available on this website.'},403);
     if (req.method === 'OPTIONS') return new Response(null,{status:204,headers:cors});
     if (req.method !== 'POST') return reply({error:'Use the registration form to submit your details.'},405);
+    if (Date.now() >= Date.parse('2026-11-30T18:30:00Z')) return reply({error:'Registration for this programme is closed.'},410);
     if (!url || !serviceKey) return reply({error:'Registration is temporarily unavailable. Please contact Edutrip.'},503);
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim();
     const now = Date.now();
@@ -88,7 +89,7 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
       const upload = await api(`/storage/v1/object/${BUCKET}/${uploadedPath}`,{method:'POST',headers:{'Content-Type':photo.type,'x-upsert':'false'},body:bytes});
       if (!upload.ok) { uploadedPath = null; throw new Error('Photo upload failed'); }
       record.photo_path = uploadedPath;
-      record.consent_version = 'chennai-2026-v1';
+      record.consent_version = 'chennai-2026-v2';
       const insert = await api(`/rest/v1/${TABLE}`,{method:'POST',headers:{'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(record)});
       if (!insert.ok) {
         // A simultaneous retry may have committed the same request ID.

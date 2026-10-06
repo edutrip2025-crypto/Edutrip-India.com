@@ -39,7 +39,7 @@ test('stores photo then record; reply exposes only registration reference',async
   }});
   const response=await handler(request(fixture()));assert.equal(response.status,201);
   assert.deepEqual(Object.keys(await response.json()),['reference']);assert.equal(calls.length,3);
-  const stored=JSON.parse(calls[2].options.body);assert.match(stored.photo_path,/\.png$/);assert.equal(stored.consent_version,'chennai-2026-v1');assert.equal(stored.photo,undefined);
+  const stored=JSON.parse(calls[2].options.body);assert.match(stored.photo_path,/\.png$/);assert.equal(stored.consent_version,'chennai-2026-v2');assert.equal(stored.photo,undefined);
 });
 test('retry returns original reference without another upload',async()=>{
   let count=0;const handler=createHandler({url:'https://db.test',serviceKey:'test',fetcher:async()=>{count++;return Response.json([{id:'10000000-0000-4000-8000-000000000001'}]);}});
