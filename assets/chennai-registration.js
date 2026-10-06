@@ -4,7 +4,6 @@
   const config = window.CHENNAI_REGISTRATION || {};
   const status = document.querySelector('#status');
   const button = document.querySelector('#submit-button');
-  const schools = ['Headmaster / Headmistress', 'Principal', 'School Complex Headmaster'];
   const tripDate = '2026-10-28';
   const today = new Date();
   const localDate = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
@@ -15,8 +14,6 @@
   }
   form.elements.role.addEventListener('change', () => {
     conditional('role-other-wrap', form.elements.role.value === 'Other');
-    form.elements.udise.required = schools.includes(form.elements.role.value);
-    document.querySelector('#udise-required').textContent = form.elements.udise.required ? '*' : '(optional)';
   });
   form.elements.medical_declaration.addEventListener('change', () => {
     conditional('medical-wrap', form.elements.medical_declaration.value === 'Yes');

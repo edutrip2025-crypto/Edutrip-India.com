@@ -13,12 +13,13 @@ function fixture() {
   return form;
 }
 const request = form => new Request('https://example.test/register',{method:'POST',headers:{Origin:'https://www.edutripindia.com'},body:form});
-test('valid school registration and visitor without UDISE',()=>{
+test('school leaders and visitors register without UDISE or mandal',()=>{
   const form=fixture(); assert.equal(validateFields(form).district,'Medak');
-  form.set('role','Accompanying Visitor');form.delete('udise');assert.equal(validateFields(form).udise,null);
+  form.delete('udise');assert.equal(validateFields(form).udise,null);
+  form.set('role','Accompanying Visitor');assert.equal(validateFields(form).mandal,null);
 });
-test('invalid dates, school codes and missing consent are rejected',()=>{
-  for (const [key,value] of [['date_of_birth','1980-02-30'],['date_of_birth','2099-01-01'],['udise','123'],['consent','']]) {
+test('invalid dates, contact numbers and missing consent are rejected',()=>{
+  for (const [key,value] of [['date_of_birth','1980-02-30'],['date_of_birth','2099-01-01'],['mobile','123'],['consent','']]) {
     const form=fixture();form.set(key,value);assert.throws(()=>validateFields(form));
   }
 });
@@ -54,4 +55,6 @@ test('disallowed origin and oversized payload stop before storage',async()=>{
   const handler=createHandler({url:'https://db.test',serviceKey:'test',fetcher:()=>{throw Error('Must not call storage');}});
   assert.equal((await handler(new Request('https://db.test',{method:'OPTIONS',headers:{Origin:'https://evil.test'}}))).status,403);
   assert.equal((await handler(new Request('https://db.test',{method:'POST',headers:{'Content-Length':'3000000'}}))).status,413);
+  const preflight=await handler(new Request('https://db.test',{method:'OPTIONS',headers:{Origin:'https://www.registrationpmshri.edutripindia.com'}}));
+  assert.equal(preflight.status,204);assert.equal(preflight.headers.get('Access-Control-Allow-Origin'),'https://www.registrationpmshri.edutripindia.com');
 });

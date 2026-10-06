@@ -5,6 +5,11 @@
   "framework": null,
   "rewrites": [
     {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.registrationpmshri.edutripindia.com" }],
+      "destination": "/chennai-registration.html"
+    },
+    {
       "source": "/chennai-registration",
       "destination": "/chennai-registration.html"
     },

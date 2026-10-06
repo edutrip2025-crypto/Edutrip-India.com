@@ -6,9 +6,9 @@ The government annexure lists Hyderabad 3, Sangareddy 44, Medak 31 and Medchal�
 
 ## Website
 
-Page: `/chennai-registration.html`; Vercel also routes `/chennai-registration` to this page. The intended public address after website deployment is `https://www.edutripindia.com/chennai-registration`.
+Page: `/chennai-registration.html`; Vercel also routes `/chennai-registration` to this page. The existing public address is `https://www.edutripindia.com/chennai-registration`. The requested domain is `https://www.registrationpmshri.edutripindia.com/`; its root is configured to show the registration page once the domain is connected in Vercel and DNS.
 
-The form contains all requested fields plus role, institution, UDISE code for school leaders, mobile number, optional email and mandal, emergency-contact name/relationship, accessibility needs and consent. No Aadhaar number or Aadhaar copy is collected. Dietary exclusions allow multiple selections, exclusive None, and required Other details. Medical information can be declared privately by telephone. JPG/PNG photos are limited to 2 MB. Personal details are not saved to browser storage.
+The form contains all requested fields plus role, institution, mobile number, optional email, emergency-contact name/relationship, accessibility needs and consent. UDISE code and Mandal have been removed; the backend keeps their legacy columns null for new registrations. No Aadhaar number or Aadhaar copy is collected. Dietary exclusions allow multiple selections, exclusive None, and required Other details. Medical information can be declared privately by telephone. JPG/PNG photos are limited to 2 MB. Personal details are not saved to browser storage.
 
 ## Supabase connection
 
@@ -18,9 +18,32 @@ Selected project: **founders@edutripindia.com's Project**, `vrmubjmgwlbypfwctwgq
 - Private bucket: `chennai-passport-photos-2026`, limited to JPEG/PNG and 2 MB.
 - Edge Function: `chennai-registration`, platform JWT verification enabled.
 - Frontend configuration: `assets/chennai-registration-config.js`, public anon JWT only. Service-role credentials stay in the Edge Function environment.
-- API allows only POST and OPTIONS and never exposes records or photo URLs. Allowed browser origins are the two Edutrip domain variants and localhost port 304 for testing.
+- API allows only POST and OPTIONS and never exposes records or photo URLs. Allowed browser origins are the two Edutrip domain variants, `https://www.registrationpmshri.edutripindia.com`, and localhost port 304 for testing.
 
 The public form uses a public anon JWT to call a write-only function. This is not participant identity verification. The server validates all fields, checks photo signatures and limits request size. Honeypot and per-instance IP throttling reduce casual abuse; throttling does not provide a global distributed limit. Repeated registrations from new page visits can still occur; organisers should reconcile duplicates by school, name and mobile before bookings.
+
+## Connect the requested registration domain
+
+You already own `edutripindia.com`; the requested address is a subdomain and does not require buying another domain.
+
+1. In [Vercel](https://vercel.com/dashboard), open the existing project that serves `www.edutripindia.com`.
+2. Open **Settings → Domains → Add Domain** and enter `www.registrationpmshri.edutripindia.com`. Assign it to Production and serve this project; do not select a redirect to the main website.
+3. Copy the CNAME target Vercel displays for this exact domain. Do not substitute an example target; Vercel uses project-specific targets.
+4. Open the authoritative DNS manager for `edutripindia.com` and add a record:
+
+| DNS field | Value |
+| --- | --- |
+| Type | CNAME |
+| Name / Host | `www.registrationpmshri` |
+| Target / Value | Exact target shown by Vercel |
+| TTL | Auto / default |
+
+If your DNS provider requires a full name, use `www.registrationpmshri.edutripindia.com`. If Cloudflare is your DNS provider, begin with DNS only (grey cloud) while verifying the domain.
+
+5. Save the record, then return to Vercel and wait for valid domain configuration and SSL certificate issuance. Complete any TXT ownership verification Vercel requests using its exact values.
+6. Open `https://www.registrationpmshri.edutripindia.com/`; the registration page should appear. Check the logos, district dropdown, medical declaration, Other food restrictions, photo upload and submit button.
+
+Only the new subdomain record is needed. Keep the existing apex/www and email DNS records in place. Setup guidance: [Vercel custom domain documentation](https://vercel.com/docs/domains/working-with-domains/add-a-domain).
 
 ## Organiser access and operations
 

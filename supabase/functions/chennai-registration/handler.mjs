@@ -1,7 +1,7 @@
 const DISTRICTS = ['Hyderabad','Sangareddy','Medak','Medchal–Malkajgiri'];
 const ROLES = ['Headmaster / Headmistress','Principal','School Complex Headmaster','DEO / Department Official','Accompanying Visitor','Other'];
 const FOOD = ['None','Onion','Garlic','Mushroom','Curd','Milk / dairy','Nuts / peanuts','Eggs','Wheat / gluten','Seafood','Soy','Other'];
-const ORIGINS = ['https://www.edutripindia.com','https://edutripindia.com','http://localhost:304','http://127.0.0.1:304'];
+const ORIGINS = ['https://www.edutripindia.com','https://edutripindia.com','https://www.registrationpmshri.edutripindia.com','http://localhost:304','http://127.0.0.1:304'];
 const BUCKET = 'chennai-passport-photos-2026';
 const TABLE = 'chennai_registrations_2026';
 const MAX_BODY = 2300000;
@@ -29,9 +29,10 @@ export function validateFields(form, today = new Date().toISOString().slice(0,10
   const email = text('email',254); if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new InputError('Please check your email address.');
   choice('district',DISTRICTS); const role = choice('role',ROLES);
   if (role === 'Other') text('role_other',120,true); else record.role_other = null;
-  text('institution',200,true); const udise = text('udise',11,ROLES.slice(0,3).includes(role));
-  if (udise && !/^\d{11}$/.test(udise)) throw new InputError('The UDISE code must contain 11 digits.');
-  text('mandal',100); choice('meal',['Veg','Non Veg']); choice('beverage',['Tea','Coffee','Neither']);
+  text('institution',200,true);
+  // Legacy columns remain nullable for existing records; the form no longer collects these fields.
+  record.udise = null; record.mandal = null;
+  choice('meal',['Veg','Non Veg']); choice('beverage',['Tea','Coffee','Neither']);
   const foods = form.getAll('food_restrictions');
   if (!foods.length || foods.length > FOOD.length || foods.some(f => !FOOD.includes(f)) || new Set(foods).size !== foods.length || (foods.includes('None') && foods.length > 1)) throw new InputError('Select food restrictions or None.');
   record.food_restrictions = foods;

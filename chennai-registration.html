@@ -2,21 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#153d38">
+  <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0ea5e9">
   <title>Chennai Exposure Visit Registration | Edutrip</title>
   <link rel="stylesheet" href="/assets/chennai-registration.css">
   <script src="/assets/chennai-registration-config.js" defer></script>
   <script src="/assets/chennai-registration.js" defer></script>
 </head>
 <body>
-  <header><a href="/" aria-label="Edutrip home"><img src="/edutrip-logo.png" alt="Edutrip"></a><span>PM SHRI · Telangana</span></header>
+  <header class="branding">
+    <a class="logo-frame edutrip-brand" href="https://www.edutripindia.com/" aria-label="Edutrip home"><img src="/edutrip-logo.png" alt="Edutrip"></a>
+    <div class="logo-frame pm-brand"><img src="/assets/pm-shri-logo.jpg" alt="PM SHRI — Pradhan Mantri Schools for Rising India"></div>
+    <div class="logo-frame samagra-brand"><img src="/assets/samagra-shiksha-logo.png" alt="Samagra Shiksha"></div>
+  </header>
   <main>
     <section class="intro">
-      <p class="eyebrow">CAPACITY BUILDING & EXPOSURE VISIT</p>
-      <h1>Chennai Exposure Visit</h1>
+      <p class="eyebrow">PM SHRI · TELANGANA</p>
+      <h1>Capacity Building &amp;<br>Exposure Visit</h1>
+      <p class="destination">Chennai · Participant Registration</p>
       <p class="lead">Register for the Chennai exposure visit. Your details help us arrange travel, meals, accommodation, ID cards and venue entry passes.</p>
       <div class="trip"><span><strong>28–31 October 2026</strong>Planned travel dates</span><span><strong>Hyderabad → Chennai</strong>SCERT Tamil Nadu · IIT Madras</span></div>
-      <p class="districts">Hyderabad · Sangareddy · Medak · Medchal–Malkajgiri</p>
       <p class="note">Schedules and institutional visits are subject to confirmation. Registration does not confirm a travel booking.</p>
     </section>
     <aside id="setup-notice" class="notice" hidden>Registration is being set up. Please contact Edutrip on <a href="tel:+917989054712">7989054712</a> before entering your details.</aside>
@@ -32,8 +36,6 @@
         <label>Participant role *<select name="role" id="role" required><option value="">Select role</option><option>Headmaster / Headmistress</option><option>Principal</option><option>School Complex Headmaster</option><option>DEO / Department Official</option><option>Accompanying Visitor</option><option>Other</option></select></label>
         <label id="role-other-wrap" class="wide" hidden>Please specify your role *<input name="role_other" maxlength="120" disabled></label>
         <label class="wide">School / institution / department name *<input name="institution" maxlength="200" required></label>
-        <label>UDISE code <span id="udise-required"></span><input name="udise" inputmode="numeric" pattern="[0-9]{11}" maxlength="11"><small>11 digits; required for school headmasters and principals.</small></label>
-        <label>Mandal (optional)<input name="mandal" maxlength="100"></label>
       </div></fieldset>
       <fieldset><legend><span>02</span> Meals & dietary needs</legend><div class="grid">
         <label>Meal preference *<select name="meal" required><option value="">Select preference</option><option>Veg</option><option>Non Veg</option></select></label>
