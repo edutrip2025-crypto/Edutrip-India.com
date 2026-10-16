@@ -1,8 +1,8 @@
-const CACHE_NAME = 'edutrip-cache-v5';
+const CACHE_NAME = 'edutrip-cache-v6';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './src/styles/minimal.css?v=20260311-2',
+  './src/styles/minimal.css?v=20261016-1',
   '/edutrip-logo.png',
   './assets/india-map-icon.png',
   './assets/tech-icon.png',

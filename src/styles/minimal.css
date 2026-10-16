@@ -2268,6 +2268,23 @@ body {
 }
 
 /* --- 3. Dynamic Typewriter Effect --- */
+.typewriter-line {
+  display: grid;
+  /* Every complete phrase reserves space, including when it wraps on mobile. */
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.typewriter-line > span {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+.typewriter-size {
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
 .typewriter-cursor {
   display: inline-block;
   width: 3px;
