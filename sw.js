@@ -1,4 +1,4 @@
-const CACHE_NAME = 'edutrip-cache-v4';
+const CACHE_NAME = 'edutrip-cache-v5';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -11,7 +11,7 @@ const ASSETS_TO_CACHE = [
   './assets/smarti.png',
   './assets/init_logo.png',
   './assets/raghavendra.jpg',
-  './assets/koteswara_rao.jpg'
+  './assets/koteswara_rao.jpg?v=20261016'
 ];
 
 self.addEventListener('install', (event) => {
