@@ -51,6 +51,11 @@ a { color:#0369a1; }
 .notice { background:#fff5d9; border:1px solid #e6c86b; border-radius:10px; padding:16px; font-size:14px; margin:25px 0; }
 .success { background:#e0f2fe; border-radius:16px; padding:32px; margin-top:30px; }
 .success h2 { font-size:28px; }
+.itinerary-download { display:flex; align-items:center; justify-content:center; gap:16px; width:100%; padding:22px 24px; margin:22px 0 26px; border:2px solid #0759a2; border-radius:12px; background:#0b4f9c; color:#fff; text-decoration:none; box-shadow:0 6px 16px #0b4f9c26; }
+.itinerary-download:hover { background:#073e7b; border-color:#073e7b; box-shadow:0 8px 20px #0b4f9c38; }
+.itinerary-download strong { display:block; font-size:20px; line-height:1.35; font-weight:700; }
+.itinerary-download-icon { flex-shrink:0; }
+.itinerary-download-note { display:block; margin-top:5px; font-size:14px; line-height:1.5; font-weight:400; color:#e0f2fe; }
 #status.error { color:#a12f28; font-weight:600; }
 footer { text-align:center; font-size:13px; color:var(--muted); padding:12px 20px 32px; }
 [hidden] { display:none!important; }
@@ -78,6 +83,9 @@ footer { text-align:center; font-size:13px; color:var(--muted); padding:12px 20p
   form { padding:22px 18px; }
   legend { font-size:18px; }
   .lead { font-size:16px; }
+  .success { padding:24px 20px; }
+  .itinerary-download { gap:12px; padding:20px 16px; justify-content:flex-start; }
+  .itinerary-download strong { font-size:18px; }
 }
 @media(max-width:400px) {
   .branding { padding:12px; gap:0 6px; }
