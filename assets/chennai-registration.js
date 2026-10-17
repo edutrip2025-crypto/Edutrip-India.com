@@ -68,6 +68,15 @@
       const result = await response.json();
       if (!response.ok || !result.reference) throw new Error(result.error || 'We could not confirm your submission. Please try again or contact Edutrip.');
       document.querySelector('#reference').textContent = result.reference;
+      if (result.itinerary_url) {
+        const itineraryLink = document.querySelector('#itinerary-link');
+        itineraryLink.href = result.itinerary_url;
+        itineraryLink.download = result.itinerary_filename || '';
+        document.querySelector('#itinerary-message').textContent = `Your ${form.elements.district.value} itinerary is ready:`;
+      } else {
+        document.querySelector('#itinerary-message').textContent = 'Your registration is confirmed. Contact Edutrip for your district itinerary.';
+        document.querySelector('#itinerary-link').hidden = true;
+      }
       form.hidden = true; const success = document.querySelector('#success'); success.hidden = false; success.focus(); success.scrollIntoView({behavior:'smooth'});
       form.reset(); if (previewUrl) URL.revokeObjectURL(previewUrl);
     } catch (error) {

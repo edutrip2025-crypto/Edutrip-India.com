@@ -4,6 +4,13 @@ const FOOD = ['None','Onion','Garlic','Mushroom','Curd','Milk / dairy','Nuts / p
 const ORIGINS = ['https://www.edutripindia.com','https://edutripindia.com','https://www.registrationpmshri.edutripindia.com','http://localhost:304','http://127.0.0.1:304'];
 const BUCKET = 'chennai-passport-photos-2026';
 const AADHAAR_BUCKET = 'chennai-masked-aadhaar-2026';
+const ITINERARY_BUCKET = 'chennai-itineraries-2026';
+const ITINERARIES = {
+  'Hyderabad': 'Revised_Itinerary_Chennai_Trip_Hyderabad.pdf',
+  'Sangareddy': 'Revised_Itinerary_Chennai_Trip_Sangareddy.pdf',
+  'Mahbubnagar': 'Revised_Itinerary_Chennai_Trip_Mahabubnagar.pdf',
+  'Medchal–Malkajgiri': 'Revised_Itinerary_Chennai_Trip_Medchal_Malkajgiri.pdf',
+};
 const TABLE = 'chennai_registrations_2026';
 const MAX_BODY = 8500000;
 const limits = new Map();
@@ -46,7 +53,7 @@ export function validateFields(form, today = new Date().toISOString().slice(0,10
   if (medical === 'Yes') text('medical_details',1500,true); else record.medical_details = null;
   text('accessibility',1000); text('emergency_name',150,true); text('emergency_relationship',80,true);
   if (form.get('consent') !== 'on') throw new InputError('Please confirm the consent declaration.');
-  if (form.get('aadhaar_confirmation') !== 'on') throw new InputError('Please confirm that your Aadhaar copy is masked.');
+  if (form.get('aadhaar_confirmation') !== 'on') throw new InputError('Please consent to Aadhaar use only for flight tickets and venue entry.');
   if (form.get('website')) throw new InputError('Unable to accept this submission.');
   return record;
 }
@@ -62,6 +69,11 @@ export function aadhaarFilename(name, extension) {
   const safe = name.normalize('NFKC').trim().replace(/\s+/g,'_').replace(/[^\p{L}\p{N}_-]/gu,'').slice(0,100) || 'Participant';
   return `${safe}_Aadhaar_Masked.${extension}`;
 }
+export function itineraryDetails(district) {
+  const filename = ITINERARIES[district];
+  if (!filename) throw new InputError('No itinerary is available for this district yet. Please contact Edutrip.');
+  return {itinerary_filename:filename, path:filename};
+}
 export function validatePhoto(file, bytes) {
   if (!file || !['image/jpeg','image/png'].includes(file.type) || file.size < 20 || file.size > 2097152) throw new InputError('Upload a JPG or PNG photograph up to 2 MB.');
   const png = [137,80,78,71,13,10,26,10].every((n,i) => bytes[i] === n);
@@ -76,6 +88,16 @@ export function photoFilename(name, extension) {
 export function createHandler({url, serviceKey, fetcher = fetch}) {
   const headers = {apikey:serviceKey, Authorization:`Bearer ${serviceKey}`};
   const api = (path, options = {}) => fetcher(`${url}${path}`, {...options, headers:{...headers,...options.headers}, signal:AbortSignal.timeout(20000)});
+  const signedItinerary = async district => {
+    const details = itineraryDetails(district);
+    const signed = await api(`/storage/v1/object/sign/${ITINERARY_BUCKET}/${encodeURIComponent(details.path)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expiresIn:2592000,download:details.itinerary_filename})});
+    if (!signed.ok) throw new Error('Itinerary link failed');
+    const data = await signed.json();
+    const signedURL = data.signedURL || data.signedUrl;
+    if (typeof signedURL !== 'string' || !signedURL) throw new Error('Itinerary link failed');
+    const itineraryUrl = signedURL.startsWith('http') ? signedURL : `${url}${signedURL.startsWith('/storage/v1/') ? '' : '/storage/v1'}${signedURL.startsWith('/') ? signedURL : `/${signedURL}`}`;
+    return {itinerary_filename:details.itinerary_filename,itinerary_url:itineraryUrl};
+  };
   return async req => {
     const origin = req.headers.get('origin');
     const cors = {'Content-Type':'application/json','Cache-Control':'no-store','Access-Control-Allow-Methods':'POST,OPTIONS','Access-Control-Allow-Headers':'authorization,apikey,content-type,x-client-info','Vary':'Origin'};
@@ -108,7 +130,8 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
       const existing = await api(`/rest/v1/${TABLE}?id=eq.${record.id}&select=registration_reference`);
       if (!existing.ok) throw new Error('Database lookup failed');
       const previous = (await existing.json())[0];
-      if (previous) return reply({reference:previous.registration_reference});
+      if (previous) return reply({reference:previous.registration_reference,...await signedItinerary(record.district)});
+      const itinerary = await signedItinerary(record.district);
       // Each attempt gets its own photo path; a concurrent retry cannot overwrite another attempt's photo.
       uploadedPath = `${record.id}/${crypto.randomUUID()}/${photoFilename(record.full_name,extension)}`;
       const upload = await api(`/storage/v1/object/${BUCKET}/${uploadedPath}`,{method:'POST',headers:{'Content-Type':photo.type,'x-upsert':'false'},body:bytes});
@@ -121,7 +144,7 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
         uploadedPath = null; uploadedAadhaarPath = null; throw new Error('Aadhaar upload failed');
       }
       record.aadhaar_path = uploadedAadhaarPath;
-      record.consent_version = 'chennai-2026-v3';
+      record.consent_version = 'chennai-2026-v4';
       const insert = await api(`/rest/v1/${TABLE}`,{method:'POST',headers:{'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(record)});
       if (!insert.ok) {
         // A simultaneous retry may have committed the same request ID.
@@ -130,13 +153,13 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
         if (committed) {
           await api(`/storage/v1/object/${BUCKET}`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({prefixes:[uploadedPath]})});
           await api(`/storage/v1/object/${AADHAAR_BUCKET}`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({prefixes:[uploadedAadhaarPath]})});
-          uploadedPath = null; uploadedAadhaarPath = null; return reply({reference:committed.registration_reference});
+          uploadedPath = null; uploadedAadhaarPath = null; return reply({reference:committed.registration_reference,...itinerary});
         }
         throw new Error('Database write failed');
       }
       uploadedPath = null; uploadedAadhaarPath = null;
       const saved = (await insert.json())[0];
-      return reply({reference:saved.registration_reference},201);
+      return reply({reference:saved.registration_reference,...itinerary},201);
     } catch (error) {
       // If an insert timed out, keep the photo: the database may already reference it.
       // Definite rejected inserts are cleaned up; ambiguous failures are reconciled by the organiser.

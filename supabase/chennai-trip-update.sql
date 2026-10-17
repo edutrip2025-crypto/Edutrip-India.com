@@ -7,7 +7,7 @@ update public.chennai_registrations_2026 set expires_at = '2026-11-28 18:30:00+0
 alter table public.chennai_registrations_2026 alter column expires_at set default '2026-11-28 18:30:00+00';
 alter table public.chennai_registrations_2026 add column if not exists whatsapp_phone text;
 alter table public.chennai_registrations_2026 add column if not exists aadhaar_path text;
-alter table public.chennai_registrations_2026 alter column consent_version set default 'chennai-2026-v3';
+alter table public.chennai_registrations_2026 alter column consent_version set default 'chennai-2026-v4';
 insert into storage.buckets (id,name,public,file_size_limit,allowed_mime_types)
 values ('chennai-masked-aadhaar-2026','chennai-masked-aadhaar-2026',false,5242880,array['application/pdf','image/jpeg','image/png'])
 on conflict (id) do update set public=false,file_size_limit=5242880,allowed_mime_types=array['application/pdf','image/jpeg','image/png'];

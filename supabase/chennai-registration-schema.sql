@@ -27,7 +27,7 @@ create table public.chennai_registrations_2026 (
   emergency_phone text not null check (emergency_phone ~ '^[6-9][0-9]{9}$'),
   photo_path text not null,
   aadhaar_path text not null,
-  consent_version text not null default 'chennai-2026-v3',
+  consent_version text not null default 'chennai-2026-v4',
   consent_at timestamptz not null default now()
 );
 alter table public.chennai_registrations_2026 enable row level security;
