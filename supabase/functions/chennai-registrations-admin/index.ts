@@ -4,6 +4,7 @@ const url = Deno.env.get('SUPABASE_URL');
 const secret = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const table = 'chennai_registrations_2026';
 const bucket = 'chennai-passport-photos-2026';
+const aadhaarBucket = 'chennai-masked-aadhaar-2026';
 const origins = ['https://app.edutripindia.com','http://localhost:1998'];
 const idPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 async function api(path: string, options: RequestInit = {}) {
@@ -20,12 +21,14 @@ Deno.serve(async req => {
   if (req.method === 'OPTIONS') return new Response(null,{status:204,headers});
   if (req.method !== 'POST') return reply({error:'Method not allowed.'},405);
   let uid: string;
+  let isFounder = false;
   try {
     const token = req.headers.get('authorization')?.match(/^Bearer (.+)$/i)?.[1];
     if (!token) throw new Error('Missing token');
     const {payload} = await jwtVerify(token,jwks,{issuer:'https://securetoken.google.com/edutrip-web',audience:'edutrip-web',algorithms:['RS256']});
     if (!payload.sub || payload.sub.length > 128 || !payload.iat || payload.iat > Date.now()/1000) throw new Error('Invalid token');
     if (!['ops','superadmin'].includes(String(payload.role)) && payload.email !== 'founders@edutripindia.com') return reply({error:'Only authorised Ops and SuperAdmin staff can access registrations.'},403);
+    isFounder = payload.email === 'founders@edutripindia.com';
     uid = payload.sub;
   } catch { return reply({error:'Please sign in with your authorised Edutrip account.'},401); }
   try {
@@ -70,6 +73,14 @@ Deno.serve(async req => {
       const row = await get(data.id); if (!row) return reply({error:'Registration not found.'},404);
       if (!row.photo_path.startsWith(`${row.id}/`) || row.photo_path.includes('..')) throw new Error('Invalid photo path');
       const signed = await (await api(`/storage/v1/object/sign/${bucket}/${row.photo_path}`,{method:'POST',body:JSON.stringify({expiresIn:300})})).json();
+      return reply({url:`${url}/storage/v1${signed.signedURL}`});
+    }
+    if (data.action === 'aadhaar') {
+      if (!isFounder) return reply({error:'Masked Aadhaar files are restricted to the founders account.'},403);
+      const row = await get(data.id); if (!row) return reply({error:'Registration not found.'},404);
+      if (!row.aadhaar_path) return reply({error:'No Aadhaar document has been submitted for this registration.'},404);
+      if (!row.aadhaar_path.startsWith(`${row.id}/`) || row.aadhaar_path.includes('..') || !/_Aadhaar_Masked\.(pdf|png|jpg)$/i.test(row.aadhaar_path)) throw new Error('Invalid Aadhaar path');
+      const signed = await (await api(`/storage/v1/object/sign/${aadhaarBucket}/${row.aadhaar_path}`,{method:'POST',body:JSON.stringify({expiresIn:60})})).json();
       return reply({url:`${url}/storage/v1${signed.signedURL}`});
     }
     if (data.action === 'resolve') {

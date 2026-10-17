@@ -2,7 +2,7 @@ alter table public.chennai_registrations_2026
   add column removed_at timestamptz,
   add column removed_by text,
   add column duplicate_of uuid,
-  add column expires_at timestamptz not null default '2026-11-30 18:30:00+00';
+  add column expires_at timestamptz not null default '2026-11-28 18:30:00+00';
 create function public.resolve_chennai_duplicate(remove_id uuid, keep_id uuid, actor text)
 returns boolean language plpgsql security invoker set search_path = '' as $$
 begin

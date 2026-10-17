@@ -4,7 +4,7 @@
   const config = window.CHENNAI_REGISTRATION || {};
   const status = document.querySelector('#status');
   const button = document.querySelector('#submit-button');
-  const tripDate = '2026-10-28';
+  const tripDate = '2026-10-27';
   const today = new Date();
   const localDate = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
   form.elements.date_of_birth.max = localDate < tripDate ? localDate : tripDate;
@@ -41,6 +41,14 @@
       photo.setCustomValidity('Choose a JPG or PNG photograph up to 2 MB.'); photo.reportValidity(); return;
     }
     previewUrl = URL.createObjectURL(file); preview.src = previewUrl; preview.hidden = false;
+  });
+  const aadhaar = document.querySelector('#aadhaar-card');
+  aadhaar.addEventListener('change', () => {
+    aadhaar.setCustomValidity('');
+    const file = aadhaar.files[0]; if (!file) return;
+    if (!['application/pdf','image/jpeg','image/png'].includes(file.type) || file.size > 5 * 1024 * 1024) {
+      aadhaar.setCustomValidity('Choose a PDF, JPG or PNG masked Aadhaar copy up to 5 MB.'); aadhaar.reportValidity();
+    }
   });
   if (!config.endpoint || !config.publicKey) {
     document.querySelector('#setup-notice').hidden = false;

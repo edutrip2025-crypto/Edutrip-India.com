@@ -1,10 +1,11 @@
-const DISTRICTS = ['Hyderabad','Sangareddy','Medak','Medchal–Malkajgiri'];
+const DISTRICTS = ['Hyderabad','Sangareddy','Mahbubnagar','Medchal–Malkajgiri'];
 const ROLES = ['Headmaster / Headmistress','Principal','School Complex Headmaster','DEO / Department Official','Accompanying Visitor','Other'];
 const FOOD = ['None','Onion','Garlic','Mushroom','Curd','Milk / dairy','Nuts / peanuts','Eggs','Wheat / gluten','Seafood','Soy','Other'];
 const ORIGINS = ['https://www.edutripindia.com','https://edutripindia.com','https://www.registrationpmshri.edutripindia.com','http://localhost:304','http://127.0.0.1:304'];
 const BUCKET = 'chennai-passport-photos-2026';
+const AADHAAR_BUCKET = 'chennai-masked-aadhaar-2026';
 const TABLE = 'chennai_registrations_2026';
-const MAX_BODY = 2300000;
+const MAX_BODY = 8500000;
 const limits = new Map();
 class InputError extends Error {}
 export function validateFields(form, today = new Date().toISOString().slice(0,10)) {
@@ -23,7 +24,7 @@ export function validateFields(form, today = new Date().toISOString().slice(0,10
   text('full_name',150,true);
   const dob = text('date_of_birth',10,true);
   const parsedDate = new Date(`${dob}T00:00:00Z`);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(dob) || !Number.isFinite(parsedDate.getTime()) || parsedDate.toISOString().slice(0,10) !== dob || dob < '1900-01-01' || dob > today || dob > '2026-10-28') throw new InputError('Please enter a valid date of birth.');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dob) || !Number.isFinite(parsedDate.getTime()) || parsedDate.toISOString().slice(0,10) !== dob || dob < '1900-01-01' || dob > today || dob > '2026-10-27') throw new InputError('Please enter a valid date of birth.');
   choice('gender',['Female','Male','Other','Prefer not to say']);
   for (const key of ['mobile','emergency_phone']) if (!/^[6-9][0-9]{9}$/.test(text(key,10,true))) throw new InputError('Please enter valid 10-digit mobile and emergency numbers.');
   if (form.get('whatsapp_different') === 'on') {
@@ -45,8 +46,21 @@ export function validateFields(form, today = new Date().toISOString().slice(0,10
   if (medical === 'Yes') text('medical_details',1500,true); else record.medical_details = null;
   text('accessibility',1000); text('emergency_name',150,true); text('emergency_relationship',80,true);
   if (form.get('consent') !== 'on') throw new InputError('Please confirm the consent declaration.');
+  if (form.get('aadhaar_confirmation') !== 'on') throw new InputError('Please confirm that your Aadhaar copy is masked.');
   if (form.get('website')) throw new InputError('Unable to accept this submission.');
   return record;
+}
+export function validateAadhaar(file, bytes) {
+  if (!file || !['application/pdf','image/jpeg','image/png'].includes(file.type) || file.size < 20 || file.size > 5242880) throw new InputError('Upload a masked Aadhaar copy as PDF, JPG or PNG, up to 5 MB.');
+  const pdf = file.type === 'application/pdf' && new TextDecoder().decode(bytes.slice(0,5)) === '%PDF-';
+  const png = file.type === 'image/png' && [137,80,78,71,13,10,26,10].every((n,i) => bytes[i] === n);
+  const jpg = file.type === 'image/jpeg' && bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;
+  if (!pdf && !png && !jpg) throw new InputError('The Aadhaar file does not match its file type. Please use a PDF, JPG or PNG file.');
+  return file.type === 'application/pdf' ? 'pdf' : file.type === 'image/png' ? 'png' : 'jpg';
+}
+export function aadhaarFilename(name, extension) {
+  const safe = name.normalize('NFKC').trim().replace(/\s+/g,'_').replace(/[^\p{L}\p{N}_-]/gu,'').slice(0,100) || 'Participant';
+  return `${safe}_Aadhaar_Masked.${extension}`;
 }
 export function validatePhoto(file, bytes) {
   if (!file || !['image/jpeg','image/png'].includes(file.type) || file.size < 20 || file.size > 2097152) throw new InputError('Upload a JPG or PNG photograph up to 2 MB.');
@@ -70,24 +84,27 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
     if (origin && !ORIGINS.includes(origin)) return reply({error:'This registration form is not available on this website.'},403);
     if (req.method === 'OPTIONS') return new Response(null,{status:204,headers:cors});
     if (req.method !== 'POST') return reply({error:'Use the registration form to submit your details.'},405);
-    if (Date.now() >= Date.parse('2026-11-30T18:30:00Z')) return reply({error:'Registration for this programme is closed.'},410);
+    if (Date.now() >= Date.parse('2026-11-28T18:30:00Z')) return reply({error:'Registration for this programme is closed.'},410);
     if (!url || !serviceKey) return reply({error:'Registration is temporarily unavailable. Please contact Edutrip.'},503);
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim();
     const now = Date.now();
     for (const [key,value] of limits) if (now - value.start > 600000) limits.delete(key);
     if (ip) { const entry = limits.get(ip) || {start:now,count:0}; entry.count++; limits.set(ip,entry); if (entry.count > 40) return reply({error:'Too many submissions. Please wait a few minutes before retrying.'},429); }
-    let uploadedPath;
+    let uploadedPath, uploadedAadhaarPath;
     try {
-      if (Number(req.headers.get('content-length') || 0) > MAX_BODY) return reply({error:'Please upload a photo up to 2 MB.'},413);
+      if (Number(req.headers.get('content-length') || 0) > MAX_BODY) return reply({error:'The files exceed the upload limit. Use a photo up to 2 MB and masked Aadhaar up to 5 MB.'},413);
       if (!req.headers.get('content-type')?.startsWith('multipart/form-data')) return reply({error:'Invalid form submission.'},400);
       const reader = req.body?.getReader(); if (!reader) throw new InputError('Empty submission.');
       const chunks = []; let size = 0;
-      while (true) { const {done,value} = await reader.read(); if (done) break; size += value.length; if (size > MAX_BODY) { await reader.cancel(); return reply({error:'Please upload a photo up to 2 MB.'},413); } chunks.push(value); }
+      while (true) { const {done,value} = await reader.read(); if (done) break; size += value.length; if (size > MAX_BODY) { await reader.cancel(); return reply({error:'The files exceed the upload limit. Use a photo up to 2 MB and masked Aadhaar up to 5 MB.'},413); } chunks.push(value); }
       let form; try { form = await new Response(new Blob(chunks),{headers:{'Content-Type':req.headers.get('content-type')}}).formData(); } catch { throw new InputError('Invalid form submission.'); }
       const record = validateFields(form);
       const photo = form.get('photo');
       if (!photo || typeof photo.arrayBuffer !== 'function' || photo.size > 2097152) throw new InputError('Upload a JPG or PNG photograph up to 2 MB.');
       const bytes = new Uint8Array(await photo.arrayBuffer()); const extension = validatePhoto(photo,bytes);
+      const aadhaar = form.get('aadhaar_card');
+      if (!aadhaar || typeof aadhaar.arrayBuffer !== 'function' || aadhaar.size > 5242880) throw new InputError('Upload a masked Aadhaar copy as PDF, JPG or PNG, up to 5 MB.');
+      const aadhaarBytes = new Uint8Array(await aadhaar.arrayBuffer()); const aadhaarExtension = validateAadhaar(aadhaar,aadhaarBytes);
       const existing = await api(`/rest/v1/${TABLE}?id=eq.${record.id}&select=registration_reference`);
       if (!existing.ok) throw new Error('Database lookup failed');
       const previous = (await existing.json())[0];
@@ -97,7 +114,14 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
       const upload = await api(`/storage/v1/object/${BUCKET}/${uploadedPath}`,{method:'POST',headers:{'Content-Type':photo.type,'x-upsert':'false'},body:bytes});
       if (!upload.ok) { uploadedPath = null; throw new Error('Photo upload failed'); }
       record.photo_path = uploadedPath;
-      record.consent_version = 'chennai-2026-v2';
+      uploadedAadhaarPath = `${record.id}/${crypto.randomUUID()}/${aadhaarFilename(record.full_name,aadhaarExtension)}`;
+      const aadhaarUpload = await api(`/storage/v1/object/${AADHAAR_BUCKET}/${uploadedAadhaarPath}`,{method:'POST',headers:{'Content-Type':aadhaar.type,'x-upsert':'false'},body:aadhaarBytes});
+      if (!aadhaarUpload.ok) {
+        await api(`/storage/v1/object/${BUCKET}`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({prefixes:[uploadedPath]})});
+        uploadedPath = null; uploadedAadhaarPath = null; throw new Error('Aadhaar upload failed');
+      }
+      record.aadhaar_path = uploadedAadhaarPath;
+      record.consent_version = 'chennai-2026-v3';
       const insert = await api(`/rest/v1/${TABLE}`,{method:'POST',headers:{'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(record)});
       if (!insert.ok) {
         // A simultaneous retry may have committed the same request ID.
@@ -105,11 +129,12 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
         const committed = check.ok ? (await check.json())[0] : null;
         if (committed) {
           await api(`/storage/v1/object/${BUCKET}`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({prefixes:[uploadedPath]})});
-          uploadedPath = null; return reply({reference:committed.registration_reference});
+          await api(`/storage/v1/object/${AADHAAR_BUCKET}`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({prefixes:[uploadedAadhaarPath]})});
+          uploadedPath = null; uploadedAadhaarPath = null; return reply({reference:committed.registration_reference});
         }
         throw new Error('Database write failed');
       }
-      uploadedPath = null;
+      uploadedPath = null; uploadedAadhaarPath = null;
       const saved = (await insert.json())[0];
       return reply({reference:saved.registration_reference},201);
     } catch (error) {
@@ -117,6 +142,9 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
       // Definite rejected inserts are cleaned up; ambiguous failures are reconciled by the organiser.
       if (error.message === 'Database write failed' && uploadedPath) {
         try { await api(`/storage/v1/object/${BUCKET}`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({prefixes:[uploadedPath]})}); } catch { /* See operations guide for orphan reconciliation. */ }
+      }
+      if (error.message === 'Database write failed' && uploadedAadhaarPath) {
+        try { await api(`/storage/v1/object/${AADHAAR_BUCKET}`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({prefixes:[uploadedAadhaarPath]})}); } catch { /* See operations guide for orphan reconciliation. */ }
       }
       if (error instanceof InputError) return reply({error:error.message},400);
       return reply({error:'We could not confirm your submission. Please retry or call Edutrip on 7989054712.'},503);

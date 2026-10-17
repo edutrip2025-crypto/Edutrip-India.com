@@ -1,14 +1,14 @@
 # Chennai exposure visit registration
 
-Programme dates from the supplied itinerary: 28–31 October 2026, including return travel. Institution bookings and transport timings still need organiser confirmation.
+Programme dates from the supplied itinerary: 27–29 October 2026, including return travel. Institution bookings and transport timings still need organiser confirmation.
 
-The government annexure lists Hyderabad 3, Sangareddy 44, Medak 31 and Medchal–Malkajgiri 25 schools: **103 schools**. Officials and accompanying visitors are additional travellers. The form does not impose a 103-person cap.
+The government annexure lists Hyderabad 3, Sangareddy 44, Mahbubnagar 31 and Medchal–Malkajgiri 25 schools: **103 schools**. Officials and accompanying visitors are additional travellers. The form does not impose a 103-person cap.
 
 ## Website
 
 Page: `/chennai-registration.html`; Vercel also routes `/chennai-registration` to this page. The existing public address is `https://www.edutripindia.com/chennai-registration`. The requested domain is `https://www.registrationpmshri.edutripindia.com/`; its root is configured to show the registration page once the domain is connected in Vercel and DNS.
 
-The form contains all requested fields plus role, institution, mobile number, optional email, emergency-contact name/relationship, accessibility needs and consent. UDISE code and Mandal have been removed; the backend keeps their legacy columns null for new registrations. No Aadhaar number or Aadhaar copy is collected. Dietary exclusions allow multiple selections, exclusive None, and required Other details. Medical information can be declared privately by telephone. JPG/PNG photos are limited to 2 MB. Personal details are not saved to browser storage.
+The form contains all requested fields plus role, institution, mobile number, optional email, emergency-contact name/relationship, accessibility needs and consent. UDISE code and Mandal have been removed; the backend keeps their legacy columns null for new registrations. An Aadhaar copy is required under the government project instructions. Participants must mask the first eight digits and QR code; the site accepts masked PDF/JPG/PNG copies up to 5 MB. The uploaded file is stored in a separate private bucket under a sanitized participant-name filename and registration folder. Do not accept or request an unmasked card. Dietary exclusions allow multiple selections, exclusive None, and required Other details. Medical information can be declared privately by telephone. JPG/PNG photos are limited to 2 MB. Personal details are not saved to browser storage.
 
 ## Supabase connection
 
@@ -16,6 +16,7 @@ Selected project: **founders@edutripindia.com's Project**, `vrmubjmgwlbypfwctwgq
 
 - Database: `public.chennai_registrations_2026`, RLS enabled, no anon/authenticated table privileges.
 - Private bucket: `chennai-passport-photos-2026`, limited to JPEG/PNG and 2 MB.
+- Separate private bucket: `chennai-masked-aadhaar-2026`, limited to PDF/JPEG/PNG and 5 MB. No public storage policy is defined. Staff retrieve files only through a 60-second signed URL after admin authentication.
 - Edge Function: `chennai-registration`, platform JWT verification enabled.
 - Frontend configuration: `assets/chennai-registration-config.js`, public anon JWT only. Service-role credentials stay in the Edge Function environment.
 - API allows only POST and OPTIONS and never exposes records or photo URLs. Allowed browser origins are the two Edutrip domain variants, `https://www.registrationpmshri.edutripindia.com`, and localhost port 304 for testing.
@@ -47,13 +48,13 @@ Only the new subdomain record is needed. Keep the existing apex/www and email DN
 
 ## Organiser access and operations
 
-Use the project's Supabase dashboard with your authorised account. Table Editor shows registrations; filter by district or role and export the necessary columns as CSV. Storage shows photos under registration ID folders. Photos require authorised access or time-limited signed URLs, consistent with [Supabase's private bucket model](https://supabase.com/docs/guides/storage/buckets/fundamentals). No public participant listing or admin page is provided.
+Use the staff dashboard at `https://app.edutripindia.com/admin/ops/registrations/pm-shri-chennai` with an authorised account. The list’s Details view opens passport photos and issues short-lived signed links for masked Aadhaar files. Do not include Aadhaar files in airline exports or photo ZIPs. Storage also has a separate private Aadhaar bucket; use authorised access or time-limited signed URLs, consistent with [Supabase's private bucket model](https://supabase.com/docs/guides/storage/buckets/fundamentals).
 
-For ID cards and venue passes use full name, role, institution, district and photo. Keep medical/emergency details out of general ID-card exports. Reconcile the final traveller list and use only confirmed bookings and pickup points; Medak/Medchal pickup arrangements are not specified in the original itinerary.
+For ID cards and venue passes use full name, role, institution, district and photo. Keep medical/emergency details out of general ID-card exports. Reconcile the final traveller list and use only confirmed bookings and pickup points; Mahbubnagar/Medchal pickup arrangements are not specified in the original itinerary.
 
 If a server write times out, retry from the same open page: the request ID prevents duplicate rows. A connection failure can leave an unreferenced photo. Periodically compare bucket paths with `photo_path` in the table and remove only confirmed unreferenced files through Storage. Handle corrections through the coordinator; the participant form does not permit editing a submitted record.
 
-Retention/deletion timing remains an organiser decision. Do not announce an unconfirmed retention promise. After the programme and required reporting, review what must be retained and remove records and photos no longer needed. Delete both the database row and its Storage object when fulfilling an approved deletion.
+The participant notice states a 30-day retention period after the trip ends on 29 October 2026. Data is kept through 28 November; scheduled cleanup starts 29 November (India time). The cleanup removes registration rows, participant photos and masked Aadhaar files. Staff must remove exports and working copies on the same deadline. Provider-held copies and platform backups may have their own schedules.
 
 ## Validation and deployment
 
@@ -72,7 +73,7 @@ Staff can use https://app.edutripindia.com/admin/ops/registrations/pm-shri-chenn
 
 Possible duplicates match normalised name + date of birth or mobile + date of birth. Staff compare both records and explicitly confirm which one to remove from the active list. Removed records remain private until the programme retention deadline. Atomic database row locks prevent two concurrent reviewers from removing both records.
 
-The trip ends 31 October 2026; records are retained through 30 November. Cleanup is scheduled daily at 19:00 UTC (00:30 India time) and refuses to run before `2026-11-30T18:30:00Z`. The `chennai-retention` function authenticates a private Vault-held job token by its SHA-256 hash, deletes the programme's expired records and private photos, and retries failures on subsequent scheduled runs. The registration submission endpoint closes at the same deadline. Check Supabase Cron job `chennai-2026-retention`, `cron.job_run_details`, and `net._http_response` for cleanup completion or errors after the deadline. Provider copies and platform backups are addressed separately in the published Data Handling Policy. Remove separately created staff exports at the same deadline.
+The trip ends 29 October 2026; records are retained through 28 November. Cleanup is scheduled daily at 19:00 UTC (00:30 India time) and refuses to run before `2026-11-28T18:30:00Z`. The `chennai-retention` function authenticates a private Vault-held job token by its SHA-256 hash, deletes expired registration rows and objects in both private buckets, then sweeps storage orphans; it retries failures on subsequent scheduled runs. The registration submission endpoint closes at the same deadline. Check Supabase Cron job `chennai-2026-retention`, `cron.job_run_details`, and `net._http_response` for cleanup completion or errors after the deadline. Provider copies and platform backups are addressed separately in the published Data Handling Policy. Remove separately created staff exports at the same deadline.
 
 Applied migration: `supabase/chennai-admin-retention.sql`. Edge functions: `chennai-registrations-admin` (custom Firebase JWT authentication) and `chennai-retention` (custom secret authentication). Both intentionally disable Supabase JWT checking because their own authentication is implemented in the function; neither is an anonymous privileged endpoint.
 

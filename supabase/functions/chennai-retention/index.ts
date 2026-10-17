@@ -1,7 +1,8 @@
 // Custom authenticated, programme-scoped cleanup. Never executes before the retention deadline.
-const DEADLINE = Date.parse('2026-11-30T18:30:00Z');
+const DEADLINE = Date.parse('2026-11-28T18:30:00Z');
 const AUTH_HASH = 'f4a7e577541d0ca33c6d7cefb78c1df2be4fbb482cb666808652a00c32aa8aed';
 const bucket = 'chennai-passport-photos-2026';
+const aadhaarBucket = 'chennai-masked-aadhaar-2026';
 const table = 'chennai_registrations_2026';
 const url = Deno.env.get('SUPABASE_URL');
 const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -22,39 +23,45 @@ Deno.serve(async req => {
   try {
     let removed = 0;
     for (;;) {
-      const records = await (await api(`/rest/v1/${table}?expires_at=lte.${new Date().toISOString()}&select=id,photo_path&limit=100`)).json();
+      const records = await (await api(`/rest/v1/${table}?expires_at=lte.${new Date().toISOString()}&select=id,photo_path,aadhaar_path&limit=100`)).json();
       if (!records.length) break;
       for (const record of records) {
         if (!record.photo_path.startsWith(`${record.id}/`) || record.photo_path.includes('..')) throw new Error('Unexpected photo path');
         // Photos first; failed storage deletion leaves the record available for a safe retry.
         await api(`/storage/v1/object/${bucket}`,{method:'DELETE',body:JSON.stringify({prefixes:[record.photo_path]})});
+        if (record.aadhaar_path) {
+          if (!record.aadhaar_path.startsWith(`${record.id}/`) || record.aadhaar_path.includes('..')) throw new Error('Unexpected Aadhaar path');
+          await api(`/storage/v1/object/${aadhaarBucket}`,{method:'DELETE',body:JSON.stringify({prefixes:[record.aadhaar_path]})});
+        }
         await api(`/rest/v1/${table}?id=eq.${record.id}`,{method:'DELETE'});
         removed++;
       }
     }
     // The programme is now closed. Also remove photos left by interrupted submissions.
-    const list = async (prefix: string) => {
+    const list = async (storageBucket: string, prefix: string) => {
       const all: {name: string; id: string | null}[] = [];
       for (let offset=0;;offset+=1000) {
-        const page = await (await api(`/storage/v1/object/list/${bucket}`,{method:'POST',body:JSON.stringify({prefix,limit:1000,offset,sortBy:{column:'name',order:'asc'}})})).json();
+        const page = await (await api(`/storage/v1/object/list/${storageBucket}`,{method:'POST',body:JSON.stringify({prefix,limit:1000,offset,sortBy:{column:'name',order:'asc'}})})).json();
         all.push(...page); if (page.length < 1000) break;
       }
       return all;
     };
-    const folders = await list('');
-    for (const folder of folders) {
-      if (!/^[0-9a-f-]{36}$/i.test(folder.name) || folder.id) throw new Error('Unexpected bucket entry');
-      const paths: string[] = [];
-      const walk = async (prefix: string, depth: number) => {
-        if (depth > 2) throw new Error('Unexpected photo folder depth');
-        for (const entry of await list(prefix)) {
-          if (entry.name.includes('/') || entry.name.includes('..')) throw new Error('Unexpected photo entry');
-          const path = `${prefix}/${entry.name}`;
-          if (entry.id) paths.push(path); else await walk(path, depth + 1);
-        }
-      };
-      await walk(folder.name, 0);
-      for (let i=0;i<paths.length;i+=100) await api(`/storage/v1/object/${bucket}`,{method:'DELETE',body:JSON.stringify({prefixes:paths.slice(i,i+100)})});
+    for (const storageBucket of [bucket,aadhaarBucket]) {
+      const folders = await list(storageBucket,'');
+      for (const folder of folders) {
+        if (!/^[0-9a-f-]{36}$/i.test(folder.name) || folder.id) throw new Error('Unexpected bucket entry');
+        const paths: string[] = [];
+        const walk = async (prefix: string, depth: number) => {
+          if (depth > 2) throw new Error('Unexpected private-file folder depth');
+          for (const entry of await list(storageBucket,prefix)) {
+            if (entry.name.includes('/') || entry.name.includes('..')) throw new Error('Unexpected private-file entry');
+            const path = `${prefix}/${entry.name}`;
+            if (entry.id) paths.push(path); else await walk(path, depth + 1);
+          }
+        };
+        await walk(folder.name, 0);
+        for (let i=0;i<paths.length;i+=100) await api(`/storage/v1/object/${storageBucket}`,{method:'DELETE',body:JSON.stringify({prefixes:paths.slice(i,i+100)})});
+      }
     }
     return reply({status:'complete',removed});
   } catch { return reply({error:'Retention cleanup incomplete; scheduled retry required.'},503); }

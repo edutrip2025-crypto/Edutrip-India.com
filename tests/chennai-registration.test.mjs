@@ -4,17 +4,18 @@ import {createHandler,validateFields,validatePhoto,photoFilename} from '../supab
 
 function fixture() {
   const form = new FormData();
-  const data = {request_id:'10000000-0000-4000-8000-000000000001',full_name:'QA Test Participant',date_of_birth:'1980-02-29',gender:'Female',mobile:'9000000000',district:'Medak',role:'Principal',institution:'QA Test School',udise:'36000000000',meal:'Veg',beverage:'Tea',medical_declaration:'None',emergency_name:'QA Test Contact',emergency_relationship:'Family',emergency_phone:'9000000001',consent:'on'};
+  const data = {request_id:'10000000-0000-4000-8000-000000000001',full_name:'QA Test Participant',date_of_birth:'1980-02-29',gender:'Female',mobile:'9000000000',district:'Mahbubnagar',role:'Principal',institution:'QA Test School',udise:'36000000000',meal:'Veg',beverage:'Tea',medical_declaration:'None',emergency_name:'QA Test Contact',emergency_relationship:'Family',emergency_phone:'9000000001',aadhaar_confirmation:'on',consent:'on'};
   for (const [key,value] of Object.entries(data)) form.set(key,value);
   form.append('food_restrictions','None');
   // Tiny synthetic PNG; no participant data or real portrait.
   const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j8WQAAAAASUVORK5CYII=','base64');
   form.set('photo',new Blob([png],{type:'image/png'}),'qa.png');
+  form.set('aadhaar_card',new Blob(['%PDF-1.4 synthetic masked Aadhaar QA data'],{type:'application/pdf'}),'qa-masked.pdf');
   return form;
 }
 const request = form => new Request('https://example.test/register',{method:'POST',headers:{Origin:'https://www.edutripindia.com'},body:form});
 test('school leaders and visitors register without UDISE or mandal',()=>{
-  const form=fixture(); assert.equal(validateFields(form).district,'Medak');
+  const form=fixture(); assert.equal(validateFields(form).district,'Mahbubnagar');
   form.delete('udise');assert.equal(validateFields(form).udise,null);
   form.set('role','Accompanying Visitor');assert.equal(validateFields(form).mandal,null);
 });
@@ -45,8 +46,8 @@ test('stores photo then record; reply exposes only registration reference',async
     calls.push({url,options});return url.includes('?id=')?Response.json([]):url.includes('/rest/')?Response.json([{registration_reference:'REGCHN0001'}],{status:201}):new Response(null,{status:201});
   }});
   const response=await handler(request(fixture()));assert.equal(response.status,201);
-  assert.deepEqual(await response.json(),{reference:'REGCHN0001'});assert.equal(calls.length,3);
-  const stored=JSON.parse(calls[2].options.body);assert.match(stored.photo_path,/\.png$/);assert.equal(stored.consent_version,'chennai-2026-v2');assert.equal(stored.photo,undefined);
+  assert.deepEqual(await response.json(),{reference:'REGCHN0001'});assert.equal(calls.length,4);
+  const stored=JSON.parse(calls[3].options.body);assert.match(stored.photo_path,/\.png$/);assert.match(stored.aadhaar_path,/QA_Test_Participant_Aadhaar_Masked\.pdf$/);assert.equal(stored.consent_version,'chennai-2026-v3');assert.equal(stored.photo,undefined);
 });
 test('retry returns original reference without another upload',async()=>{
   let count=0;const handler=createHandler({url:'https://db.test',serviceKey:'test',fetcher:async()=>{count++;return Response.json([{registration_reference:'REGCHN0001'}]);}});
