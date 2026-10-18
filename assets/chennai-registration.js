@@ -4,6 +4,23 @@
   const config = window.CHENNAI_REGISTRATION || {};
   const status = document.querySelector('#status');
   const button = document.querySelector('#submit-button');
+  const uploads = window.CHENNAI_UPLOAD;
+  const fileCache = uploads.createFileCache();
+  const requestId = crypto.randomUUID();
+  function reportFailure(error) {
+    // Never include field values, file names, file contents or raw exception messages.
+    const diagnostic = {request_id:requestId, code:error.code || 'UPLOAD_UNKNOWN', status:error.status || 0};
+    fetch('/api/registration-diagnostics', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(diagnostic), keepalive:true}).catch(() => {});
+  }
+  function prepareFile(input, label, code) {
+    const file = input.files[0];
+    fileCache.read(file, label, code).catch(error => {
+      if (input.files[0] !== file) return;
+      input.setCustomValidity(error.message);
+      status.className = 'error'; status.textContent = error.message;
+      reportFailure(error);
+    });
+  }
   const tripDate = '2026-10-27';
   const today = new Date();
   const localDate = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
@@ -41,14 +58,16 @@
       photo.setCustomValidity('Choose a JPG or PNG photograph up to 2 MB.'); photo.reportValidity(); return;
     }
     previewUrl = URL.createObjectURL(file); preview.src = previewUrl; preview.hidden = false;
+    prepareFile(photo, 'your photograph', 'FILE_PHOTO');
   });
   const aadhaar = document.querySelector('#aadhaar-card');
   aadhaar.addEventListener('change', () => {
     aadhaar.setCustomValidity('');
     const file = aadhaar.files[0]; if (!file) return;
     if (!['application/pdf','image/jpeg','image/png'].includes(file.type) || file.size > 5 * 1024 * 1024) {
-      aadhaar.setCustomValidity('Choose a PDF, JPG or PNG masked Aadhaar copy up to 5 MB.'); aadhaar.reportValidity();
+      aadhaar.setCustomValidity('Choose a PDF, JPG or PNG masked Aadhaar copy up to 5 MB.'); aadhaar.reportValidity(); return;
     }
+    prepareFile(aadhaar, 'your masked Aadhaar copy', 'FILE_AADHAAR');
   });
   if (!config.endpoint || !config.publicKey) {
     document.querySelector('#setup-notice').hidden = false;
@@ -56,17 +75,26 @@
     form.querySelectorAll('fieldset').forEach(fieldset => { fieldset.disabled = true; });
   }
   // Retain the same request ID for safe retry after a network interruption; no personal data is persisted locally.
-  const requestId = crypto.randomUUID();
   form.addEventListener('submit', async event => {
     event.preventDefault();
     foods[0].setCustomValidity(foods.some(input => input.checked) ? '' : 'Select food restrictions or None.');
     if (!form.reportValidity()) return;
     button.disabled = true; status.className = ''; status.textContent = 'Submitting your registration…';
-    const payload = new FormData(form); payload.append('request_id', requestId);
     try {
-      const response = await fetch(config.endpoint, { method: 'POST', headers: { apikey: config.publicKey, Authorization: `Bearer ${config.publicKey}` }, body: payload });
-      const result = await response.json();
-      if (!response.ok || !result.reference) throw new Error(result.error || 'We could not confirm your submission. Please try again or contact Edutrip.');
+      status.textContent = 'Preparing your files…';
+      const selectedPhoto = photo.files[0], selectedAadhaar = aadhaar.files[0];
+      const payload = new FormData(form); payload.append('request_id', requestId);
+      const [photoCopy, aadhaarCopy] = await Promise.all([
+        fileCache.read(selectedPhoto, 'your photograph', 'FILE_PHOTO'),
+        fileCache.read(selectedAadhaar, 'your masked Aadhaar copy', 'FILE_AADHAAR')
+      ]);
+      // Replace browser/provider-backed Files with the stable in-memory copies.
+      payload.set('photo', photoCopy, selectedPhoto.name);
+      payload.set('aadhaar_card', aadhaarCopy, selectedAadhaar.name);
+      status.textContent = 'Uploading your registration. Please keep this page open…';
+      const result = await uploads.submit({endpoint:config.endpoint, publicKey:config.publicKey, payload,
+        onRetry:() => { status.textContent = 'Connection interrupted. Retrying your registration safely…'; }
+      });
       document.querySelector('#reference').textContent = result.reference;
       if (result.itinerary_url) {
         const itineraryLink = document.querySelector('#itinerary-link');
@@ -80,7 +108,8 @@
       form.hidden = true; const success = document.querySelector('#success'); success.hidden = false; success.focus(); success.scrollIntoView({behavior:'smooth'});
       form.reset(); if (previewUrl) URL.revokeObjectURL(previewUrl);
     } catch (error) {
-      status.className = 'error'; status.textContent = error.message === 'Failed to fetch' ? 'Connection interrupted. Your details remain in this form. Please retry; if the issue continues, call 7989054712.' : error.message;
+      reportFailure(error);
+      status.className = 'error'; status.textContent = `${error.message} Support code: ${error.code || 'UPLOAD_UNKNOWN'} / ${requestId.slice(0,8)}.`;
       status.focus(); button.disabled = false;
     }
   });

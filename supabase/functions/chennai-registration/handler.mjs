@@ -85,7 +85,7 @@ export function photoFilename(name, extension) {
   const first = name.normalize('NFKC').trim().split(/\s+/)[0].replace(/[^\p{L}\p{N}_-]/gu,'').slice(0,70) || 'Participant';
   return `${first}_Photo.${extension}`;
 }
-export function createHandler({url, serviceKey, fetcher = fetch}) {
+export function createHandler({url, serviceKey, fetcher = fetch, logger = console}) {
   const headers = {apikey:serviceKey, Authorization:`Bearer ${serviceKey}`};
   const api = (path, options = {}) => fetcher(`${url}${path}`, {...options, headers:{...headers,...options.headers}, signal:AbortSignal.timeout(20000)});
   const signedItinerary = async district => {
@@ -113,6 +113,7 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
     for (const [key,value] of limits) if (now - value.start > 600000) limits.delete(key);
     if (ip) { const entry = limits.get(ip) || {start:now,count:0}; entry.count++; limits.set(ip,entry); if (entry.count > 40) return reply({error:'Too many submissions. Please wait a few minutes before retrying.'},429); }
     let uploadedPath, uploadedAadhaarPath;
+    let stage = 'BODY_READ', requestId;
     try {
       if (Number(req.headers.get('content-length') || 0) > MAX_BODY) return reply({error:'The files exceed the upload limit. Use a photo up to 2 MB and masked Aadhaar up to 5 MB.'},413);
       if (!req.headers.get('content-type')?.startsWith('multipart/form-data')) return reply({error:'Invalid form submission.'},400);
@@ -121,23 +122,28 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
       while (true) { const {done,value} = await reader.read(); if (done) break; size += value.length; if (size > MAX_BODY) { await reader.cancel(); return reply({error:'The files exceed the upload limit. Use a photo up to 2 MB and masked Aadhaar up to 5 MB.'},413); } chunks.push(value); }
       let form; try { form = await new Response(new Blob(chunks),{headers:{'Content-Type':req.headers.get('content-type')}}).formData(); } catch { throw new InputError('Invalid form submission.'); }
       const record = validateFields(form);
+      requestId = record.id;
       const photo = form.get('photo');
       if (!photo || typeof photo.arrayBuffer !== 'function' || photo.size > 2097152) throw new InputError('Upload a JPG or PNG photograph up to 2 MB.');
       const bytes = new Uint8Array(await photo.arrayBuffer()); const extension = validatePhoto(photo,bytes);
       const aadhaar = form.get('aadhaar_card');
       if (!aadhaar || typeof aadhaar.arrayBuffer !== 'function' || aadhaar.size > 5242880) throw new InputError('Upload a masked Aadhaar copy as PDF, JPG or PNG, up to 5 MB.');
       const aadhaarBytes = new Uint8Array(await aadhaar.arrayBuffer()); const aadhaarExtension = validateAadhaar(aadhaar,aadhaarBytes);
+      stage = 'DATABASE_LOOKUP';
       const existing = await api(`/rest/v1/${TABLE}?id=eq.${record.id}&select=registration_reference`);
       if (!existing.ok) throw new Error('Database lookup failed');
       const previous = (await existing.json())[0];
+      stage = 'ITINERARY_LINK';
       if (previous) return reply({reference:previous.registration_reference,...await signedItinerary(record.district)});
       const itinerary = await signedItinerary(record.district);
       // Each attempt gets its own photo path; a concurrent retry cannot overwrite another attempt's photo.
       uploadedPath = `${record.id}/${crypto.randomUUID()}/${photoFilename(record.full_name,extension)}`;
+      stage = 'PHOTO_UPLOAD';
       const upload = await api(`/storage/v1/object/${BUCKET}/${uploadedPath}`,{method:'POST',headers:{'Content-Type':photo.type,'x-upsert':'false'},body:bytes});
       if (!upload.ok) { uploadedPath = null; throw new Error('Photo upload failed'); }
       record.photo_path = uploadedPath;
       uploadedAadhaarPath = `${record.id}/${crypto.randomUUID()}/${aadhaarFilename(record.full_name,aadhaarExtension)}`;
+      stage = 'AADHAAR_UPLOAD';
       const aadhaarUpload = await api(`/storage/v1/object/${AADHAAR_BUCKET}/${uploadedAadhaarPath}`,{method:'POST',headers:{'Content-Type':aadhaar.type,'x-upsert':'false'},body:aadhaarBytes});
       if (!aadhaarUpload.ok) {
         await api(`/storage/v1/object/${BUCKET}`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({prefixes:[uploadedPath]})});
@@ -145,6 +151,7 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
       }
       record.aadhaar_path = uploadedAadhaarPath;
       record.consent_version = 'chennai-2026-v4';
+      stage = 'DATABASE_SAVE';
       const insert = await api(`/rest/v1/${TABLE}`,{method:'POST',headers:{'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(record)});
       if (!insert.ok) {
         // A simultaneous retry may have committed the same request ID.
@@ -170,7 +177,9 @@ export function createHandler({url, serviceKey, fetcher = fetch}) {
         try { await api(`/storage/v1/object/${AADHAAR_BUCKET}`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({prefixes:[uploadedAadhaarPath]})}); } catch { /* See operations guide for orphan reconciliation. */ }
       }
       if (error instanceof InputError) return reply({error:error.message},400);
-      return reply({error:'We could not confirm your submission. Please retry or call Edutrip on 7989054712.'},503);
+      logger.error(JSON.stringify({event:'chennai_registration_failure',code:stage,request_id:requestId,
+        kind:['TimeoutError','AbortError'].includes(error.name) ? 'timeout' : 'upstream'}));
+      return reply({error:'We could not confirm your submission. Please retry or call Edutrip on 7989054712.',code:stage},503);
     }
   };
 }

@@ -89,3 +89,19 @@ test('each district resolves to its revised itinerary PDF',()=>{
   for(const [district,file] of Object.entries(districts)) assert.equal(itineraryDetails(district).itinerary_filename,`Revised_Itinerary_Chennai_Trip_${file}.pdf`);
   assert.throws(()=>itineraryDetails('Unknown'));
 });
+
+test('upstream failures identify their stage without logging participant data or keys',async()=>{
+  for (const [failedPath,code] of [['?id=','DATABASE_LOOKUP'],['/object/sign/','ITINERARY_LINK'],['/object/chennai-passport-','PHOTO_UPLOAD'],['/object/chennai-masked-','AADHAAR_UPLOAD']]) {
+    const logs=[];
+    const handler=createHandler({url:'https://db.test',serviceKey:'NEVER_LOG_THIS_KEY',logger:{error:entry=>logs.push(JSON.parse(entry))},fetcher:async(url)=>{
+      if(url.includes(failedPath))return new Response(null,{status:500});
+      if(url.includes('?id='))return Response.json([]);
+      if(url.includes('/object/sign/'))return Response.json({signedURL:'/object/sign/test.pdf?token=private'});
+      return new Response(null,{status:201});
+    }});
+    const response=await handler(request(fixture()));
+    assert.equal(response.status,503); assert.equal((await response.json()).code,code);
+    assert.equal(logs[0].code,code);
+    assert.doesNotMatch(JSON.stringify(logs),/QA Test Participant|9000000000|NEVER_LOG_THIS_KEY|private/);
+  }
+});
