@@ -28,7 +28,8 @@
       <p class="note">Schedules and institutional visits are subject to confirmation. Registration does not confirm a travel booking.</p>
     </section>
     <aside id="setup-notice" class="notice" hidden>Registration is being set up. Please contact Edutrip on <a href="tel:+917989054712">7989054712</a> before entering your details.</aside>
-    <form id="registration" enctype="multipart/form-data">
+    <noscript><p class="notice">Please enable JavaScript or use an up-to-date browser to register securely. For assistance, call 7989054712.</p></noscript>
+    <form id="registration" method="post" action="/api/chennai-registration" enctype="multipart/form-data">
       <p class="form-guide">Complete one form per traveller. Fields marked <span aria-hidden="true">*</span> are required.</p>
       <fieldset><legend><span>01</span> Participant details</legend><div class="grid">
         <label class="wide">Full name (as per Aadhaar) *<input name="full_name" autocomplete="name" maxlength="150" required><small>Use the spelling shown on your Aadhaar card.</small></label>
@@ -91,8 +92,8 @@
         <p>Your data, including the masked Aadhaar copy, will be processed securely and removed from Edutrip’s active registration database and private file storage 30 days after the trip concludes on 29 October 2026. Data is retained through 28 November; scheduled removal begins 29 November 2026 (India time). Read our <a href="/data-handling-policy" target="_blank" rel="noopener">Data Handling Policy</a>.</p>
         <label><input type="checkbox" name="consent" required>I confirm the details are accurate, have informed my emergency contact, and consent to Edutrip’s stated use and secure storage of my details, photo and masked Aadhaar copy under the Data Handling Policy. *</label>
         <label class="trap" aria-hidden="true">Leave empty<input name="website" tabindex="-1" autocomplete="off"></label>
-        <button id="submit-button" type="submit">Submit registration</button>
-        <p id="status" role="status" tabindex="-1"></p>
+        <button id="submit-button" type="submit" disabled>Submit registration</button>
+        <p id="status" role="status" tabindex="-1">Loading registration… If this message remains, refresh the page or call 7989054712.</p>
       </section>
     </form>
     <section id="success" class="success" hidden tabindex="-1"><p class="eyebrow">DETAILS RECEIVED</p><h2>Thank you for registering.</h2><p>Your registration reference is <strong id="reference"></strong>. Save this reference for any corrections.</p><p id="itinerary-message">Download the itinerary for your selected district:</p>

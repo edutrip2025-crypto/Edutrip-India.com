@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const {createFileCache, submit} = require('../assets/chennai-registration-upload.js');
+const {createFileCache, submit, requestId} = require('../assets/chennai-registration-upload.js');
 const diagnostics = require('../api/registration-diagnostics.js');
 
 test('selected files stay readable even after the original file changes', async () => {
@@ -70,4 +70,51 @@ test('diagnostics logs only allowed metadata and excludes participant informatio
     diagnostics({method:'POST',headers:{},body:{code:'raw private error'}},res);
     assert.equal(res.code,400); assert.equal(logs.length,1);
   } finally {console.warn=original;}
+});
+
+test('temporary server errors and interrupted confirmation responses are retried safely',async()=>{
+  for (const failure of [()=>Response.json({error:'Temporary outage',code:'DATABASE_LOOKUP'},{status:503}),()=>new Response('<html>gateway error</html>',{status:502}),()=>Response.json(null),()=>new Response('truncated',{status:200})]) {
+    let calls=0; const payload=new FormData(); payload.set('request_id','unchanged');
+    const result=await submit({payload,delay:async()=>{},fetcher:async(_,options)=>{
+      assert.equal(options.body,payload);
+      return ++calls===1?failure():Response.json({reference:'REGCHNRECOVERED'});
+    }});
+    assert.equal(result.reference,'REGCHNRECOVERED'); assert.equal(calls,2);
+  }
+});
+
+test('authorization, size, validation and long rate-limit errors are not retried',async()=>{
+  for (const status of [400,401,403,413,429]) {
+    let calls=0;
+    await assert.rejects(submit({delay:async()=>{},fetcher:async()=>{calls++;return Response.json({error:'Please retry later'},{status,headers:{'Retry-After':'600'}});}}));
+    assert.equal(calls,1);
+  }
+});
+
+test('request and response-body timeouts release the upload instead of hanging',async()=>{
+  for (const inBody of [false,true]) {
+    await assert.rejects(submit({timeoutMs:5,delay:async()=>{},fetcher:async(_,options)=>{
+      const blocked=()=>new Promise((_,reject)=>options.signal.addEventListener('abort',()=>reject(new DOMException('aborted','AbortError'))));
+      return inBody?{ok:true,status:200,json:blocked}:blocked();
+    }}),{code:'UPLOAD_TIMEOUT'});
+  }
+});
+
+test('file reads time out with a recoverable file-specific error',async()=>{
+  await assert.rejects(createFileCache({readTimeoutMs:5}).read({size:100,type:'image/png',arrayBuffer:()=>new Promise(()=>{})},'your photograph','FILE_PHOTO'),{code:'FILE_PHOTO'});
+});
+
+test('files with missing phone-provided MIME types use their actual signatures',async()=>{
+  for (const [type,bytes,code,expected] of [['',Buffer.from('%PDF-1.4 synthetic'),'FILE_AADHAAR','application/pdf'],['application/octet-stream',Buffer.from([137,80,78,71,13,10,26,10]),'FILE_PHOTO','image/png'],['',Buffer.from([255,216,255,0]),'FILE_PHOTO','image/jpeg']]) {
+    const file={size:bytes.length,type,arrayBuffer:async()=>new Uint8Array(bytes).buffer};
+    assert.equal((await createFileCache().read(file,'your file',code)).type,expected);
+  }
+  const pdf=Buffer.from('%PDF-1.4 synthetic');
+  await assert.rejects(createFileCache().read({size:pdf.length,type:'',arrayBuffer:async()=>new Uint8Array(pdf).buffer},'your photograph','FILE_PHOTO'),{code:'FILE_PHOTO'});
+});
+
+test('older browsers can generate valid retry IDs without crypto.randomUUID',()=>{
+  const {webcrypto}=require('node:crypto');
+  const generated=requestId({getRandomValues:bytes=>webcrypto.getRandomValues(bytes)});
+  assert.match(generated,/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
 });

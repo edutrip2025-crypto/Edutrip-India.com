@@ -5,12 +5,20 @@
   const status = document.querySelector('#status');
   const button = document.querySelector('#submit-button');
   const uploads = window.CHENNAI_UPLOAD;
+  if (!uploads || !window.crypto?.getRandomValues || !window.fetch || !window.FormData || !window.AbortController) {
+    button.disabled = true;
+    document.querySelector('#setup-notice').hidden = false;
+    form.querySelectorAll('fieldset').forEach(fieldset => { fieldset.disabled = true; });
+    status.className = 'error'; status.textContent = 'Registration could not start. Please refresh or use an up-to-date browser. For assistance, call 7989054712.';
+    return;
+  }
   const fileCache = uploads.createFileCache();
-  const requestId = crypto.randomUUID();
+  const requestId = uploads.requestId();
   function reportFailure(error) {
     // Never include field values, file names, file contents or raw exception messages.
     const diagnostic = {request_id:requestId, code:error.code || 'UPLOAD_UNKNOWN', status:error.status || 0};
-    fetch('/api/registration-diagnostics', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(diagnostic), keepalive:true}).catch(() => {});
+    try { fetch('/api/registration-diagnostics', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(diagnostic), keepalive:true}).catch(() => {}); }
+    catch { /* Diagnostics must never prevent the participant from retrying. */ }
   }
   function prepareFile(input, label, code) {
     const file = input.files[0];
@@ -54,17 +62,18 @@
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     const preview = document.querySelector('#photo-preview'); preview.hidden = true;
     const file = photo.files[0]; if (!file) return;
-    if (!['image/jpeg','image/png'].includes(file.type) || file.size > 2 * 1024 * 1024) {
+    if (!['','application/octet-stream','image/jpeg','image/png'].includes(file.type) || file.size < 20 || file.size > 2 * 1024 * 1024) {
       photo.setCustomValidity('Choose a JPG or PNG photograph up to 2 MB.'); photo.reportValidity(); return;
     }
-    previewUrl = URL.createObjectURL(file); preview.src = previewUrl; preview.hidden = false;
     prepareFile(photo, 'your photograph', 'FILE_PHOTO');
+    try { previewUrl = URL.createObjectURL(file); preview.src = previewUrl; preview.hidden = false; }
+    catch { /* The preview is optional; the upload still uses the cached file. */ }
   });
   const aadhaar = document.querySelector('#aadhaar-card');
   aadhaar.addEventListener('change', () => {
     aadhaar.setCustomValidity('');
     const file = aadhaar.files[0]; if (!file) return;
-    if (!['application/pdf','image/jpeg','image/png'].includes(file.type) || file.size > 5 * 1024 * 1024) {
+    if (!['','application/octet-stream','application/pdf','image/jpeg','image/png'].includes(file.type) || file.size < 20 || file.size > 5 * 1024 * 1024) {
       aadhaar.setCustomValidity('Choose a PDF, JPG or PNG masked Aadhaar copy up to 5 MB.'); aadhaar.reportValidity(); return;
     }
     prepareFile(aadhaar, 'your masked Aadhaar copy', 'FILE_AADHAAR');
@@ -75,11 +84,13 @@
     form.querySelectorAll('fieldset').forEach(fieldset => { fieldset.disabled = true; });
   }
   // Retain the same request ID for safe retry after a network interruption; no personal data is persisted locally.
+  let submitting = false;
   form.addEventListener('submit', async event => {
     event.preventDefault();
+    if (submitting) return;
     foods[0].setCustomValidity(foods.some(input => input.checked) ? '' : 'Select food restrictions or None.');
     if (!form.reportValidity()) return;
-    button.disabled = true; status.className = ''; status.textContent = 'Submitting your registration…';
+    submitting = true; button.disabled = true; status.className = ''; status.textContent = 'Submitting your registration…';
     try {
       status.textContent = 'Preparing your files…';
       const selectedPhoto = photo.files[0], selectedAadhaar = aadhaar.files[0];
@@ -105,12 +116,16 @@
         document.querySelector('#itinerary-message').textContent = 'Your registration is confirmed. Contact Edutrip for your district itinerary.';
         document.querySelector('#itinerary-link').hidden = true;
       }
-      form.hidden = true; const success = document.querySelector('#success'); success.hidden = false; success.focus(); success.scrollIntoView({behavior:'smooth'});
+      form.hidden = true; const success = document.querySelector('#success'); success.hidden = false;
+      // A browser focus/scroll limitation must never turn a confirmed save into an upload error.
+      try { success.focus(); success.scrollIntoView({behavior:'smooth'}); } catch { /* Confirmation remains visible. */ }
       form.reset(); if (previewUrl) URL.revokeObjectURL(previewUrl);
     } catch (error) {
       reportFailure(error);
       status.className = 'error'; status.textContent = `${error.message} Support code: ${error.code || 'UPLOAD_UNKNOWN'} / ${requestId.slice(0,8)}.`;
-      status.focus(); button.disabled = false;
-    }
+      button.disabled = false;
+      try { status.focus(); } catch { /* The visible error and retry button remain available. */ }
+    } finally { submitting = false; }
   });
+  if (config.endpoint && config.publicKey) { button.disabled = false; status.textContent = ''; }
 })();
