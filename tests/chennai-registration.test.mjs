@@ -207,3 +207,36 @@ test('a retried registration uses the saved district for its itinerary',async()=
   const signing=backend.calls.filter(call=>call.url.includes('/object/sign/'));
   assert.ok(signing.every(call=>call.url.includes('Hyderabad.pdf')));
 });
+
+test('110 simultaneous submissions behind one shared IP complete without rate rejection or duplicate retry records',async()=>{
+  const backend=memoryBackend();
+  const ids=Array.from({length:110},()=>crypto.randomUUID());
+  const send=id=>{
+    const form=fixture();form.set('request_id',id);
+    return backend.handler(new Request('https://example.test/register',{method:'POST',headers:{Origin:'https://www.edutripindia.com','x-forwarded-for':'192.0.2.200'},body:form}));
+  };
+  const start=performance.now();
+  const first=await Promise.all(ids.map(send));
+  assert.ok(first.every(response=>response.status===201));
+  assert.equal(backend.records.size,110); assert.equal(backend.objects.size,220);
+  const repeated=await Promise.all(ids.map(send));
+  assert.ok(repeated.every(response=>response.status===200));
+  assert.equal(backend.records.size,110); assert.equal(backend.objects.size,220);assert.equal(backend.insertCalls,110);
+  console.log(JSON.stringify({test:'110 concurrent handler submissions plus 110 retries',upstream:'simulated storage and database',registrations:backend.records.size,files:backend.objects.size,elapsed_ms:Math.round(performance.now()-start)}));
+});
+
+test('the higher shared-network allowance still rejects excessive new registrations and lets existing users confirm',async()=>{
+  const backend=memoryBackend();
+  let firstId;
+  const send=id=>{
+    const form=fixture();form.set('request_id',id);
+    return backend.handler(new Request('https://example.test/register',{method:'POST',headers:{Origin:'https://www.edutripindia.com','x-forwarded-for':'192.0.2.201'},body:form}));
+  };
+  for(let index=0;index<150;index++) {
+    const id=crypto.randomUUID(); if(!firstId)firstId=id;
+    assert.equal((await send(id)).status,201);
+  }
+  const rejected=await send(crypto.randomUUID());
+  assert.equal(rejected.status,429);assert.ok(Number(rejected.headers.get('Retry-After'))>0);
+  assert.equal((await send(firstId)).status,200);
+});

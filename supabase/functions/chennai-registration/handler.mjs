@@ -13,6 +13,9 @@ const ITINERARIES = {
 };
 const TABLE = 'chennai_registrations_2026';
 const MAX_BODY = 8500000;
+// Approved for 110 registrations, including a cohort behind one Wi-Fi/carrier NAT.
+// This counts new request IDs, never page visits or retries.
+const MAX_NEW_REGISTRATIONS_PER_IP = 150;
 const limits = new Map();
 class InputError extends Error {}
 export function validateFields(form, today = new Date().toISOString().slice(0,10)) {
@@ -173,7 +176,7 @@ export function createHandler({url, serviceKey, fetcher = fetch, logger = consol
       for (const [key,value] of limits) if (now - value.start > 600000) limits.delete(key);
       if (ip) {
         const entry = limits.get(ip) || {start:now,ids:new Set()};
-        if (!entry.ids.has(requestId) && entry.ids.size >= 40) return reply({error:'Too many submissions. Please wait a few minutes before retrying.'},429,{'Retry-After':String(Math.max(1,Math.ceil((600000 - (now-entry.start))/1000)))});
+        if (!entry.ids.has(requestId) && entry.ids.size >= MAX_NEW_REGISTRATIONS_PER_IP) return reply({error:'Too many submissions. Please wait a few minutes before retrying.'},429,{'Retry-After':String(Math.max(1,Math.ceil((600000 - (now-entry.start))/1000)))});
         entry.ids.add(requestId); limits.set(ip,entry);
       }
       // Separate attempts have separate paths; a transport retry safely reuses its own path and bytes.
