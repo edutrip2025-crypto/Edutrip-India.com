@@ -1,6 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
 import {createHandler,validateFields,validatePhoto,photoFilename,itineraryDetails} from '../supabase/functions/chennai-registration/handler.mjs';
+
+test('browser submits through the website proxy before the generic API rewrite',()=>{
+  const context = {window:{}};
+  vm.runInNewContext(readFileSync(new URL('../assets/chennai-registration-config.js',import.meta.url),'utf8'),context);
+  const endpoint = context.window.CHENNAI_REGISTRATION.endpoint;
+  assert.equal(endpoint,'/api/chennai-registration');
+  const config = JSON.parse(readFileSync(new URL('../vercel.json',import.meta.url),'utf8'));
+  const proxyIndex = config.rewrites.findIndex(route=>route.source===endpoint);
+  assert.ok(proxyIndex>=0);
+  assert.equal(config.rewrites[proxyIndex].destination,'https://vrmubjmgwlbypfwctwgq.supabase.co/functions/v1/chennai-registration');
+  assert.ok(proxyIndex<config.rewrites.findIndex(route=>route.source==='/api/(.*)'));
+});
 
 function fixture() {
   const form = new FormData();

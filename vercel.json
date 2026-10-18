@@ -4,6 +4,10 @@
   "outputDirectory": ".",
   "framework": null,
   "rewrites": [
+    {
+      "source": "/api/chennai-registration",
+      "destination": "https://vrmubjmgwlbypfwctwgq.supabase.co/functions/v1/chennai-registration"
+    },
     {"source":"/data-handling-policy","destination":"/data-handling-policy.html"},
     {
       "source": "/",
