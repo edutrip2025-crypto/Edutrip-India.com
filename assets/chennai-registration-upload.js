@@ -69,6 +69,7 @@
           error.retryable = response.ok || [408,429,500,502,503,504].includes(response.status);
           const retryAfter = Number(response.headers.get('Retry-After'));
           if (response.status === 429 && retryAfter > 5) error.retryable = false;
+          if (Number.isFinite(retryAfter) && retryAfter > 0 && retryAfter <= 5) error.retryDelayMs = retryAfter * 1000;
           throw error;
         }
         return result;
@@ -76,7 +77,8 @@
         if (attempt === 0 && (!(error instanceof UploadError) || error.retryable)) {
           clearTimeout(timeout);
           try { onRetry(); } catch { /* Progress display must not cancel a safe retry. */ }
-          await delay(1000); continue;
+          // Spread retries so a burst of phones does not retry in lockstep.
+          await delay((error?.retryDelayMs || 1000) + Math.floor(Math.random() * 1000)); continue;
         }
         if (error instanceof UploadError) throw error;
         const timedOut = controller.signal.aborted || error?.name === 'TimeoutError' || error?.name === 'AbortError';

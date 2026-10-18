@@ -118,3 +118,9 @@ test('older browsers can generate valid retry IDs without crypto.randomUUID',()=
   const generated=requestId({getRandomValues:bytes=>webcrypto.getRandomValues(bytes)});
   assert.match(generated,/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
 });
+
+test('busy-service retries respect short Retry-After delays and are staggered',async()=>{
+  let calls=0,wait;
+  await submit({delay:async ms=>{wait=ms;},fetcher:async()=>++calls===1?Response.json({error:'Busy'},{status:429,headers:{'Retry-After':'3'}}):Response.json({reference:'REGCHNRETRY'})});
+  assert.equal(calls,2);assert.ok(wait>=3000&&wait<4000);
+});
