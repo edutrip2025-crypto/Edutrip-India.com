@@ -1,16 +1,9 @@
-const DISTRICTS = ['Hyderabad','Sangareddy','Mahbubnagar','Medchal–Malkajgiri'];
+const DISTRICTS = ['Wanaparthy','Vikarabad','Nagarkurnool','Narayanpet','Kamareddy'];
 const ROLES = ['Headmaster / Headmistress','Principal','School Complex Headmaster','DEO / Department Official','Accompanying Visitor','Other'];
 const FOOD = ['None','Onion','Garlic','Mushroom','Curd','Milk / dairy','Nuts / peanuts','Eggs','Wheat / gluten','Seafood','Soy','Other'];
 const ORIGINS = ['https://www.edutripindia.com','https://edutripindia.com','https://www.registrationpmshri.edutripindia.com','http://localhost:304','http://127.0.0.1:304'];
 const BUCKET = 'chennai-passport-photos-2026';
 const AADHAAR_BUCKET = 'chennai-masked-aadhaar-2026';
-const ITINERARY_BUCKET = 'chennai-itineraries-2026';
-const ITINERARIES = {
-  'Hyderabad': 'Revised_Itinerary_Chennai_Trip_Hyderabad.pdf',
-  'Sangareddy': 'Revised_Itinerary_Chennai_Trip_Sangareddy.pdf',
-  'Mahbubnagar': 'Revised_Itinerary_Chennai_Trip_Mahabubnagar.pdf',
-  'Medchal–Malkajgiri': 'Revised_Itinerary_Chennai_Trip_Medchal_Malkajgiri.pdf',
-};
 const TABLE = 'chennai_registrations_2026';
 const MAX_BODY = 8500000;
 // Approved for 110 registrations, including a cohort behind one Wi-Fi/carrier NAT.
@@ -34,7 +27,7 @@ export function validateFields(form, today = new Date().toISOString().slice(0,10
   text('full_name',150,true);
   const dob = text('date_of_birth',10,true);
   const parsedDate = new Date(`${dob}T00:00:00Z`);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(dob) || !Number.isFinite(parsedDate.getTime()) || parsedDate.toISOString().slice(0,10) !== dob || dob < '1900-01-01' || dob > today || dob > '2026-10-27') throw new InputError('Please enter a valid date of birth.');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dob) || !Number.isFinite(parsedDate.getTime()) || parsedDate.toISOString().slice(0,10) !== dob || dob < '1900-01-01' || dob > today) throw new InputError('Please enter a valid date of birth.');
   choice('gender',['Female','Male','Other','Prefer not to say']);
   for (const key of ['mobile','emergency_phone']) if (!/^[6-9][0-9]{9}$/.test(text(key,10,true))) throw new InputError('Please enter valid 10-digit mobile and emergency numbers.');
   if (form.get('whatsapp_different') === 'on') {
@@ -72,11 +65,6 @@ export function aadhaarFilename(name, extension) {
   const safe = name.normalize('NFKC').trim().replace(/\s+/g,'_').replace(/[^\p{L}\p{N}_-]/gu,'').slice(0,100) || 'Participant';
   return `${safe}_Aadhaar_Masked.${extension}`;
 }
-export function itineraryDetails(district) {
-  const filename = ITINERARIES[district];
-  if (!filename) throw new InputError('No itinerary is available for this district yet. Please contact Edutrip.');
-  return {itinerary_filename:filename, path:filename};
-}
 export function validatePhoto(file, bytes) {
   if (!file || !['image/jpeg','image/png'].includes(file.type) || file.size < 20 || file.size > 2097152) throw new InputError('Upload a JPG or PNG photograph up to 2 MB.');
   const png = [137,80,78,71,13,10,26,10].every((n,i) => bytes[i] === n);
@@ -107,18 +95,6 @@ export function createHandler({url, serviceKey, fetcher = fetch, logger = consol
       }
     }
   };
-  const signedItinerary = async district => {
-    const details = itineraryDetails(district);
-    const signed = await api(`/storage/v1/object/sign/${ITINERARY_BUCKET}/${encodeURIComponent(details.path)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expiresIn:2592000,download:details.itinerary_filename})},5000);
-    if (!signed.ok) throw new Error('Itinerary link failed');
-    const data = await signed.json();
-    const signedURL = data.signedURL || data.signedUrl;
-    if (typeof signedURL !== 'string' || !signedURL) throw new Error('Itinerary link failed');
-    const itineraryUrl = signedURL.startsWith('http') ? signedURL : `${url}${signedURL.startsWith('/storage/v1/') ? '' : '/storage/v1'}${signedURL.startsWith('/') ? signedURL : `/${signedURL}`}`;
-    // Never send an unexpected host or protocol to the confirmation page.
-    if (new URL(itineraryUrl).origin !== new URL(url).origin) throw new Error('Itinerary link failed');
-    return {itinerary_filename:details.itinerary_filename,itinerary_url:itineraryUrl};
-  };
   return async req => {
     const origin = req.headers.get('origin');
     const cors = {'Content-Type':'application/json','Cache-Control':'no-store','Access-Control-Allow-Methods':'POST,OPTIONS','Access-Control-Allow-Headers':'authorization,apikey,content-type,x-client-info','Vary':'Origin'};
@@ -127,16 +103,10 @@ export function createHandler({url, serviceKey, fetcher = fetch, logger = consol
     if (origin && !ORIGINS.includes(origin)) return reply({error:'This registration form is not available on this website.'},403);
     if (req.method === 'OPTIONS') return new Response(null,{status:204,headers:cors});
     if (req.method !== 'POST') return reply({error:'Use the registration form to submit your details.'},405);
-    if (Date.now() >= Date.parse('2026-11-28T18:30:00Z')) return reply({error:'Registration for this programme is closed.'},410);
     if (!url || !serviceKey) return reply({error:'Registration is temporarily unavailable. Please contact Edutrip.'},503);
     let uploadedPath, uploadedAadhaarPath, insertAttempted = false, definiteRejection = false;
     let stage = 'BODY_READ', requestId, district;
-    const confirmed = async (reference, savedDistrict, status = 200) => {
-      let itinerary = {};
-      try { itinerary = await signedItinerary(savedDistrict); }
-      catch { log('warn',{event:'chennai_itinerary_unavailable',code:'ITINERARY_LINK',request_id:requestId}); }
-      return reply({reference,...itinerary},status);
-    };
+    const confirmed = async (reference, savedDistrict, status = 200) => reply({reference},status);
     const lookup = async () => {
       const response = await api(`/rest/v1/${TABLE}?id=eq.${requestId}&select=registration_reference,district`);
       if (!response.ok) throw new Error('Database lookup failed');
@@ -190,7 +160,8 @@ export function createHandler({url, serviceKey, fetcher = fetch, logger = consol
       const aadhaarUpload = await api(`/storage/v1/object/${AADHAAR_BUCKET}/${uploadedAadhaarPath}`,{method:'POST',headers:{'Content-Type':aadhaar.type,'x-upsert':'true'},body:aadhaarBytes});
       if (!aadhaarUpload.ok) throw new Error('Aadhaar upload failed');
       record.aadhaar_path = uploadedAadhaarPath;
-      record.consent_version = 'chennai-2026-v4';
+      record.consent_version = 'pmshri-2026-v5';
+      record.programme = 'PM SHRI Exposure Visit 2026';
       stage = 'DATABASE_SAVE'; insertAttempted = true;
       // Do not blindly retry an insert: a lost response may follow a committed write.
       const insert = await api(`/rest/v1/${TABLE}`,{method:'POST',headers:{'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(record)});

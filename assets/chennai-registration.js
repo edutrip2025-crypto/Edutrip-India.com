@@ -29,10 +29,9 @@
       reportFailure(error);
     });
   }
-  const tripDate = '2026-10-27';
   const today = new Date();
   const localDate = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-  form.elements.date_of_birth.max = localDate < tripDate ? localDate : tripDate;
+  form.elements.date_of_birth.max = localDate;
   function conditional(id, active) {
     const wrap = document.getElementById(id); wrap.hidden = !active;
     wrap.querySelectorAll('input,textarea').forEach(input => { input.disabled = !active; input.required = active; });
@@ -107,15 +106,6 @@
         onRetry:() => { status.textContent = 'Connection interrupted. Retrying your registration safely…'; }
       });
       document.querySelector('#reference').textContent = result.reference;
-      if (result.itinerary_url) {
-        const itineraryLink = document.querySelector('#itinerary-link');
-        itineraryLink.href = result.itinerary_url;
-        itineraryLink.download = result.itinerary_filename || '';
-        document.querySelector('#itinerary-message').textContent = `Your ${form.elements.district.value} itinerary is ready:`;
-      } else {
-        document.querySelector('#itinerary-message').textContent = 'Your registration is confirmed. Contact Edutrip for your district itinerary.';
-        document.querySelector('#itinerary-link').hidden = true;
-      }
       form.hidden = true; const success = document.querySelector('#success'); success.hidden = false;
       // A browser focus/scroll limitation must never turn a confirmed save into an upload error.
       try { success.focus(); success.scrollIntoView({behavior:'smooth'}); } catch { /* Confirmation remains visible. */ }

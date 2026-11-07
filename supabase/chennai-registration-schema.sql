@@ -2,13 +2,13 @@
 create table public.chennai_registrations_2026 (
   id uuid primary key,
   created_at timestamptz not null default now(),
-  programme text not null default 'Chennai Exposure Visit 2026',
+  programme text not null default 'PM SHRI Exposure Visit 2026',
   full_name text not null,
-  date_of_birth date not null check (date_of_birth between date '1900-01-01' and date '2026-10-27'),
+  date_of_birth date not null check (date_of_birth between date '1900-01-01' and current_date),
   gender text not null,
   mobile text not null check (mobile ~ '^[6-9][0-9]{9}$'),
   email text,
-  district text not null check (district in ('Hyderabad','Sangareddy','Mahbubnagar','Medchal–Malkajgiri')),
+  district text not null check (district in ('Wanaparthy','Vikarabad','Nagarkurnool','Narayanpet','Kamareddy')),
   role text not null,
   role_other text,
   institution text not null,
@@ -27,7 +27,7 @@ create table public.chennai_registrations_2026 (
   emergency_phone text not null check (emergency_phone ~ '^[6-9][0-9]{9}$'),
   photo_path text not null,
   aadhaar_path text not null,
-  consent_version text not null default 'chennai-2026-v4',
+  consent_version text not null default 'pmshri-2026-v5',
   consent_at timestamptz not null default now()
 );
 alter table public.chennai_registrations_2026 enable row level security;

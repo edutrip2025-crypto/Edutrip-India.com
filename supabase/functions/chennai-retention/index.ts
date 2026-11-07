@@ -37,7 +37,7 @@ Deno.serve(async req => {
         removed++;
       }
     }
-    // The programme is now closed. Also remove photos left by interrupted submissions.
+    // Never remove files belonging to an unexpired or not-yet-scheduled registration.
     const list = async (storageBucket: string, prefix: string) => {
       const all: {name: string; id: string | null}[] = [];
       for (let offset=0;;offset+=1000) {
@@ -49,6 +49,8 @@ Deno.serve(async req => {
     for (const storageBucket of [bucket,aadhaarBucket]) {
       const folders = await list(storageBucket,'');
       for (const folder of folders) {
+        const owners = await (await api(`/rest/v1/${table}?id=eq.${encodeURIComponent(folder.name)}&select=id&limit=1`)).json();
+        if (owners.length) continue;
         if (!/^[0-9a-f-]{36}$/i.test(folder.name) || folder.id) throw new Error('Unexpected bucket entry');
         const paths: string[] = [];
         const walk = async (prefix: string, depth: number) => {

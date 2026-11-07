@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
-import {createHandler,validateFields,validatePhoto,photoFilename,itineraryDetails} from '../supabase/functions/chennai-registration/handler.mjs';
+import {createHandler,validateFields,validatePhoto,photoFilename} from '../supabase/functions/chennai-registration/handler.mjs';
 
 test('browser submits through the website proxy before the generic API rewrite',()=>{
   const context = {window:{}};
@@ -27,7 +27,7 @@ test('JavaScript load failure leaves submit disabled and cannot send form fields
 
 function fixture() {
   const form = new FormData();
-  const data = {request_id:'10000000-0000-4000-8000-000000000001',full_name:'QA Test Participant',date_of_birth:'1980-02-29',gender:'Female',mobile:'9000000000',district:'Mahbubnagar',role:'Principal',institution:'QA Test School',udise:'36000000000',meal:'Veg',beverage:'Tea',medical_declaration:'None',emergency_name:'QA Test Contact',emergency_relationship:'Family',emergency_phone:'9000000001',aadhaar_confirmation:'on',consent:'on'};
+  const data = {request_id:'10000000-0000-4000-8000-000000000001',full_name:'QA Test Participant',date_of_birth:'1980-02-29',gender:'Female',mobile:'9000000000',district:'Wanaparthy',role:'Principal',institution:'QA Test School',udise:'36000000000',meal:'Veg',beverage:'Tea',medical_declaration:'None',emergency_name:'QA Test Contact',emergency_relationship:'Family',emergency_phone:'9000000001',aadhaar_confirmation:'on',consent:'on'};
   for (const [key,value] of Object.entries(data)) form.set(key,value);
   form.append('food_restrictions','None');
   // Tiny synthetic PNG; no participant data or real portrait.
@@ -38,7 +38,7 @@ function fixture() {
 }
 const request = form => new Request('https://example.test/register',{method:'POST',headers:{Origin:'https://www.edutripindia.com'},body:form});
 test('school leaders and visitors register without UDISE or mandal',()=>{
-  const form=fixture(); assert.equal(validateFields(form).district,'Mahbubnagar');
+  const form=fixture(); assert.equal(validateFields(form).district,'Wanaparthy');
   form.delete('udise');assert.equal(validateFields(form).udise,null);
   form.set('role','Accompanying Visitor');assert.equal(validateFields(form).mandal,null);
 });
@@ -64,18 +64,18 @@ test('spoofed and oversized photo files are rejected',()=>{
   assert.throws(()=>validatePhoto({type:'image/png',size:30},new Uint8Array(30)));
   assert.throws(()=>validatePhoto({type:'image/png',size:2097153},new Uint8Array(30)));
 });
-test('stores photo then record and replies with the matching itinerary',async()=>{
+test('stores photo then record without publishing an itinerary',async()=>{
   const calls=[]; const handler=createHandler({url:'https://db.test',serviceKey:'server-only-test-key',fetcher:async(url,options)=>{
     calls.push({url,options});return url.includes('?id=')?Response.json([]):url.includes('/object/sign/')?Response.json({signedURL:'/object/sign/chennai-itineraries-2026/Revised_Itinerary_Chennai_Trip_Mahabubnagar.pdf?token=test'}):url.includes('/rest/')?Response.json([{registration_reference:'REGCHN0001'}],{status:201}):new Response(null,{status:201});
   }});
   const response=await handler(request(fixture()));assert.equal(response.status,201);
-  const result=await response.json();assert.equal(result.reference,'REGCHN0001');assert.match(result.itinerary_url,/storage\/v1\/object\/sign\/chennai-itineraries-2026\/Revised_Itinerary_Chennai_Trip_Mahabubnagar\.pdf/);assert.equal(calls.length,5);
-  assert.equal(JSON.parse(calls.find(call=>call.url.includes('/object/sign/')).options.body).expiresIn,2592000);
-  const stored=JSON.parse(calls.find(call=>call.url.endsWith('/rest/v1/chennai_registrations_2026')).options.body);assert.match(stored.photo_path,/\.png$/);assert.match(stored.aadhaar_path,/QA_Test_Participant_Aadhaar_Masked\.pdf$/);assert.equal(stored.consent_version,'chennai-2026-v4');assert.equal(stored.photo,undefined);
+  const result=await response.json();assert.equal(result.reference,'REGCHN0001');assert.equal(result.itinerary_url,undefined);assert.equal(calls.length,4);
+  assert.ok(!calls.some(call=>call.url.includes('/object/sign/')));
+  const stored=JSON.parse(calls.find(call=>call.url.endsWith('/rest/v1/chennai_registrations_2026')).options.body);assert.match(stored.photo_path,/\.png$/);assert.match(stored.aadhaar_path,/QA_Test_Participant_Aadhaar_Masked\.pdf$/);assert.equal(stored.consent_version,'pmshri-2026-v5');assert.equal(stored.photo,undefined);
 });
 test('retry returns original reference without another upload',async()=>{
   let count=0;const handler=createHandler({url:'https://db.test',serviceKey:'test',fetcher:async url=>{count++;return url.includes('?id=')?Response.json([{registration_reference:'REGCHN0001'}]):Response.json({signedURL:'/object/sign/chennai-itineraries-2026/file.pdf?token=test'});}});
-  const response = await handler(request(fixture())); assert.equal(response.status,200); const result=await response.json();assert.equal(result.reference,'REGCHN0001');assert.match(result.itinerary_url,/file.pdf/);assert.equal(count,2);
+  const response = await handler(request(fixture())); assert.equal(response.status,200); const result=await response.json();assert.equal(result.reference,'REGCHN0001');assert.equal(result.itinerary_url,undefined);assert.equal(count,1);
 });
 test('database rejection removes uploaded photo and never reports success',async()=>{
   const calls=[];const handler=createHandler({url:'https://db.test',serviceKey:'test',fetcher:async(url,options)=>{
@@ -93,10 +93,13 @@ test('disallowed origin and oversized payload stop before storage',async()=>{
 });
 
 test('photo filenames use participant names safely and preserve format',()=>{assert.equal(photoFilename('Raghavendra Prasad','jpg'),'Raghavendra_Photo.jpg');assert.equal(photoFilename('../ Unsafe','png'),'Participant_Photo.png');});
-test('each district resolves to its revised itinerary PDF',()=>{
-  const districts={Hyderabad:'Hyderabad',Sangareddy:'Sangareddy',Mahbubnagar:'Mahabubnagar','Medchal–Malkajgiri':'Medchal_Malkajgiri'};
-  for(const [district,file] of Object.entries(districts)) assert.equal(itineraryDetails(district).itinerary_filename,`Revised_Itinerary_Chennai_Trip_${file}.pdf`);
-  assert.throws(()=>itineraryDetails('Unknown'));
+test('only the five current districts are accepted',()=>{
+  for(const district of ['Wanaparthy','Vikarabad','Nagarkurnool','Narayanpet','Kamareddy']) {
+    const form=fixture();form.set('district',district);assert.equal(validateFields(form).district,district);
+  }
+  for(const district of ['Hyderabad','Sangareddy','Mahbubnagar','Medchal–Malkajgiri']) {
+    const form=fixture();form.set('district',district);assert.throws(()=>validateFields(form));
+  }
 });
 
 test('upstream failures identify their stage without logging participant data or keys',async()=>{
@@ -159,7 +162,7 @@ test('itinerary outages cannot block a saved registration or its retry',async()=
     const result=await response.json();assert.equal(result.reference,'REGCHNRECOVERED');assert.equal(result.itinerary_url,undefined);
   }
   assert.equal(backend.records.size,1);assert.equal(backend.insertCalls,1);assert.equal(backend.objects.size,2);
-  assert.ok(backend.logs.some(log=>log.code==='ITINERARY_LINK'));
+  assert.ok(!backend.calls.some(call=>call.url.includes('/object/sign/')));
 });
 
 test('lost and malformed insert responses recover the committed reference without deleting its files',async()=>{
@@ -199,13 +202,13 @@ test('concurrent retries produce one registration and keep its referenced files'
   }
 });
 
-test('a retried registration uses the saved district for its itinerary',async()=>{
+test('a retried registration confirms without publishing trip details',async()=>{
   const backend=memoryBackend();
-  const first=fixture();first.set('district','Hyderabad');
+  const first=fixture();first.set('district','Vikarabad');
   assert.equal((await backend.handler(request(first))).status,201);
   await backend.handler(request(fixture()));
   const signing=backend.calls.filter(call=>call.url.includes('/object/sign/'));
-  assert.ok(signing.every(call=>call.url.includes('Hyderabad.pdf')));
+  assert.equal(signing.length,0);
 });
 
 test('110 simultaneous submissions behind one shared IP complete without rate rejection or duplicate retry records',async()=>{
@@ -239,4 +242,12 @@ test('the higher shared-network allowance still rejects excessive new registrati
   const rejected=await send(crypto.randomUUID());
   assert.equal(rejected.status,429);assert.ok(Number(rejected.headers.get('Retry-After'))>0);
   assert.equal((await send(firstId)).status,200);
+});
+
+test('form and linked policy publish no fixed trip dates or destination',()=>{
+  for(const filename of ['chennai-registration.html','data-handling-policy.html']) {
+    const html=readFileSync(new URL('../'+filename,import.meta.url),'utf8');
+    assert.doesNotMatch(html,/Chennai|SCERT|IIT Madras|October|November|2026-10-27|itinerary-link/);
+    assert.match(html,/Final trip dates shall be shared with the respective DEO office/);
+  }
 });
