@@ -93,8 +93,8 @@ test('disallowed origin and oversized payload stop before storage',async()=>{
 });
 
 test('photo filenames use participant names safely and preserve format',()=>{assert.equal(photoFilename('Raghavendra Prasad','jpg'),'Raghavendra_Photo.jpg');assert.equal(photoFilename('../ Unsafe','png'),'Participant_Photo.png');});
-test('only the five current districts are accepted',()=>{
-  for(const district of ['Wanaparthy','Vikarabad','Nagarkurnool','Narayanpet','Kamareddy']) {
+test('only the six current districts are accepted',()=>{
+  for(const district of ['Wanaparthy','Vikarabad','Nagarkurnool','Narayanpet','Kamareddy','Nizamabad']) {
     const form=fixture();form.set('district',district);assert.equal(validateFields(form).district,district);
   }
   for(const district of ['Hyderabad','Sangareddy','Mahbubnagar','Medchal–Malkajgiri']) {

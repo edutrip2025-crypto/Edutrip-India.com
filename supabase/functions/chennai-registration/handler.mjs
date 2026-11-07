@@ -1,4 +1,4 @@
-const DISTRICTS = ['Wanaparthy','Vikarabad','Nagarkurnool','Narayanpet','Kamareddy'];
+const DISTRICTS = ['Wanaparthy','Vikarabad','Nagarkurnool','Narayanpet','Kamareddy','Nizamabad'];
 const ROLES = ['Headmaster / Headmistress','Principal','School Complex Headmaster','DEO / Department Official','Accompanying Visitor','Other'];
 const FOOD = ['None','Onion','Garlic','Mushroom','Curd','Milk / dairy','Nuts / peanuts','Eggs','Wheat / gluten','Seafood','Soy','Other'];
 const ORIGINS = ['https://www.edutripindia.com','https://edutripindia.com','https://www.registrationpmshri.edutripindia.com','http://localhost:304','http://127.0.0.1:304'];

@@ -8,7 +8,7 @@ create table public.chennai_registrations_2026 (
   gender text not null,
   mobile text not null check (mobile ~ '^[6-9][0-9]{9}$'),
   email text,
-  district text not null check (district in ('Wanaparthy','Vikarabad','Nagarkurnool','Narayanpet','Kamareddy')),
+  district text not null check (district in ('Wanaparthy','Vikarabad','Nagarkurnool','Narayanpet','Kamareddy','Nizamabad')),
   role text not null,
   role_other text,
   institution text not null,
