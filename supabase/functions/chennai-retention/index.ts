@@ -1,5 +1,4 @@
-// Custom authenticated, programme-scoped cleanup. Never executes before the retention deadline.
-const DEADLINE = Date.parse('2026-11-28T18:30:00Z');
+// JWT and custom-secret authenticated cleanup, restricted to explicitly expired records.
 const AUTH_HASH = 'f4a7e577541d0ca33c6d7cefb78c1df2be4fbb482cb666808652a00c32aa8aed';
 const bucket = 'chennai-passport-photos-2026';
 const aadhaarBucket = 'chennai-masked-aadhaar-2026';
@@ -19,51 +18,23 @@ Deno.serve(async req => {
   const hash = Array.from(digest,b => b.toString(16).padStart(2,'0')).join('');
   let diff = 0; for (let i=0;i<AUTH_HASH.length;i++) diff |= AUTH_HASH.charCodeAt(i) ^ hash.charCodeAt(i);
   if (diff) return reply({error:'Unauthorised'},401);
-  if (Date.now() < DEADLINE) return reply({status:'retention-period-active',removed:0});
   try {
     let removed = 0;
     for (;;) {
       const records = await (await api(`/rest/v1/${table}?expires_at=lte.${new Date().toISOString()}&select=id,photo_path,aadhaar_path&limit=100`)).json();
       if (!records.length) break;
       for (const record of records) {
-        if (!record.photo_path.startsWith(`${record.id}/`) || record.photo_path.includes('..')) throw new Error('Unexpected photo path');
-        // Photos first; failed storage deletion leaves the record available for a safe retry.
-        await api(`/storage/v1/object/${bucket}`,{method:'DELETE',body:JSON.stringify({prefixes:[record.photo_path]})});
-        if (record.aadhaar_path) {
-          if (!record.aadhaar_path.startsWith(`${record.id}/`) || record.aadhaar_path.includes('..')) throw new Error('Unexpected Aadhaar path');
-          await api(`/storage/v1/object/${aadhaarBucket}`,{method:'DELETE',body:JSON.stringify({prefixes:[record.aadhaar_path]})});
+        for (const path of [record.photo_path,record.aadhaar_path].filter(Boolean)) {
+          if (!path.startsWith(`${record.id}/`) || path.includes('..')) throw new Error('Unexpected private-file path');
         }
-        await api(`/rest/v1/${table}?id=eq.${record.id}`,{method:'DELETE'});
-        removed++;
       }
-    }
-    // Never remove files belonging to an unexpired or not-yet-scheduled registration.
-    const list = async (storageBucket: string, prefix: string) => {
-      const all: {name: string; id: string | null}[] = [];
-      for (let offset=0;;offset+=1000) {
-        const page = await (await api(`/storage/v1/object/list/${storageBucket}`,{method:'POST',body:JSON.stringify({prefix,limit:1000,offset,sortBy:{column:'name',order:'asc'}})})).json();
-        all.push(...page); if (page.length < 1000) break;
-      }
-      return all;
-    };
-    for (const storageBucket of [bucket,aadhaarBucket]) {
-      const folders = await list(storageBucket,'');
-      for (const folder of folders) {
-        const owners = await (await api(`/rest/v1/${table}?id=eq.${encodeURIComponent(folder.name)}&select=id&limit=1`)).json();
-        if (owners.length) continue;
-        if (!/^[0-9a-f-]{36}$/i.test(folder.name) || folder.id) throw new Error('Unexpected bucket entry');
-        const paths: string[] = [];
-        const walk = async (prefix: string, depth: number) => {
-          if (depth > 2) throw new Error('Unexpected private-file folder depth');
-          for (const entry of await list(storageBucket,prefix)) {
-            if (entry.name.includes('/') || entry.name.includes('..')) throw new Error('Unexpected private-file entry');
-            const path = `${prefix}/${entry.name}`;
-            if (entry.id) paths.push(path); else await walk(path, depth + 1);
-          }
-        };
-        await walk(folder.name, 0);
-        for (let i=0;i<paths.length;i+=100) await api(`/storage/v1/object/${storageBucket}`,{method:'DELETE',body:JSON.stringify({prefixes:paths.slice(i,i+100)})});
-      }
+      const photos=records.map((r: {photo_path: string})=>r.photo_path).filter(Boolean);
+      const aadhaar=records.map((r: {aadhaar_path: string})=>r.aadhaar_path).filter(Boolean);
+      if (photos.length) await api(`/storage/v1/object/${bucket}`,{method:'DELETE',body:JSON.stringify({prefixes:photos})});
+      if (aadhaar.length) await api(`/storage/v1/object/${aadhaarBucket}`,{method:'DELETE',body:JSON.stringify({prefixes:aadhaar})});
+      const ids=records.map((r: {id: string})=>r.id);
+      await api(`/rest/v1/${table}?id=in.(${ids.join(',')})&expires_at=lte.${new Date().toISOString()}`,{method:'DELETE'});
+      removed+=records.length;
     }
     return reply({status:'complete',removed});
   } catch { return reply({error:'Retention cleanup incomplete; scheduled retry required.'},503); }
